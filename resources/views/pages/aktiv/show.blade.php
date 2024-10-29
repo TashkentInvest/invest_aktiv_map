@@ -1,16 +1,56 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1>Aktiv Details</h1>
+    <h1>Объект маълумотлари (Детали объекта)</h1>
 
     <div class="mb-3">
-        <strong>Object Name:</strong> {{ $aktiv->object_name }}
+        <strong>Объект номи (Название объекта):</strong> {{ $aktiv->object_name }}
     </div>
-    <!-- Display other fields similarly -->
+
+    <div class="mb-3">
+        <strong>Балансда сақловчи (Балансодержатель):</strong> {{ $aktiv->balance_keeper }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Мўлжал (Местоположение):</strong> {{ $aktiv->location }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Ер майдони (Площадь земли) (кв.м):</strong> {{ $aktiv->land_area }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Бино майдони (Площадь здания) (кв.м):</strong> {{ $aktiv->building_area }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Газ (Газ):</strong> {{ $aktiv->gas }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Сув (Вода):</strong> {{ $aktiv->water }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Электр (Электричество):</strong> {{ $aktiv->electricity }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Қўшимча маълумот (Дополнительная информация):</strong> {{ $aktiv->additional_info }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Кадастр рақами (Кадастровый номер):</strong> {{ $aktiv->kadastr_raqami }}
+    </div>
+
+    <div class="mb-3">
+        <strong>Геолокация (Ссылка на геолокацию):</strong> <a href="{{ $aktiv->geolokatsiya }}"
+            target="_blank">{{ $aktiv->geolokatsiya }}</a>
+    </div>
 
     <!-- Display Files -->
     <div class="mb-3">
-        <strong>Uploaded Files:</strong>
+        <strong>Юкланган файллар (Загруженные файлы):</strong>
         @if ($aktiv->files->count())
             <ul>
                 @foreach ($aktiv->files as $file)
@@ -20,18 +60,21 @@
                 @endforeach
             </ul>
         @else
-            <p>No files uploaded.</p>
+            <p>Файллар мавжуд эмас (Нет загруженных файлов).</p>
         @endif
     </div>
 
     <!-- Map -->
     <div id="map" style="height: 500px; width: 100%;"></div>
+
+    <!-- Back Button -->
+    <a href="{{ route('aktivs.index') }}" class="btn btn-secondary mt-3">Рўйхатга қайтиш (Вернуться к списку)</a>
+    <a href="{{ route('aktivs.edit', $aktiv->id) }}" class="btn btn-primary mt-3">Объектни таҳрирлаш (Редактировать
+        объект)</a>
 @endsection
 
 @section('scripts')
     <!-- Include the Google Maps JavaScript API -->
-
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
     </script>
     <script>
