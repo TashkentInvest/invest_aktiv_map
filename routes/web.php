@@ -478,7 +478,19 @@ Route::post('excel/import', [ExcelController::class, 'import'])->name('excel.imp
 Route::get('excel/export', [ExcelController::class, 'export'])->name('excel.export');
 
 
-// cusomt route
-Route::get('aktivs', [AktivController::class, 'index'])->name('aktiv.index');
-Route::get('aktivs/create', [AktivController::class, 'create'])->name('aktiv.create');
+// custom routes
+// Route::get('/', function () {
+//     return redirect()->route('aktivs.index');
+// });
 
+// Route::resource('aktivs', AktivController::class);
+// Import the controller at the top
+
+// Define routes individually
+Route::get('aktivs', [AktivController::class, 'index'])->name('aktivs.index');
+Route::get('aktivs/create', [AktivController::class, 'create'])->name('aktivs.create');
+Route::post('aktivs', [AktivController::class, 'store'])->name('aktivs.store');
+Route::get('aktivs/{aktiv}', [AktivController::class, 'show'])->name('aktivs.show');
+Route::get('aktivs/{aktiv}/edit', [AktivController::class, 'edit'])->name('aktivs.edit');
+Route::put('aktivs/{aktiv}', [AktivController::class, 'update'])->name('aktivs.update');
+Route::delete('aktivs/{aktiv}', [AktivController::class, 'destroy'])->name('aktivs.destroy');

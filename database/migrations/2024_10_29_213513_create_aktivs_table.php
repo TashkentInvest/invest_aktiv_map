@@ -15,17 +15,19 @@ class CreateAktivsTable extends Migration
     {
         Schema::create('aktivs', function (Blueprint $table) {
             $table->id();
-            $table->string('address'); // Manzil
-            $table->string('object_name'); // Объект номи
-            $table->string('balance_keeper'); // Балансда сақловчи
-            $table->string('location'); // Мўлжал
-            $table->decimal('land_area', 8, 2); // Ер майдони
-            $table->decimal('building_area', 8, 2); // Бино майдони
-            $table->boolean('gas'); // Газ (мавжуд/мавжуд эмас)
-            $table->boolean('water'); // Сув (мавжуд/мавжуд эмас)
-            $table->boolean('electricity'); // Электр (мавжуд/мавжуд эмас)
-            $table->text('additional_info')->nullable(); // Қўшимча маълумот
-            $table->string('location_info')->nullable(); // Локация
+            $table->string('object_name');
+            $table->string('balance_keeper');
+            $table->string('location');
+            $table->decimal('land_area', 10, 2);
+            $table->decimal('building_area', 10, 2);
+            $table->string('gas');
+            $table->string('water');
+            $table->string('electricity');
+            $table->text('additional_info')->nullable();
+            $table->string('zone_name');
+            $table->string('geolokatsiya');
+            $table->decimal('latitude', 10, 7);
+            $table->decimal('longitude', 10, 7);
             $table->timestamps();
         });
     }

@@ -9,9 +9,7 @@ class Aktiv extends Model
 {
     use HasFactory;
 
-
     protected $fillable = [
-        'address',
         'object_name',
         'balance_keeper',
         'location',
@@ -21,7 +19,10 @@ class Aktiv extends Model
         'water',
         'electricity',
         'additional_info',
-        'location_info',
+        'zone_name',
+        'geolokatsiya',
+        'latitude',
+        'longitude',
     ];
 
     public function files()

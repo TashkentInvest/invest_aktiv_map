@@ -3,88 +3,107 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aktiv;
-use App\Http\Requests\StoreAktivRequest;
-use App\Http\Requests\UpdateAktivRequest;
-use App\Models\Branch;
-use App\Models\Regions;
+use Illuminate\Http\Request;
 
 class AktivController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        return view();
+        $aktivs = Aktiv::with('files')->paginate(10);
+        return view('pages.aktiv.index', compact('aktivs'));
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        $branches = Branch::with(['kt', 'kj', 'ko', 'kz'])->get()->all();
-        $regions = Regions::all();
-        return view('pages.aktiv.add', compact('branches','regions'));
+        return view('pages.aktiv.create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \App\Http\Requests\StoreAktivRequest  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(StoreAktivRequest $request)
+    public function store(Request $request)
     {
-        //
+        $request->validate([
+            'object_name' => 'required|string|max:255',
+            'balance_keeper' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'land_area' => 'required|numeric',
+            'building_area' => 'required|numeric',
+            'gas' => 'required|string',
+            'water' => 'required|string',
+            'electricity' => 'required|string',
+            'additional_info' => 'nullable|string|max:255',
+            'zone_name' => 'required|string|max:255',
+            'geolokatsiya' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'files.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+        ]);
+
+        $data = $request->except('files');
+
+        $aktiv = Aktiv::create($data);
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $path = $file->store('assets', 'public');
+
+                $aktiv->files()->create([
+                    'path' => $path,
+                ]);
+            }
+        }
+
+        return redirect()->route('pages.aktiv.index')->with('success', 'Aktiv created successfully.');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Aktiv  $aktiv
-     * @return \Illuminate\Http\Response
-     */
     public function show(Aktiv $aktiv)
     {
-        //
+        return view('pages.aktiv.show', compact('aktiv'));
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Aktiv  $aktiv
-     * @return \Illuminate\Http\Response
-     */
     public function edit(Aktiv $aktiv)
     {
-        //
+        return view('pages.aktiv.edit', compact('aktiv'));
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \App\Http\Requests\UpdateAktivRequest  $request
-     * @param  \App\Models\Aktiv  $aktiv
-     * @return \Illuminate\Http\Response
-     */
-    public function update(UpdateAktivRequest $request, Aktiv $aktiv)
+    public function update(Request $request, Aktiv $aktiv)
     {
-        //
+        $request->validate([
+            'object_name' => 'required|string|max:255',
+            'balance_keeper' => 'required|string|max:255',
+            'location' => 'required|string|max:255',
+            'land_area' => 'required|numeric',
+            'building_area' => 'required|numeric',
+            'gas' => 'required|string',
+            'water' => 'required|string',
+            'electricity' => 'required|string',
+            'additional_info' => 'nullable|string|max:255',
+            'zone_name' => 'required|string|max:255',
+            'geolokatsiya' => 'required|string',
+            'latitude' => 'required|numeric',
+            'longitude' => 'required|numeric',
+            'files.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+        ]);
+
+        $data = $request->except('files');
+
+        $aktiv->update($data);
+
+        if ($request->hasFile('files')) {
+            foreach ($request->file('files') as $file) {
+                $path = $file->store('assets', 'public');
+
+                $aktiv->files()->create([
+                    'path' => $path,
+                ]);
+            }
+        }
+
+        return redirect()->route('pages.aktiv.index')->with('success', 'Aktiv updated successfully.');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Aktiv  $aktiv
-     * @return \Illuminate\Http\Response
-     */
     public function destroy(Aktiv $aktiv)
     {
-        //
+        $aktiv->delete();
+
+        return redirect()->route('pages.aktiv.index')->with('success', 'Aktiv deleted successfully.');
     }
 }
