@@ -43,7 +43,8 @@
     <link rel="stylesheet" href="{{ asset('assets/new/assets/css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('assets/new/assets/css/style-preset.css') }}">
 
-
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
+    </script>
 
     @yield('styles')
 </head>
@@ -74,7 +75,7 @@
                 }
             }
         </style>
-    
+
         <header class="pc-header">
             <div class="header-wrapper"> <!-- [Mobile Media Block] start -->
                 <div class="me-auto pc-mob-drp">
@@ -98,20 +99,23 @@
                             <div class="dropdown-menu pc-h-dropdown drp-search">
                                 <form action="{{ route('search') }}" method="GET" class="px-3">
                                     <div class="mb-0 d-flex align-items-center">
-                                        <input type="search" name="query" class="form-control border-0 shadow-none" placeholder="Search...">
-                                        <button type="submit" class="btn btn-light-secondary btn-search">Search</button>
+                                        <input type="search" name="query" class="form-control border-0 shadow-none"
+                                            placeholder="Search...">
+                                        <button type="submit"
+                                            class="btn btn-light-secondary btn-search">Search</button>
                                     </div>
                                 </form>
-                                
+
                             </div>
                         </li>
                         <li class="pc-h-item d-none d-md-inline-flex">
                             <form action="{{ route('search') }}" method="GET" class="form-search">
                                 <i class="ph-duotone ph-magnifying-glass icon-search"></i>
                                 <input type="search" name="query" class="form-control" placeholder="Search...">
-                                <button type="submit" class="btn btn-search" style="padding: 0"><kbd>ctrl+k</kbd></button>
+                                <button type="submit" class="btn btn-search"
+                                    style="padding: 0"><kbd>ctrl+k</kbd></button>
                             </form>
-                            
+
                         </li>
                     </ul>
                 </div>
@@ -551,28 +555,28 @@
         <div class="pc-container">
             <div class="pc-content">
                 @if (session('success'))
-            <div class="alert alert-success">
-                {{ session('success') }}
-            </div>
-        @endif
+                    <div class="alert alert-success">
+                        {{ session('success') }}
+                    </div>
+                @endif
 
-        <!-- Display error message -->
-        @if (session('error'))
-            <div class="alert alert-danger">
-                {{ session('error') }}
-            </div>
-        @endif
+                <!-- Display error message -->
+                @if (session('error'))
+                    <div class="alert alert-danger">
+                        {{ session('error') }}
+                    </div>
+                @endif
 
-        <!-- Display validation errors -->
-        @if ($errors->any())
-            <div class="alert alert-danger">
-                <ul>
-                    @foreach ($errors->all() as $error)
-                        <li>{{ $error }}</li>
-                    @endforeach
-                </ul>
-            </div>
-        @endif
+                <!-- Display validation errors -->
+                @if ($errors->any())
+                    <div class="alert alert-danger">
+                        <ul>
+                            @foreach ($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
 
                 @yield('content')
             </div>
@@ -833,13 +837,13 @@
     <script>
         $(document).ready(function() {
             $('.phone2').inputmask('+998 (99) 999-99-99');
-            
+
             $('#contact').on('focus', function() {
                 if ($(this).val().startsWith('+998') === false) {
                     $(this).val('+998 ');
                 }
             });
-            
+
             $('#contact').on('input', function() {
                 if ($(this).val().length > 14) {
                     $(this).val($(this).val().substring(0, 14));

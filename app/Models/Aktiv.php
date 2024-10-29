@@ -19,11 +19,10 @@ class Aktiv extends Model
         'water',
         'electricity',
         'additional_info',
-        'zone_name',
         'geolokatsiya',
         'latitude',
         'longitude',
-        'kadastr_raqami'
+        'kadastr_raqami',
     ];
 
     public function files()

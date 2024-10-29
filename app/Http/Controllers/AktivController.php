@@ -3,7 +3,6 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aktiv;
-use App\Models\Regions;
 use Illuminate\Http\Request;
 
 class AktivController extends Controller
@@ -16,9 +15,7 @@ class AktivController extends Controller
 
     public function create()
     {
-        $regions = Regions::all();
-
-        return view('pages.aktiv.create', compact('regions'));
+        return view('pages.aktiv.create');
     }
 
     public function store(Request $request)
@@ -36,12 +33,8 @@ class AktivController extends Controller
             'geolokatsiya'     => 'required|string',
             'latitude'         => 'required|numeric',
             'longitude'        => 'required|numeric',
+            'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
-
-            'kadastr_raqami'        => 'nullable',
-
-
-
         ]);
 
         $data = $request->except('files');
@@ -86,10 +79,8 @@ class AktivController extends Controller
             'geolokatsiya'     => 'required|string',
             'latitude'         => 'required|numeric',
             'longitude'        => 'required|numeric',
+            'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
-
-            'kadastr_raqami'        => 'nullable',
-
         ]);
 
         $data = $request->except('files');

@@ -24,13 +24,10 @@ class CreateAktivsTable extends Migration
             $table->string('water');
             $table->string('electricity');
             $table->text('additional_info')->nullable();
-            $table->string('zone_name');
             $table->string('geolokatsiya');
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
-            $table->string('kadastr_raqami');
-
-            
+            $table->string('kadastr_raqami')->nullable();
             $table->timestamps();
         });
     }

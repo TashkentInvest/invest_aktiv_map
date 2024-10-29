@@ -1,4 +1,4 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
     <h1>Aktiv Details</h1>
@@ -6,7 +6,6 @@
     <div class="mb-3">
         <strong>Object Name:</strong> {{ $aktiv->object_name }}
     </div>
-
     <!-- Display other fields similarly -->
 
     <!-- Display Files -->
@@ -31,7 +30,6 @@
 
 @section('scripts')
     <!-- Include the Google Maps JavaScript API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
 
     <script>
         function initMap() {
@@ -41,7 +39,7 @@
             };
 
             const map = new google.maps.Map(document.getElementById('map'), {
-            center: location,
+                center: location,
                 zoom: 15
             });
 
