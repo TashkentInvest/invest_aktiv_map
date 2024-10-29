@@ -1,0 +1,1316 @@
+[
+  
+     {
+      "id": 1,
+      "application_number": 117688604,
+      "company_name": "\"BUILDING CONNECTION\" МЧЖ",
+      "contact": "Шохруз +998901979696",
+      "generate_price": "11 498 256 000",
+      "first_payment_percent": 2.2,
+      "payed_sum": "2299651200 сўм",
+      "payed_date": "2024-05-16",
+      "contract_apt": "АРТ-1\/24",
+      "contract_date": "2024-04-08",
+      "client_description": "получил договор, оплатил 20% в полном объеме 16.05.2024"
+     },
+     {
+      "id": 2,
+      "application_number": 108215708,
+      "company_name": "MIRADILOV MIRJALIL SUNNATOVICH",
+      "contact": "Шухрат +998998008707",
+      "branch_location": "Тошкент шаҳри, Шайхонтахур тумани \"Жарариқ\" мавзеси 1Б",
+      "generate_price": "1 791 800 000",
+      "first_payment_percent": 1,
+      "payed_sum": 1791800000,
+      "contract_apt": "АРТ-4\/24",
+      "contract_date": "2024-04-15",
+      "client_description": "оплата произведена полностью 17.04.2024"
+     },
+     {
+      "id": 3,
+      "application_number": 110539658,
+      "company_name": "\"INGENERING BIZNES\" МЧЖ (оплатили Partners Power)",
+      "contact": "998998710009 Абонент",
+      "branch_location": "Тошкент шаҳри, Яшнобод тумани, Оханграбо кўчаси, 29",
+      "generate_price": "5 978 791 200",
+      "first_payment_percent": 1,
+      "payed_sum": 1195758240,
+      "contract_apt": "АРТ-6\/24",
+      "contract_date": "2024-04-19",
+      "client_description": "20% оплачен (29.04.2024), просят ускорить решение вопроса с получением АПЗ"
+     },
+     {
+      "id": 4,
+      "application_number": 120226537,
+      "company_name": "“IBRATLI INSON” МЧЖ",
+      "contact": "998900081993 Контактер",
+      "branch_location": "Тошкент шаҳри, Сергели тумани, Хонобод поселкаси, Хонобод кўчаси",
+      "generate_price": "30 000 000 000",
+      "first_payment_percent": 6,
+      "payed_sum": 6000000000,
+      "contract_apt": "АРТ-5\/24",
+      "contract_date": "2024-04-19",
+      "client_description": "10% оплачен (29.04.2024),\n10% оплатили 29.05.2024"
+     },
+     {
+      "id": 5,
+      "company_name": "Нафасов Иброҳим Алимардон ўғли",
+      "contact": "998974146692 Контакт",
+      "branch_location": "Тошкент шаҳри, Сергели тумани, Буюк авлод кўчаси, 17А",
+      "Расчетный объем здания": 53.01,
+      "generate_price": "18 023 400",
+      "first_payment_percent": 18,
+      "payed_sum": 18023400,
+      "contract_apt": "АРТ-7\/24",
+      "contract_date": "2024-05-06",
+      "client_description": "Девелопер оплатил платеж полностью 06.05.2024"
+     },
+     {
+      "id": 6,
+      "company_name": "\"INSOFT INVEST\" МЧЖ (Аския)",
+      "contact": 996132838,
+      "branch_location": "Тошкент шаҳри, Яккасарой тумани, Аския кўчаси",
+      "generate_price": "12 839 025 600",
+      "first_payment_percent": 2.4,
+      "payed_sum": 2567805120,
+      "contract_apt": "АРТ-3\/24",
+      "contract_date": "2024-05-07"
+     },
+     {
+      "id": 7,
+      "company_name": "SHOHJAHON AGRO",
+      "contact": "998990050950 Контакт",
+      "branch_location": "Тошкент шаҳри, Сергели тумани, Қумариқ кўчаси, 22",
+      "Расчетный объем здания": 45,
+      "generate_price": "15 300 000",
+      "first_payment_percent": 15,
+      "payed_sum": 15300000,
+      "contract_apt": "АРТ-9\/24",
+      "contract_date": "2024-05-08"
+     },
+     {
+      "id": 8,
+      "company_name": "GROWTH LEVER",
+      "contact": "Умид +998909877203",
+      "branch_location": "Тошкент шаҳри, Сергели тумани, Янги Қўйлиқ кўчаси, 46Б",
+      "Расчетный объем здания": 59175,
+      "generate_price": "20 119 534 000",
+      "first_payment_percent": 4,
+      "payed_sum": 4023906800,
+      "contract_apt": "АРТ-8\/24",
+      "contract_date": "2024-05-07"
+     },
+     {
+      "id": 9,
+      "application_number": 109574166,
+      "company_name": "\"IMMOBILIARE\" МЧЖ",
+      "contact": "Алишер +998987749877",
+      "Расчетный объем здания": "42 042,00",
+      "generate_price": "14 294 280 000",
+      "contract_apt": "АРТ-15\/24"
+     },
+     {
+      "id": 10,
+      "application_number": 113200872,
+      "company_name": "\"SYNDICATE TOWER\" МЧЖ",
+      "contact": "Мурод ака +998903455800",
+      "Расчетный объем здания": "22 680,00",
+      "generate_price": "7 711 200 000"
+     },
+     {
+      "id": 11,
+      "application_number": 117186313,
+      "company_name": "\"SJT ESTATES\" МЧЖ",
+      "contact": "Абдиз +998507059000",
+      "branch_location": "Тошкент шаҳри, МирзоУлуғбек тумани, Мухаммад Юсуф кўчаси, 54",
+      "generate_price": "8 637 615 000",
+      "first_payment_percent": 1.6,
+      "payed_sum": 1727523000,
+      "contract_apt": "АРТ-11\/24",
+      "contract_date": "2024-05-13"
+     },
+     {
+      "id": 12,
+      "application_number": 112532043,
+      "company_name": "“NEO CONSTRACTION PREMIUM” МЧЖ",
+      "contact": "Нажмиддин ака +998991386800",
+      "branch_location": "Тошкент шаҳри, Олмазор тумани, Ислом ота МФЙ, Қора-қамиш дахаси 1\/2, 31уй",
+      "generate_price": "7 482 312 000",
+      "first_payment_percent": 1.4,
+      "payed_sum": 1496462400,
+      "contract_apt": "АРТ-13\/24 от 14.05.2024",
+      "contract_date": "2024-05-14"
+     },
+     {
+      "id": 13,
+      "application_number": 117282552,
+      "company_name": "“MEGA PARRANDA XONOBOD” МЧЖ",
+      "contact": "Ойбек\n998974313035 Контакт",
+      "Расчетный объем здания": "76 374,00",
+      "generate_price": "25 967 160 000",
+      "client_description": "Девелопер забрал подписанный договор на оплату по частям 13.05.2024, с учредителями не утверждено. 25.05 перезвонить 25.05 не ответил, перезвонил, ждёт финансирования от инвесторов\n 29.05 перезвонить"
+     },
+     {
+      "id": 14,
+      "application_number": 118745979,
+      "company_name": "AGRO TECHNO",
+      "contact": "Мардон\n998933830609\nКонтакт",
+      "Расчетный объем здания": "60 624,88",
+      "generate_price": "20 612 459 200",
+      "client_description": "Получил электронный вариантр договора на оплату частями (неоформленный)\nМеняют проект\n15.05.2024\n25.05 да телефон қилинди \nрухсатнома олинмаган\n25-июнгача маблағлани тўплаб шартномани қайта расмийлаштиради\n"
+     },
+     {
+      "id": 15,
+      "application_number": 107823171,
+      "company_name": "\"O'ZENERGOHIMMETALL\" МЧЖ",
+      "contact": "Алексей +998903700210",
+      "Расчетный объем здания": "218 912,10",
+      "generate_price": "74 430 114 000",
+      "client_description": "Получил оформленный договор 15.05.2024, \nобешали перезвонить 25.05"
+     },
+     {
+      "id": 16,
+      "company_name": "GOLDEN IMPERIUM BIZNES",
+      "contact": "Расул +998937091111",
+      "branch_location": "Тошкент шаҳри, Миробод тумани,Фарғона йўли кўчаси",
+      "Расчетный объем здания": 534,
+      "generate_price": "181 560 000",
+      "first_payment_percent": 36.2,
+      "payed_sum": 36312000,
+      "contract_apt": "АРТ-10\/24",
+      "contract_date": "2024-05-13",
+      "client_description": "Девелопер получил подписанный договор на полную оплату 15.05.2024. Оплатил полную сумму"
+     },
+     {
+      "id": 17,
+      "application_number": 111692621,
+      "company_name": "“CENTRAL ASIAN CONSTRICTION” МЧЖ",
+      "contact": "Жавохир (проектировщик) +998909806066",
+      "Расчетный объем здания": "21 045,00",
+      "generate_price": "7 155 300 000",
+      "client_description": "28.05 келади параметри ўзгарди шарьнома қайта расмийлаштирди"
+     },
+     {
+      "id": 18,
+      "application_number": 105236391,
+      "company_name": "\"CHINOBOD AVENUE\" МЧЖ",
+      "Расчетный объем здания": "32 493,00",
+      "generate_price": "11 047 620 000",
+      "contract_apt": "АРТ-17\/24",
+      "client_description": "20 % тўланди"
+     },
+     {
+      "id": 19,
+      "application_number": 117298052,
+      "company_name": "\"BN PROJECT AND TRADE\" МЧЖ",
+      "contact": "Жураев Акрам +998970055667",
+      "Расчетный объем здания": "13 800,00",
+      "generate_price": "4 692 000 000",
+      "client_description": "25.06 гача келади"
+     },
+     {
+      "id": 20,
+      "application_number": 108552513,
+      "company_name": "\"GARANT TRADE IMPEX\" МЧЖ",
+      "contact": "998997862455 Контакт",
+      "Расчетный объем здания": "11 928,56",
+      "generate_price": "4 055 711 760",
+      "client_description": "20% тўланди 23.05.2024"
+     },
+     {
+      "id": 21,
+      "company_name": "\"GOLDEN HOUSE DEVELOPMENT\" МЧЖ",
+      "contact": "998903210007 Контакт",
+      "Расчетный объем здания": "16 903,10",
+      "generate_price": "5 747 054 000",
+      "client_description": "22,05,24 келади"
+     },
+     {
+      "id": 22,
+      "company_name": "\"GOLDEN HOUSE DEVELOPMENT\" МЧЖ",
+      "contact": "998903210007 Контакт",
+      "Расчетный объем здания": "23 295,45",
+      "generate_price": "7 920 451 300",
+      "client_description": "Оповещен, предприниматель пока строить не будет"
+     },
+     {
+      "id": 23,
+      "application_number": 120218715,
+      "company_name": "«OLIM IMKON SERVIS» МЧЖ",
+      "contact": "970207005 Контакт",
+      "Расчетный объем здания": "17 374,38",
+      "generate_price": "5 907 289 200",
+      "client_description": "28.05 келади"
+     },
+     {
+      "id": 24,
+      "company_name": "МEGA BIZ",
+      "contact": "998908140303 Контакт",
+      "Расчетный объем здания": "49 310,70",
+      "generate_price": "16 765 638 000",
+      "contract_apt": "АРТ 41\/24",
+      "client_description": "25.05 куни договир олиб кетди\n27.05 куни тўлайди"
+     },
+     {
+      "id": 25,
+      "company_name": "Абдурахманов Ботир Усманжанович\n(Ахмедов Ҳайиталижон Олимжон ўғли оплатил)",
+      "contact": "Хайиталижон +998889998888",
+      "Расчетный объем здания": 287.1,
+      "generate_price": "97 614 000",
+      "contract_apt": "АРТ-14\/24 от 15.05.2024",
+      "client_description": "тўланган"
+     },
+     {
+      "id": 26,
+      "application_number": 200523284,
+      "company_name": "\"O`zmedimpeks\" ДМ",
+      "contact": "998970176699 Контакт",
+      "client_description": "Приедет в 20.05.2024\nАРТ бўйича тўлов тўланмаслигини Қурилиш бошқармаси қурувчига маьлум қилган"
+     },
+     {
+      "id": 27,
+      "application_number": 306177068,
+      "company_name": "\"GOLD STAR EAST COMPANY\" МЧЖ",
+      "contact": "998983332225 Контакт",
+      "client_description": "Приедет в 17.05.2024\n25.05 телефон кўтармади"
+     },
+     {
+      "id": 28,
+      "application_number": 109470909,
+      "company_name": "\"GOLDEN HOUSE DEVELOPMENT\" МЧЖ",
+      "contact": "998903210007 Контакт",
+      "Расчетный объем здания": 37476,
+      "generate_price": 13761187200,
+      "client_description": "22,05,24"
+     },
+     {
+      "id": 29,
+      "application_number": 110922536,
+      "company_name": "\"GOLDEN HOUSE DEVELOPMENT\" МЧЖ",
+      "contact": "998903210007 Контакт",
+      "Расчетный объем здания": 273125,
+      "generate_price": 100291591800,
+      "client_description": "22,05,24"
+     },
+     {
+      "id": 30,
+      "application_number": 111565842,
+      "company_name": "\"OQ-TEPA FUTBOL PLUS\" МЧЖ",
+      "contact": "998994621680 Контакт",
+      "Расчетный объем здания": 18589,
+      "generate_price": 5802154740,
+      "client_description": "Девелопер получил консультацию, вернутся когда проект будеть готов\n(14.05.2024)\n25.05 телфон қилинди ва кўтармади"
+     },
+     {
+      "id": 31,
+      "application_number": 112130887,
+      "company_name": "\"HIRING-SERVIS\" МЧЖ",
+      "contact": "998901136306 Контакт",
+      "Расчетный объем здания": 162978,
+      "generate_price": 50869927450,
+      "client_description": "Выдать АПЗ без инфраструктурного платежа, так как там легкие конструкции, перепланировка гипсокартоном существующей конструкции"
+     },
+     {
+      "id": 32,
+      "application_number": 110406900,
+      "company_name": "\"ZOOKO STIL\" МЧЖ",
+      "contact": "998935938121 Контакт",
+      "Расчетный объем здания": 25137,
+      "generate_price": 9230306400,
+      "client_description": "Қурилиш қилишмас экан."
+     },
+     {
+      "id": 33,
+      "application_number": 110718433,
+      "company_name": "\"SMART SCHOOL CHILONZOR\" МЧЖ",
+      "contact": "998998559911 Контакт",
+      "Расчетный объем здания": 130410,
+      "generate_price": 47886552000,
+      "client_description": "25.05 телефон кўтармади"
+     },
+     {
+      "id": 34,
+      "application_number": 115579998,
+      "company_name": "\"BARAKAT HOUSE\" МЧЖ",
+      "contact": "998933806961 Контакт",
+      "Расчетный объем здания": 357723,
+      "generate_price": 186087504600,
+      "client_description": "25.05 да 15.06 келишини маьлум қилди"
+     },
+     {
+      "id": 35,
+      "application_number": 118418579,
+      "company_name": "\"TEMIRCHI\" МЧЖ",
+      "contact": "Ансор\n998888035555 Контакт",
+      "Расчетный объем здания": 135587,
+      "generate_price": 37064130660,
+      "client_description": "25.05 да телефон қилинди хозир маблағ йўқлигини маълум қилди"
+     },
+     {
+      "id": 36,
+      "application_number": 117159321,
+      "company_name": "\"NANO CHEMICAL TASHKENT\" МЧЖ",
+      "contact": "998712934062 Контакт",
+      "Расчетный объем здания": 69363,
+      "generate_price": 18961069680,
+      "client_description": "25.05 телефон кўтармади"
+     },
+     {
+      "id": 37,
+      "application_number": 107440097,
+      "company_name": "“CHIMBOY TOWER” МЧЖ",
+      "contact": "998900040307 Контакт",
+      "client_description": "25.05 телефон кўтармади"
+     },
+     {
+      "id": 38,
+      "application_number": 107524234,
+      "company_name": "“VILLA GRAND MODERN” МЧЖ",
+      "contact": "998998287227 Контакт",
+      "client_description": "Оповещен\nпроект еще не готов\n25.05 да телефон қилинди \nтаъсисчисига маълум қилади"
+     },
+     {
+      "id": 39,
+      "application_number": 108638423,
+      "company_name": "MATKARIMOVA NODIRA AZAMATOVNA",
+      "contact": "998909208008 Контакт",
+      "client_description": "Приедет в 28.05.2024 шартнома обкетгани"
+     },
+     {
+      "id": 40,
+      "application_number": 108745430,
+      "company_name": "KURBANOV NIZOMIDDIN ASAMITDINOVICH",
+      "contact": "998998959100 Контакт",
+      "client_description": "25.05 да телефон қилнди 28.05 да келишини этди"
+     },
+     {
+      "id": 41,
+      "application_number": 108020449,
+      "company_name": "ABIDOVA MAVLYUDA ABDUKADIROVNA",
+      "contact": "998903181230 Контакт",
+      "client_description": "Оповещен\n25.05 да телефон қилинди \nрухсатномадан хабари йўқ"
+     },
+     {
+      "id": 42,
+      "application_number": 110935074,
+      "company_name": "“XALQ UCHUN SERVIS” МЧЖ",
+      "contact": "998998379628 Контакт",
+      "client_description": "Оповещен, Зафарака ой охирида шартномага келадила"
+     },
+     {
+      "id": 43,
+      "application_number": 114830860,
+      "company_name": "“PREMIUM AUTO” МЧЖ",
+      "contact": "998935000009 Контакт",
+      "client_description": "25.05 да телефон қилинди рухсатнома чиқмаганлигини маълум қилди"
+     },
+     {
+      "id": 44,
+      "application_number": 115037317,
+      "company_name": "“LUX MED” МЧЖ",
+      "contact": "998999967851 Контакт",
+      "client_description": "25.05 телефон кўтармади"
+     },
+     {
+      "id": 45,
+      "application_number": 114564967,
+      "company_name": "XVAN VYACHESLAV SERGEYEVICH",
+      "contact": "998940220202 Контакт",
+      "client_description": "25.05 телефон кўтармади"
+     },
+     {
+      "id": 46,
+      "application_number": 117112868,
+      "company_name": "“GAZ NEFT-AVTO BENZIN” МЧЖ",
+      "contact": "998983005885 Контакт",
+      "client_description": "Приедет в 17.05.2024\nрухсатнома чиқмаган"
+     },
+     {
+      "id": 47,
+      "application_number": 114427340,
+      "company_name": "“TRIANON IMMO” МЧЖ",
+      "contact": "Шахзода\n998997417780 Контакт",
+      "client_description": "Шахзода жилойда не жилойга хали ўтмаган\n25.05 телефон кўтармади"
+     },
+     {
+      "id": 48,
+      "application_number": 118488531,
+      "company_name": "KAMALOV FAXRITDIN MUXITDINOVICH",
+      "contact": "903213131, Контакт\n949366607",
+      "client_description": "Фахриддин пул маблағлари етарли эмас экан"
+     },
+     {
+      "id": 49,
+      "application_number": 120326256,
+      "company_name": "MAXMURZAYEV DOVRONBEK XABIBULLAYEVICH",
+      "contact": "998909654445 Контакт",
+      "client_description": "Оповещен, Приедет в 27.05.2024 Davronbek direktor\n25.05 да гаплашилди рахбарига 28.05 да келишини этди"
+     },
+     {
+      "id": 50,
+      "application_number": 120681536,
+      "company_name": "“PERGAMENT QUALITY EXCLUSIVE” МЧЖ",
+      "contact": "998935505580 Контакт",
+      "client_description": "25.05 да телефон қилинди рухсатнома чиқмаганлигини маълум қилди"
+     },
+     {
+      "id": 51,
+      "application_number": 117194894,
+      "company_name": "“ECO BARAKA 571” МЧЖ",
+      "contact": "998909806700 Контакт",
+      "Расчетный объем здания": 21150.6,
+      "generate_price": "7 191 204 000",
+      "client_description": "Девелопер получил договор  на оплату частями  20.05.2024\n25.05 телефон кўтармади"
+     },
+     {
+      "id": 52,
+      "company_name": "“VOSIQ INTERNATIONAL SCHOOL” МЧЖ",
+      "contact": "998901861114 Контакт",
+      "client_description": "25.05 да телефон қилинди\nлойиха тайёр эмас 01.06 да аниқ "
+     },
+     {
+      "id": 53,
+      "application_number": 107672081,
+      "company_name": "\"FRONTRANNER\" МЧЖ",
+      "contact": "998999669188 Контакт",
+      "Расчетный объем здания": 151335,
+      "generate_price": 5557021200,
+      "client_description": "номер нотўғри"
+     },
+     {
+      "id": 54,
+      "application_number": 107846342,
+      "company_name": "\"AGROTON\" МЧЖ",
+      "contact": "Шухрат ака\n998935068888",
+      "Расчетный объем здания": 60419,
+      "generate_price": 20542460000,
+      "contract_apt": "Арт-27\/24",
+      "client_description": "21.05.2024 шартнома обкетишди\n25.05 да телефон қлинди маблағ йўқлигини маълум қилди"
+     },
+     {
+      "id": 55,
+      "application_number": 108326928,
+      "company_name": "“GOVERNESS HOUSE” МЧЖ",
+      "contact": 977454037,
+      "client_description": "22.05 келди хисоблатиб кетти, маслахатлашиб 24.05 келади\n25.05 да телефон кўтармади"
+     },
+     {
+      "id": 56,
+      "application_number": 110772406,
+      "company_name": "TURSUNXO‘JAYEV AVAZXON AZIZXON O‘G‘LI",
+      "contact": 903444464,
+      "client_description": "25.05 да телефон қилинди номер ўчиқ"
+     },
+     {
+      "id": 57,
+      "application_number": 114417203,
+      "company_name": "\"TOLGA TEKIN\" МЧЖ",
+      "contact": "977759755\n903294848",
+      "Расчетный объем здания": 82154,
+      "generate_price": 22457685780,
+      "client_description": "25.05 да телефон қилинди рухсатнома чиқмаганлигини маълум қилди"
+     },
+     {
+      "id": 58,
+      "application_number": 114428259,
+      "company_name": "\"ORA PROGRES-BIZNES\" МЧЖ",
+      "contact": "977240700\n909700301",
+      "Расчетный объем здания": 17347,
+      "generate_price": 6370002000
+     },
+     {
+      "id": 59,
+      "application_number": 114438578,
+      "company_name": "Yusupov Xikmatulla Nigmanovich \"ORA PROGRES-BIZNES\" МЧЖ",
+      "contact": "977240700\n909700301",
+      "Расчетный объем здания": 6432,
+      "generate_price": 2362105800
+     },
+     {
+      "id": 60,
+      "application_number": 117018988,
+      "company_name": "AHMEDOV JAMSHID MAXKAMOVICH",
+      "contact": "998983115557 Контакт",
+      "Расчетный объем здания": 12825,
+      "generate_price": 4002939000
+     },
+     {
+      "id": 61,
+      "company_name": "\"Bahor Barno\" МЧЖ (Кукча дарвоза)",
+      "contact": "Жамшид Ака +998991073335",
+      "Расчетный объем здания": "23 992,45",
+      "generate_price": "8 157 433 680",
+      "client_description": "27.05 номер не доступен"
+     },
+     {
+      "id": 62,
+      "company_name": "Абдурахмонов Бекзод Рахматулла угли",
+      "contact": "Ойбек +998917777786",
+      "Расчетный объем здания": "2 290,81",
+      "generate_price": "778 876 080",
+      "contract_apt": "АРТ-2\/24",
+      "client_description": "27.05. не собираются оплачивать в связи с реконструкцией объекта"
+     },
+     {
+      "id": 63,
+      "company_name": "DSG",
+      "contact": "Дониер Хидоятов +998996000055",
+      "Расчетный объем здания": "27 366,90",
+      "generate_price": "9 304 746 000",
+      "client_description": "27.05. не доступен,      27.05.АПЗ получилии ранее, в связи с этим договор заключать не собираются"
+     },
+     {
+      "id": 64,
+      "company_name": "\"ABROR PRINT\" МЧЖ",
+      "contact": "998983080241 контакт",
+      "Расчетный объем здания": "2 262,37",
+      "generate_price": "769 206 480",
+      "client_description": "27.05. номер не существует"
+     },
+     {
+      "id": 65,
+      "company_name": "UNILUXE",
+      "contact": "Умид +998909877203",
+      "Расчетный объем здания": "159 112,80",
+      "generate_price": "54 098 352 000",
+      "client_description": "27.05. финансирования ещё нет перезвонить 20 июня"
+     },
+     {
+      "id": 66,
+      "company_name": "Абдукадыров Мужбатулло",
+      "contact": "Мужбатулло @mujbatullo",
+      "Расчетный объем здания": "6 566,50",
+      "generate_price": "2 232 610 000",
+      "client_description": "27\/05 номера нет"
+     },
+     {
+      "id": 67,
+      "company_name": "Farmatsevtika ta`lim va tadqiqot instituti",
+      "contact": "998903745755 контакт",
+      "Расчетный объем здания": "8 041,41",
+      "generate_price": "2 734 079 400",
+      "client_description": "27\/05 номер не доступен"
+     },
+     {
+      "id": 68,
+      "company_name": "Исаходжаев Акмал",
+      "contact": "977091902 (Фарходака архитектор)",
+      "Расчетный объем здания": "2 068,42",
+      "generate_price": "703 262 800",
+      "contract_apt": "Арт-26\/24",
+      "client_description": "Оплатили 20% от общей суммы."
+     },
+     {
+      "id": 69,
+      "company_name": "Султанходжаев Санжар Абдумубдиевич",
+      "contact": "998909526049 контакт",
+      "Расчетный объем здания": "4 600,92",
+      "generate_price": "1 564 312 800",
+      "client_description": "27\/05 номер не доступен,          27\/05 строят клинику, не рассчитали расход, пока не готовы строить"
+     },
+     {
+      "id": 70,
+      "company_name": "\"REBUIL-PRO\" МЧЖ",
+      "contact": "998907157273 контакт",
+      "Расчетный объем здания": "13 685,00",
+      "generate_price": "4 652 900 000",
+      "client_description": "27\/05 обещал оплатить получив у Зилолы номер договора"
+     },
+     {
+      "id": 71,
+      "company_name": "J-UNITED GROUP",
+      "contact": "998998117826 контакт",
+      "Расчетный объем здания": "5 029,00",
+      "generate_price": "1 709 860 000",
+      "client_description": "27\/05 ответил, что на рассмотрении у руководства, не знает когда будет ответ. Перезвонить 1\/06"
+     },
+     {
+      "id": 72,
+      "company_name": "MAX LESSOR INVEST",
+      "contact": "998999333335 контакт",
+      "Расчетный объем здания": 638.19,
+      "generate_price": "216 985 280",
+      "client_description": "27\/05 номер не ответил"
+     },
+     {
+      "id": 73,
+      "company_name": "CHINA HOUSE",
+      "contact": "9989905187777 контакт",
+      "Расчетный объем здания": "43 867,81",
+      "generate_price": "14 915 054 584",
+      "client_description": "27\/05 номер не ответил"
+     },
+     {
+      "id": 74,
+      "company_name": "«ARTIKUL AZIYA KABEL»",
+      "contact": "998977720277 контакт",
+      "Расчетный объем здания": "3 290,60",
+      "generate_price": "1 118 804 000",
+      "contract_apt": "АРТ-12\/24 от 14.05.2024",
+      "client_description": "27\/05 не готовы платить "
+     },
+     {
+      "id": 75,
+      "company_name": "LEKURE",
+      "contact": "Нурилла +998903745755",
+      "Расчетный объем здания": "1 647,60",
+      "generate_price": "560 184 000",
+      "client_description": "27\/05 ждут финансирования"
+     },
+     {
+      "id": 76,
+      "company_name": "Fayziyev Sobirjon Ulug`bek o`g`li",
+      "contact": "Исмоил +998977056005",
+      "Расчетный объем здания": "4 643,56",
+      "generate_price": "1 578 809 040",
+      "client_description": "27\/05 Исмоил обещал прийти 28\/05 оплата планируется до 5\/06"
+     },
+     {
+      "id": 77,
+      "company_name": "BEKZOD ABDULLOH BUILDING",
+      "contact": "Бегзод +998943750000",
+      "Расчетный объем здания": 19399.04,
+      "generate_price": 6595673600,
+      "client_description": "27\/05 разрешение ещё не получил. Ответил, что готов оплатить, как только получит разрешение на строительство"
+     },
+     {
+      "id": 78,
+      "company_name": "Pulatov Begzod Omon o`g`li",
+      "contact": "Абдуносир +998958995555",
+      "Расчетный объем здания": 912.25,
+      "generate_price": "310 165 000",
+      "contract_apt": "АРТ-24\/24",
+      "client_description": "Оплатили "
+     },
+     {
+      "id": 79,
+      "company_name": "\"MEGATRANS PRESTIJ\" МЧЖ",
+      "contact": "Лазиз +998996106692",
+      "Расчетный объем здания": "3 900,00",
+      "generate_price": "1 326 000 000",
+      "client_description": "27\/05 один номер, не ответил на звонки"
+     },
+     {
+      "id": 80,
+      "company_name": "Bekmuratov Xayrulla Abdullayevich",
+      "contact": "Лазиз +998996106692",
+      "Расчетный объем здания": "2 988,00",
+      "generate_price": "1 015 920 000"
+     },
+     {
+      "id": 81,
+      "company_name": "«NESH GROUP METALL» МЧЖ",
+      "contact": "998936717737 контакт",
+      "Расчетный объем здания": "4 779,00",
+      "generate_price": "1 624 860 000",
+      "client_description": "27\/05 Зохитджон 933757779 проектировщик, меняют проект, обещал перезвонить и подъехать 28-29\/05"
+     },
+     {
+      "id": 82,
+      "company_name": "«METROPOL PARK» МЧЖ",
+      "contact": "998909880250 контакт",
+      "Расчетный объем здания": 297.5,
+      "generate_price": "101 150 000",
+      "client_description": "27\/05 контактный номер дан неверно"
+     },
+     {
+      "id": 83,
+      "company_name": "«METROPOL PARK» МЧЖ",
+      "contact": "998909880250 контакт",
+      "Расчетный объем здания": 297.5,
+      "generate_price": "101 150 000"
+     },
+     {
+      "id": 84,
+      "company_name": "Пўлатов Бекзод Омон ўғли",
+      "contact": "998308353 контакт",
+      "Расчетный объем здания": "1 153,44",
+      "generate_price": "392 169 600"
+     },
+     {
+      "id": 85,
+      "company_name": "TOSH POLIMER PRODUCT",
+      "contact": "Равшан +998977758487",
+      "Расчетный объем здания": "19 509,00",
+      "generate_price": "6 633 060 000",
+      "client_description": "27\/05 не готовы строить "
+     },
+     {
+      "id": 86,
+      "company_name": "«HEALTH HELPERS» MCHJ",
+      "contact": 998444346,
+      "client_description": "27\/05 не собираются строить"
+     },
+     {
+      "id": 87,
+      "application_number": 124953543,
+      "company_name": "«OQQO`RG`ON» MASJIDI",
+      "contact": 990193699,
+      "client_description": "27\/05 не ответил на вызовы"
+     },
+     {
+      "id": 88,
+      "company_name": "«OLTIN QURULISH BIZNES K» MCHJ",
+      "contact": "998951882525 контакт",
+      "client_description": "27\/05 не ответил на вызовы"
+     },
+     {
+      "id": 89,
+      "company_name": "«SADAF MEXRI DD» MCHJ",
+      "contact": "998903632269контакт",
+      "client_description": "27\/05 не существующий номер"
+     },
+     {
+      "id": 90,
+      "company_name": "«Startup Eco Trade» MCHJ",
+      "contact": "998905668595 контакт",
+      "client_description": "27\/05 контактный номер дан неверно"
+     },
+     {
+      "id": 91,
+      "company_name": "«SUXROB IMKON TRADE» MCHJ",
+      "contact": "998974786589 контакт",
+      "client_description": "27\/05 не существующий номер"
+     },
+     {
+      "id": 92,
+      "company_name": "«PURE SUNFLOWER OIL» MCHJ",
+      "contact": "9998977680001 контакт",
+      "client_description": "27\/05 Разрешение на строительство еще не получили, обещали прийти и расчет сделать"
+     },
+     {
+      "id": 93,
+      "company_name": "Akromova Nazokat Xikmatullayevna",
+      "contact": "Шокир +998983007400",
+      "client_description": "27\/05 не рассчитывали на дополнительные сборы, пока строить не собираются"
+     },
+     {
+      "id": 94,
+      "application_number": 111579887,
+      "company_name": "GANIYEVA MAXMUDA RUSTAMOVNA",
+      "contact": "998950787888 контакт",
+      "client_description": "Архитектор Зохирака, договор забрали платить не собираются"
+     },
+     {
+      "id": 95,
+      "application_number": 117833762,
+      "company_name": "\"FORSAJ INVEST\" МЧЖ",
+      "contact": "998946599919 контакт",
+      "client_description": "27\/05 контактный номер бухгалтера, сам не в курсе, обещал передать наш разговор руководству"
+     },
+     {
+      "id": 96,
+      "application_number": 117833809,
+      "company_name": "\"FORSAJ INVEST\" МЧЖ",
+      "contact": "998946599919 контакт"
+     },
+     {
+      "id": 97,
+      "application_number": 118375692,
+      "company_name": "\"SSA TOWERS\" МЧЖ",
+      "contact": "998936854000 контакт",
+      "client_description": "26\/05 не ответил на вызовы   27\/05 обещали прийти 28\/05"
+     },
+     {
+      "id": 98,
+      "company_name": "Легкие конструкции, объекты возле Бодкина",
+      "contact": "Ильдус +998909593047"
+     },
+     {
+      "id": 99,
+      "company_name": "Бутаева Максуда Кузибаевна",
+      "contact": "Ойбек +998970014447"
+     },
+     {
+      "id": 100,
+      "company_name": "DELUX LIFE PARADISE",
+      "contact": "Улугбек +998935020271 +998998440271"
+     },
+     {
+      "id": 101,
+      "company_name": "Зуфарова Матлуба",
+      "contact": "Дилшод +998998625590"
+     },
+     {
+      "id": 102,
+      "company_name": "Хаджиева Луиза",
+      "contact": "998908112870 контакт"
+     },
+     {
+      "id": 103,
+      "application_number": 117016010,
+      "company_name": "“CHILONZOR BUYUM SAVDO KOMPLEKSI” АЖ",
+      "contact": "998974331441 контакт",
+      "client_description": "Жавлонака қурлиш бўлими мутахассиси, 22 май шартнома олиб кетишга келишади, Қурилиш килишмас экан"
+     },
+     {
+      "id": 104,
+      "company_name": "Тиллабоев Рустам Абдукодирович",
+      "contact": "998902535355 контакт"
+     },
+     {
+      "id": 105,
+      "application_number": 123871842,
+      "company_name": "Абдуллаев Акмал Абдухошимович",
+      "contact": "998935893997 контакт",
+      "client_description": "27.05. в отъезде, обещал прийти по приезду"
+     },
+     {
+      "id": 106,
+      "company_name": "Ибрагимов Икрам Ибрагимович (реконструкция существующего здания)",
+      "contact": "998979993607 контакт",
+      "client_description": "27.05. не ответил на звонок"
+     },
+     {
+      "id": 107,
+      "company_name": "\"FAYZ FOOD\" МЧЖ",
+      "contact": "Сухроб +998977675355",
+      "client_description": "27.05. обещал прийти 30\/05"
+     },
+     {
+      "id": 108,
+      "company_name": "Исмаилов Миржамол Миргиясович",
+      "contact": "998951280020 контакт",
+      "client_description": "27.05. разрешение ещё не получили"
+     },
+     {
+      "id": 109,
+      "application_number": 124659378,
+      "company_name": "Ибадов Муроджон Исмаилович",
+      "contact": "998998776680 контакт",
+      "client_description": "27.05. планирует только поменять вид фасада"
+     },
+     {
+      "id": 110,
+      "company_name": "TOSHKENT POLYMER PRODUCT",
+      "contact": "998977758487 контакт",
+      "client_description": "27.05. не рассчитывали на эти расходы, в связи с эти отложили стройку"
+     },
+     {
+      "id": 111,
+      "company_name": "Муминходжаев З.Д. (автомойка)",
+      "contact": "Хусан +998946254344",
+      "client_description": "27.05. автомойка - вносит изменения в проект"
+     },
+     {
+      "id": 112,
+      "application_number": 107436160,
+      "company_name": "\"KRAS NET SERVIS\" МЧЖ",
+      "contact": "998995328473 контакт",
+      "Расчетный объем здания": 57753,
+      "generate_price": 15787360080,
+      "client_description": "27\/05 на вызовы не ответил"
+     },
+     {
+      "id": 113,
+      "application_number": 107672081,
+      "company_name": "“FRONTRANNER” МЧЖ",
+      "contact": 977391937,
+      "client_description": "27\/05 не существующий номер"
+     },
+     {
+      "id": 114,
+      "application_number": 107823171,
+      "company_name": "“O‘ZENERGOHIMMETALL” МЧЖ",
+      "contact": 903700210,
+      "client_description": "разрешение на строительство не получали, Русланака строител.  деп"
+     },
+     {
+      "id": 115,
+      "application_number": 107730808,
+      "company_name": "“AQL MANBAI” МЧЖ",
+      "contact": 977444485
+     },
+     {
+      "id": 116,
+      "application_number": 107436160,
+      "company_name": "“KRAS NET SERVIS” МЧЖ",
+      "contact": 995328473,
+      "client_description": "Пул ёк экан, Хали бери қурилиш қилишмас экан"
+     },
+     {
+      "id": 117,
+      "application_number": 108552513,
+      "company_name": "“GARANT TRADE IMPEX” МЧЖ",
+      "contact": 997862455,
+      "client_description": "Шокирака директор дом курилиш буйича, пул билан муамо, ой охиригача кредит олинаркан"
+     },
+     {
+      "id": 118,
+      "application_number": 108745430,
+      "company_name": "KURBANOV NIZOMIDDIN ASAMITDINOVICH",
+      "contact": 998959100,
+      "client_description": "Низомиддин директор, дом курилиши 25,05 келаман диди"
+     },
+     {
+      "id": 119,
+      "application_number": 109471483,
+      "company_name": "“GOLDEN HOUSE DEVELOPMENT” МЧЖ",
+      "contact": 903210007,
+      "client_description": "23.05.2024 май шартнома олиб кетгани келар экан"
+     },
+     {
+      "id": 120,
+      "application_number": 109501262,
+      "company_name": "“GOLDEN HOUSE DEVELOPMENT” МЧЖ",
+      "contact": 903210007,
+      "client_description": "23.05.2024 май шартнома олиб кетгани келар экан"
+     },
+     {
+      "id": 121,
+      "application_number": 109574166,
+      "company_name": "“IMMOBILIARE” МЧЖ",
+      "contact": 903260660,
+      "Расчетный объем здания": " ",
+      "client_description": "Қурилиш қилишмас экан."
+     },
+     {
+      "id": 122,
+      "application_number": 109470909,
+      "company_name": "“GOLDEN HOUSE DEVELOPMENT” МЧЖ",
+      "contact": 903210007,
+      "client_description": "23.05.2024 май шартнома олиб кетгани келар экан"
+     },
+     {
+      "id": 123,
+      "application_number": 111565842,
+      "company_name": "“OQ-TEPA FUTBOL PLUS” МЧЖ",
+      "contact": "900070964, 993077777",
+      "client_description": "Алишер учредитель, қурилиш қилишмас экан"
+     },
+     {
+      "id": 124,
+      "application_number": 110922536,
+      "company_name": "“GOLDEN HOUSE DEVELOPMENT” МЧЖ",
+      "contact": 903210007,
+      "client_description": "22,05,24 келади"
+     },
+     {
+      "id": 125,
+      "application_number": 112130887,
+      "company_name": "“HIRING-SERVIS” МЧЖ",
+      "contact": "901136306, 901760638",
+      "client_description": "Гофурака, 22.05.2024"
+     },
+     {
+      "id": 126,
+      "application_number": 110539658,
+      "company_name": "“INJENERING BIZNES” МЧЖ",
+      "contact": 998710009,
+      "client_description": "Телефон рақам ўчиқ"
+     },
+     {
+      "id": 127,
+      "application_number": 110718433,
+      "company_name": "“SMART SCHOOL CHILONZOR” ",
+      "contact": 998559911,
+      "client_description": "РУСЛАНАКА 22,.05.24 Помошник келади"
+     },
+     {
+      "id": 128,
+      "application_number": 113200872,
+      "company_name": "“SYNDICATE TOWER” МЧЖ",
+      "contact": "901897090 Азиз, 903455800 Мурод ака ",
+      "client_description": "22,05.2024. шартнома олиб кeтгани келади, Азизбек"
+     },
+     {
+      "id": 129,
+      "application_number": 114669709,
+      "company_name": "“MEGABIZ” МЧЖ",
+      "contact": 908130909,
+      "Расчетный объем здания": 49310.7,
+      "generate_price": 16765638000,
+      "client_description": "оплатили 20% 29\/05"
+     },
+     {
+      "id": 130,
+      "application_number": 114830860,
+      "company_name": "“PREMIUM AUTO” МЧЖ",
+      "contact": 935000009,
+      "client_description": "Бобурака рухсатномага топшириб койишган жавобини кутишвоти"
+     },
+     {
+      "id": 131,
+      "application_number": 115579998,
+      "company_name": "“BARAKAT HOUSE” МЧЖ",
+      "contact": 933806961,
+      "client_description": "Ринат Рашидович касал буп копти, май ой охирида келади"
+     },
+     {
+      "id": 132,
+      "application_number": 114655179,
+      "company_name": "“YANGIHAYOT TUMANI HOKIMLIGI” ДМ",
+      "contact": 712106003,
+      "client_description": "бинони ичида 1 та 30 кв хонани ремонт "
+     },
+     {
+      "id": 133,
+      "application_number": 115037317,
+      "company_name": "“LUX MED” МЧЖ",
+      "contact": 999967851
+     },
+     {
+      "id": 134,
+      "application_number": 117159321,
+      "company_name": "“NANO CHEMICAL TASHKENT” МЧЖ",
+      "contact": 712934062,
+      "client_description": "Телефон рақам ўчиқ"
+     },
+     {
+      "id": 135,
+      "application_number": 117298052,
+      "company_name": "“BN PROJECT AND TRADE” МЧЖ",
+      "contact": 970055667,
+      "client_description": "Пул ёк экан, хали бери қурилиш қилишмас экан"
+     },
+     {
+      "id": 136,
+      "application_number": 117833809,
+      "company_name": "“FORSAJ INVEST” МЧЖ",
+      "contact": 946599919,
+      "Расчетный объем здания": 5.068,
+      "generate_price": 17056000000,
+      "contract_apt": "АРТ-31\/24",
+      "client_description": "22.05.2024 договор обкетти Дилшодака архитектор"
+     },
+     {
+      "id": 137,
+      "application_number": 117833762,
+      "company_name": "“FORSAJ INVEST” МЧЖ",
+      "contact": 946599919,
+      "Расчетный объем здания": 137116.8,
+      "generate_price": 46619712000,
+      "contract_apt": "АРТ-32\/24",
+      "client_description": "22.05.2024 договор обкетти Дилшодака архитектор"
+     },
+     {
+      "id": 138,
+      "application_number": 118375692,
+      "company_name": "“SSA TOWERS” МЧЖ",
+      "contact": 936854000,
+      "client_description": "Бобомурод 23.05. келади шартнома обкетгани\n25.05 да телефон қилди 26.05 да келишини маълум қилди"
+     },
+     {
+      "id": 139,
+      "application_number": 118418579,
+      "company_name": "“TEMIRCHI” МЧЖ",
+      "contact": 888035555,
+      "client_description": "Ансорака директор Пул йўқ экан, хали бери қурилиш қилишмас экан"
+     },
+     {
+      "id": 140,
+      "application_number": 117186313,
+      "company_name": "“SJT ESTATES” МЧЖ",
+      "contact": 909783414,
+      "Расчетный объем здания": 25404,
+      "contract_apt": 45425,
+      "client_description": "Жаасулан 24.05 келаман диди, Тўловга пул йўк экан\n25.05 телефон кўтармади"
+     },
+     {
+      "id": 141,
+      "application_number": 118419246,
+      "company_name": "“TEMIRCHI” МЧЖ",
+      "contact": 888035555,
+      "client_description": "Ансорака директор Пул ёк экан, хали бери қурилиш қилишмас экан"
+     },
+     {
+      "id": 142,
+      "application_number": 120226537,
+      "company_name": "“IBRATLI INSON” МЧЖ",
+      "contact": 900081993,
+      "client_description": "телефон номер котармаёпти"
+     },
+     {
+      "id": 143,
+      "application_number": 118745979,
+      "company_name": "“AGRO TECHNO” МЧЖ",
+      "contact": 946900777,
+      "client_description": "Нозимака андижонда душанба келаман диди"
+     },
+     {
+      "id": 144,
+      "application_number": 120681536,
+      "company_name": "“PERGAMENT QUALITY EXCLUSIVE” МЧЖ ",
+      "contact": 935505580,
+      "client_description": "24.05 Директор келади бухгалтер абарор"
+     },
+     {
+      "id": 145,
+      "application_number": 120218715,
+      "company_name": "“OLIM IMKON SERVIS” МЧЖ",
+      "contact": 970207005,
+      "client_description": "Далерака  директор пулини хисоблаб кетишди, 31.05 да келиб шартнома олиб кетиб пул толов қилишар экан "
+     },
+     {
+      "id": 146,
+      "application_number": 110406900,
+      "company_name": "“ZOOKO STIL” МЧЖ",
+      "contact": 935938121,
+      "client_description": "Пул маблағлари ёк экан, хали бери қурилиш қилишмас экан"
+     },
+     {
+      "id": 147,
+      "application_number": 117653191,
+      "company_name": "“CROCUS BUILDING” МЧЖ",
+      "contact": 117653191,
+      "client_description": "25.05 да лойиха тайёр эмаслигини маълум қилди"
+     },
+     {
+      "id": 148,
+      "application_number": 116365432,
+      "company_name": "“ELITE HOUSE COMPANY” МЧЖ",
+      "contact": 116365432,
+      "client_description": "25.05 да лойиха тайёр эмаслигини маълум қилди"
+     },
+     {
+      "id": 149,
+      "company_name": "Исаходжаев Акмал",
+      "contact": "977091902 (Фарходака архитектор)",
+      "Расчетный объем здания": 3380,
+      "generate_price": 1149200000
+     },
+     {
+      "id": 150,
+      "company_name": "Закирова Умидахон Ёрихон қизи",
+      "contact": 998977752222,
+      "Расчетный объем здания": 7460.64,
+      "generate_price": 2536617600,
+      "client_description": "Девелопер получил договр на оплату частями  22.05.2024 оплатил первый платеж 23.05.2024"
+     },
+     {
+      "id": 151,
+      "company_name": "\"ORIENT FINANS\"",
+      "Расчетный объем здания": 298.68,
+      "generate_price": 101551200,
+      "client_description": "Девелопер оплатил платеж полностью"
+     },
+     {
+      "id": 152,
+      "company_name": "ASTERUS MCHJ",
+      "Расчетный объем здания": 8492.5,
+      "generate_price": 2887450000
+     },
+     {
+      "id": 153,
+      "company_name": "AST LIDER OOO",
+      "Расчетный объем здания": 5062,
+      "generate_price": 1721080000
+     },
+     {
+      "id": 154,
+      "company_name": "“GAZ NEFT-AVTO BENZIN” МЧЖ",
+      "contact": 97390,
+      "Расчетный объем здания": 8701,
+      "generate_price": "2,958,340,000",
+      "client_description": "24.05 куни маълумотнома олибкетди"
+     },
+     {
+      "id": 155,
+      "company_name": "ТИФ Миллий банк АЖ"
+     },
+     {
+      "id": 156,
+      "company_name": "Закирова Фароғат Синатуллаевна",
+      "generate_price": 2162400000
+     },
+     {
+      "id": 157,
+      "company_name": "BAXT NAZIR MCHJ",
+      "contact": 998971220870,
+      "Расчетный объем здания": 1312,
+      "generate_price": 395972500,
+      "client_description": "28.05 тўловни амалга оширди"
+     },
+     {
+      "id": 158,
+      "application_number": 118770029,
+      "company_name": "Kamilov Dilshod Mixmanovich",
+      "contact": "907399969 Бахтиер проектировщик",
+      "Расчетный объем здания": 28869.9,
+      "generate_price": 9815766000,
+      "client_description": "28\/05 проектировщик переговорит с заказчиком и до 29\/05 выйдет на связь"
+     },
+     {
+      "id": 159,
+      "company_name": "\"WAN HOO\" ИП",
+      "contact": "+998903978690 Салтанат таржимон",
+      "Расчетный объем здания": 3960,
+      "generate_price": 1346400000,
+      "client_description": "24.05.разрешение получено на 3 этажа, просят достроить ещё 2 этажа                                             28\/05 пеговорит с партнером забрали договор обещали оплатить 31\/S14405"
+     },
+     {
+      "id": 160,
+      "company_name": "\"ASIA PROJECT GROUP\" МЧЖ",
+      "contact": "909986535 Иброхим ака",
+      "client_description": "сделает дополнительный расчет"
+     },
+     {
+      "id": 161,
+      "company_name": "\"BEST ONE\" MCHJ",
+      "contact": "Cуннатжон\n998957729292"
+     },
+     {
+      "id": 162,
+      "company_name": "\"INTERMEBEL\" МЧЖ",
+      "contact": "935093737 Зинатилла",
+      "Расчетный объем здания": 180,
+      "generate_price": 61200000,
+      "client_description": "28\/05 переговорит с партнером и обещает дать ответ 29\/05"
+     },
+     {
+      "id": 163,
+      "company_name": "USMAN IMPERIAL HOUSE MCHJ",
+      "contact": "Ўткир Абдиев\n998905020000"
+     },
+     {
+      "id": 164,
+      "company_name": "Choriyeva Farogat Toshpolatovna",
+      "Расчетный объем здания": 2552.84,
+      "generate_price": 867965600,
+      "client_description": "28.05. оплатила 150 млн осталось 23.593.120 сум"
+     },
+     {
+      "id": 165,
+      "company_name": "Ташпулатова Муаттар Абдусаматовна",
+      "Расчетный объем здания": 300.8,
+      "generate_price": 102272000,
+      "client_description": "28\/05 оплатила "
+     },
+     {
+      "id": 166,
+      "company_name": "\"SHARQ-CHEMICAL\" МЧЖ",
+      "contact": "903040429 Хондамир ",
+      "Расчетный объем здания": 3780,
+      "generate_price": 1285200000,
+      "client_description": "29\/05 обещали довести до сведения инвестора и дать ответ"
+     },
+     {
+      "id": 167,
+      "company_name": "\"DUTAR NAVO\" МЧЖ",
+      "contact": "998222273 Улугбек",
+      "Расчетный объем здания": 52080,
+      "generate_price": 17707200000,
+      "client_description": "29\/05 разрешение ещё не получили, обсуждают проект"
+     },
+     {
+      "id": 168,
+      "company_name": "Иргашев Олимжон Кудратович",
+      "contact": "977017407 Олимжон, 901190220 Абдували"
+     },
+     {
+      "id": 169,
+      "company_name": "Yuldashev Jamoliddin Faxritdinovich",
+      "contact": "998818177 Даврон ака",
+      "Расчетный объем здания": 19440,
+      "generate_price": 6609600000
+     },
+     {
+      "id": 170,
+      "application_number": 128785062,
+      "company_name": "BESTIN ONE МЧЖ",
+      "contact": "936568808 Хасан ака, 946132729 Андрей",
+      "client_description": "30\/05 складское помещение"
+     }
+   
+    
+    ]

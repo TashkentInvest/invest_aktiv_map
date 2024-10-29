@@ -1,0 +1,9 @@
+history of 0.5/09/2024
+-pyside database connect, route page, clcik qilib kordm
+-pbl_stock modelni database blan json ga save qilib plot chqazb kordm
+
+history of 0.5/10/2024
+stock qlshga idea oldm, asosiy voqt bug fix qsqasi waste time (
+
+history of 0.5/11/2024
+fara tashkentskiy kordm , logistika bug fix qildim, 80% waste time (	

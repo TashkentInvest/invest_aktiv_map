@@ -1,0 +1,75 @@
+[
+   
+    {
+        "id": "1",
+        "region_id": "1",
+        "name_ru": "Бектемир тумани",
+        "name_uz": "Bektemir tumani"
+    },
+    {
+        "id": "2",
+        "region_id": "1",
+        "name_ru": "Мирзо Улуғбек тумани",
+        "name_uz": "Mirzo Ulug‘bek tumani"
+    },
+    {
+        "id": "3",
+        "region_id": "1",
+        "name_ru": "Миробод тумани",
+        "name_uz": "Mirobod tumani"
+    },
+    {
+        "id": "4",
+        "region_id": "1",
+        "name_ru": "Олмазор тумани",
+        "name_uz": "Olmazor tumani"
+    },
+    {
+        "id": "5",
+        "region_id": "1",
+        "name_ru": "Сирғали тумани",
+        "name_uz": "Sirg‘ali tumani"
+    },
+    {
+        "id": "6",
+        "region_id": "1",
+        "name_ru": "Учтепа тумани",
+        "name_uz": "Uchtepa tumani"
+    },
+    {
+        "id": "7",
+        "region_id": "1",
+        "name_ru": "Чилонзор тумани",
+        "name_uz": "Chilonzor tumani"
+    },
+    {
+        "id": "8",
+        "region_id": "1",
+        "name_ru": "Шайхонтоҳур тумани",
+        "name_uz": "Shayxontohur tumani"
+    },
+    {
+        "id": "9",
+        "region_id": "1",
+        "name_ru": "Юнусобод тумани",
+        "name_uz": "Yunusobod tumani"
+    },
+    {
+        "id": "10",
+        "region_id": "1",
+        "name_ru": "Яккасарой тумани",
+        "name_uz": "Yakkasaroy tumani"
+    },
+    {
+        "id": "11",
+        "region_id": "1",
+        "name_ru": "Яшнобод тумани",
+        "name_uz": "Yashnobod tumani"
+    },
+    {
+        "id": "12",
+        "region_id": "1",
+        "name_ru": "Янгихайот тумани",
+        "name_uz": "Yangihayot tumani"
+    }
+]
