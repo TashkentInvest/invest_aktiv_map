@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aktiv;
+use App\Models\Regions;
 use Illuminate\Http\Request;
 
 class AktivController extends Controller
@@ -15,7 +16,9 @@ class AktivController extends Controller
 
     public function create()
     {
-        return view('pages.aktiv.create');
+        $regions = Regions::all();
+
+        return view('pages.aktiv.create',compact('regions'));
     }
 
     public function store(Request $request)

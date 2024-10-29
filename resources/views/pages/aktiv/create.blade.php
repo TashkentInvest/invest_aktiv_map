@@ -1,9 +1,10 @@
 @extends('layouts.admin')
 
 @section('content')
-    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQ&libraries=geometry">
-    </script> --}}
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQ&libraries=geometry">
+    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
+    </script>
 
 
     <script>
@@ -132,7 +133,7 @@
                         } else {
                             alert(
                                 `No zone selected. Coordinates: Lat ${userLocation.lat()}, Lng ${userLocation.lng}`
-                                );
+                            );
                         }
                     }, function(error) {
                         console.error('Error occurred. Error code: ' + error.code);
@@ -170,54 +171,118 @@
     <form method="POST" action="{{ route('aktivs.store') }}" enctype="multipart/form-data">
         @csrf
 
-        <div class="mb-3">
-            <label for="object_name" class="form-label">Object Name</label>
-            <input type="text" class="form-control" name="object_name" id="object_name" value="{{ old('object_name') }}">
-            @error('object_name')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
+        <div class="row my-3">
 
-        <!-- Repeat similar blocks for other fields -->
-        <div class="mb-3">
-            <label for="balance_keeper" class="form-label">Balance Keeper</label>
-            <input type="text" class="form-control" name="balance_keeper" id="balance_keeper"
-                value="{{ old('balance_keeper') }}">
-            @error('balance_keeper')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
+            <!-- Ariza -->
+            <div class="col-md-6">
 
-        <!-- Add all other input fields accordingly -->
 
-        <div class="mb-3">
-            <label for="gas" class="form-label">Gas</label>
-            <select class="form-select" name="gas" id="gas">
-                <option value="Available" {{ old('gas') == 'Available' ? 'selected' : '' }}>Available</option>
-                <option value="Not Available" {{ old('gas') == 'Not Available' ? 'selected' : '' }}>Not Available</option>
-            </select>
-            @error('gas')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
+                @include('inc.__address')
 
-        <!-- Similarly for water and electricity -->
+            </div>
 
-        <div class="mb-3">
-            <label for="additional_info" class="form-label">Additional Info</label>
-            <textarea class="form-control" name="additional_info" id="additional_info">{{ old('additional_info') }}</textarea>
-            @error('additional_info')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
+            <!-- Ruxsatnoma -->
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="card-header">
+                        <h5>Лойиха ҳажми хақида маълумотнома</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="mb-3">
+                            <label for="object_name">Объект номи</label>
+                            <input class="form-control shaxarsozlik_umumiy_xajmi" type="text" name="object_name"
+                                id="object_name" value="{{ old('object_name') }}">
+                        </div>
 
-        <!-- File Upload -->
-        <div class="mb-3">
-            <label for="files" class="form-label">Upload Files</label>
-            <input type="file" class="form-control" name="files[]" id="files" multiple>
-            @error('files.*')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+                        <div class="mb-3">
+                            <label for="balance_keeper">Балансда сақловчи</label>
+                            <input class="form-control qavatlar_soni_xajmi" type="text" name="balance_keeper"
+                                id="balance_keeper" value="{{ old('balance_keeper') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="location">Мўлжал</label>
+                            <input class="form-control avtoturargoh_xajmi" type="text" name="location" id="location"
+                                value="{{ old('location') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="land_area">Ер майдони (кв.м)</label>
+                            <input class="form-control qavat_xona_xajmi" type="number" name="land_area" id="land_area"
+                                value="{{ old('land_area') }}">
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="building_area">Бино майдони
+                                (кв.м)</label>
+                            <input class="form-control umumiy_foydalanishdagi_xajmi" type="text" name="building_area"
+                                id="building_area" value="{{ old('building_area') }}">
+                        </div>
+
+
+                        <label for="gas">Газ</label>
+                        <select class="form-control form-select mb-3" name="gas" id="gas">
+                            <option value="">
+                                Мавжуд
+                            </option>
+                            <option value="">
+                                Мавжуд эмас
+                            </option>
+                        </select>
+
+                        <label for="Сув">Сув</label>
+                        <select class="form-control form-select mb-3" name="water" id="water">
+                            <option value="">
+                                Мавжуд
+                            </option>
+                            <option value="">
+                                Мавжуд эмас
+                            </option>
+                        </select>
+
+                        <label for="Электр">Электр</label>
+                        <select class="form-control form-select mb-3" name="electricity" id="electricity">
+                            <option value="">
+                                Мавжуд
+                            </option>
+                            <option value="">
+                                Мавжуд эмас
+                            </option>
+                        </select>
+
+                        <div class="mb-3">
+                            <label for="water">Қўшимча маълумот</label>
+                            <input class="form-control" type="text" name="additional_info" id="additional_info"
+                                value="{{ old('additional_info') }}">
+                        </div>
+
+
+                        <!-- File upload field -->
+                        <div class="mb-3">
+                            <label for="files">Upload Files</label>
+                            <input type="file" class="form-control" name="files[]" id="files" multiple>
+                        </div>
+
+                        <!-- Button to open the map modal -->
+                        @include('inc.__select_map')
+
+                        <!-- Form Inputs for Coordinates -->
+                        <div class="mb-3">
+                            <label for="geolokatsiya">Зона</label>
+                            <input type="text" class="form-control" name="zone_name" value="{{ old('zone_name') }}"
+                                id="zone_name">
+                            <label for="geolokatsiya">Геолокация (координата)</label>
+                            <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya"
+                                value="{{ old('geolokatsiya') }}">
+                            <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
+                            <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
+
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
         </div>
 
         <!-- Map Section -->
