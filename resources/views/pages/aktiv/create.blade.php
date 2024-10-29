@@ -90,16 +90,8 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+                @include('inc.__address')
 
-                <!-- Kadastr Raqami -->
-                <div class="mb-3">
-                    <label for="kadastr_raqami">Кадастр рақами</label>
-                    <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami"
-                        value="{{ old('kadastr_raqami') }}">
-                    @error('kadastr_raqami')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
 
             </div>
 
@@ -134,12 +126,14 @@
                 <div class="mb-3">
                     <label for="geolokatsiya">Геолокация (координата)</label>
                     <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya"
-                        value="{{ old('geolokatsiya') }}">
+                        value="{{ old('geolokatsiya') }}" readonly>
                     @error('geolokatsiya')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
+
+
         </div>
 
         <!-- Submit Button -->

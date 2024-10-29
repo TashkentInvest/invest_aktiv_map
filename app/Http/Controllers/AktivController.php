@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Aktiv;
+use App\Models\Regions;
 use Illuminate\Http\Request;
 
 class AktivController extends Controller
@@ -15,7 +16,8 @@ class AktivController extends Controller
 
     public function create()
     {
-        return view('pages.aktiv.create');
+        $regions = Regions::get();
+        return view('pages.aktiv.create', compact('regions'));
     }
 
     public function store(Request $request)
@@ -61,7 +63,8 @@ class AktivController extends Controller
 
     public function edit(Aktiv $aktiv)
     {
-        return view('pages.aktiv.edit', compact('aktiv'));
+        $regions = Regions::get();
+        return view('pages.aktiv.edit', compact('aktiv', 'regions'));
     }
 
     public function update(Request $request, Aktiv $aktiv)
@@ -102,6 +105,14 @@ class AktivController extends Controller
 
     public function destroy(Aktiv $aktiv)
     {
+        // Delete associated files
+        foreach ($aktiv->files as $file) {
+            // Delete the file from storage
+            \Storage::disk('public')->delete($file->path);
+            // Delete the file record from the database
+            $file->delete();
+        }
+
         $aktiv->delete();
 
         return redirect()->route('aktivs.index')->with('success', 'Aktiv deleted successfully.');

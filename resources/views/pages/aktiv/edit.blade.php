@@ -59,7 +59,8 @@
                 <label for="gas">Газ</label>
                 <select class="form-control form-select mb-3" name="gas" id="gas">
                     <option value="Мавжуд" {{ old('gas', $aktiv->gas) == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
-                    <option value="Мавжуд эмас" {{ old('gas', $aktiv->gas) == 'Мавжуд эмас' ? 'selected' : '' }}>Мавжуд эмас</option>
+                    <option value="Мавжуд эмас" {{ old('gas', $aktiv->gas) == 'Мавжуд эмас' ? 'selected' : '' }}>Мавжуд
+                        эмас</option>
                 </select>
                 @error('gas')
                     <div class="text-danger">{{ $message }}</div>
@@ -68,7 +69,8 @@
                 <label for="water">Сув</label>
                 <select class="form-control form-select mb-3" name="water" id="water">
                     <option value="Мавжуд" {{ old('water', $aktiv->water) == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
-                    <option value="Мавжуд эмас" {{ old('water', $aktiv->water) == 'Мавжуд эмас' ? 'selected' : '' }}>Мавжуд эмас</option>
+                    <option value="Мавжуд эмас" {{ old('water', $aktiv->water) == 'Мавжуд эмас' ? 'selected' : '' }}>Мавжуд
+                        эмас</option>
                 </select>
                 @error('water')
                     <div class="text-danger">{{ $message }}</div>
@@ -76,8 +78,10 @@
 
                 <label for="electricity">Электр</label>
                 <select class="form-control form-select mb-3" name="electricity" id="electricity">
-                    <option value="Мавжуд" {{ old('electricity', $aktiv->electricity) == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
-                    <option value="Мавжуд эмас" {{ old('electricity', $aktiv->electricity) == 'Мавжуд эмас' ? 'selected' : '' }}>Мавжуд эмас
+                    <option value="Мавжуд" {{ old('electricity', $aktiv->electricity) == 'Мавжуд' ? 'selected' : '' }}>
+                        Мавжуд</option>
+                    <option value="Мавжуд эмас"
+                        {{ old('electricity', $aktiv->electricity) == 'Мавжуд эмас' ? 'selected' : '' }}>Мавжуд эмас
                     </option>
                 </select>
                 @error('electricity')
@@ -93,15 +97,8 @@
                     @enderror
                 </div>
 
-                <!-- Kadastr Raqami -->
-                <div class="mb-3">
-                    <label for="kadastr_raqami">Кадастр рақами</label>
-                    <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami"
-                        value="{{ old('kadastr_raqami', $aktiv->kadastr_raqami) }}">
-                    @error('kadastr_raqami')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
-                </div>
+                <!-- Include Address Partial -->
+                @include('inc.__address')
 
             </div>
 
@@ -119,11 +116,12 @@
                 <!-- Display Existing Files -->
                 <div class="mb-3">
                     <label>Existing Files:</label>
-                    @if($aktiv->files->count())
+                    @if ($aktiv->files->count())
                         <ul>
-                            @foreach($aktiv->files as $file)
+                            @foreach ($aktiv->files as $file)
                                 <li>
-                                    <a href="{{ asset('storage/' . $file->path) }}" target="_blank">{{ basename($file->path) }}</a>
+                                    <a href="{{ asset('storage/' . $file->path) }}"
+                                        target="_blank">{{ basename($file->path) }}</a>
                                 </li>
                             @endforeach
                         </ul>
@@ -152,12 +150,16 @@
                 <div class="mb-3">
                     <label for="geolokatsiya">Геолокация (координата)</label>
                     <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya"
-                        value="{{ old('geolokatsiya', $aktiv->geolokatsiya) }}">
+                        value="{{ old('geolokatsiya', $aktiv->geolokatsiya) }}" readonly>
                     @error('geolokatsiya')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
             </div>
+
+            <!-- Include Address Partial (if needed) -->
+            {{-- @include('inc.__address') --}}
+
         </div>
 
         <!-- Submit Button -->
@@ -167,8 +169,6 @@
 
 @section('scripts')
     <!-- Include the Google Maps JavaScript API -->
-    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>s --}}
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
     </script>
     <script>
@@ -188,24 +188,27 @@
 
             if (initialLocation.lat && initialLocation.lng) {
                 placeMarker(initialLocation);
-                map.setCenter(initialLocation);
             }
 
             // "Find My Location" button
             document.getElementById('find-my-location').addEventListener('click', function() {
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        const userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        map.setCenter(userLocation);
-                        map.setZoom(15);
-                        placeMarker(userLocation);
-                    }, function(error) {
-                        console.error('Error occurred. Error code: ' + error.code);
-                        alert('Error getting your location.');
-                    });
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const userLocation = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+                            map.setCenter(userLocation);
+                            map.setZoom(15);
+                            placeMarker(userLocation);
+                        },
+                        function(error) {
+                            console.error('Error occurred. Error code: ' + error.code);
+                            console.error('Error message: ' + error.message);
+                            alert('Error getting your location: ' + error.message);
+                        }
+                    );
                 } else {
                     alert('Geolocation is not supported by this browser.');
                 }
