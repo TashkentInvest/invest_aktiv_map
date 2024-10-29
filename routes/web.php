@@ -64,6 +64,15 @@ Route::get('/statistics', [HomeController::class, 'statistics'])->name('statisti
 // Web pages
 Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
 
+    Route::get('aktivs', [AktivController::class, 'index'])->name('aktivs.index');
+    Route::get('aktivs/create', [AktivController::class, 'create'])->name('aktivs.create');
+    Route::post('aktivs', [AktivController::class, 'store'])->name('aktivs.store');
+    Route::get('aktivs/{aktiv}', [AktivController::class, 'show'])->name('aktivs.show');
+    Route::get('aktivs/{aktiv}/edit', [AktivController::class, 'edit'])->name('aktivs.edit');
+    Route::put('aktivs/{aktiv}', [AktivController::class, 'update'])->name('aktivs.update');
+    Route::delete('aktivs/{aktiv}', [AktivController::class, 'destroy'])->name('aktivs.destroy');
+
+
     Route::get('/optimize-cache', [HomeController::class, 'optimize'])->name('optimize.command');
 
     // Regions  
@@ -487,10 +496,3 @@ Route::get('excel/export', [ExcelController::class, 'export'])->name('excel.expo
 // Import the controller at the top
 
 // Define routes individually
-Route::get('aktivs', [AktivController::class, 'index'])->name('aktivs.index');
-Route::get('aktivs/create', [AktivController::class, 'create'])->name('aktivs.create');
-Route::post('aktivs', [AktivController::class, 'store'])->name('aktivs.store');
-Route::get('aktivs/{aktiv}', [AktivController::class, 'show'])->name('aktivs.show');
-Route::get('aktivs/{aktiv}/edit', [AktivController::class, 'edit'])->name('aktivs.edit');
-Route::put('aktivs/{aktiv}', [AktivController::class, 'update'])->name('aktivs.update');
-Route::delete('aktivs/{aktiv}', [AktivController::class, 'destroy'])->name('aktivs.destroy');
