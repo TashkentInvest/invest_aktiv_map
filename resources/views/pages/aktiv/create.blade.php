@@ -162,7 +162,8 @@
                 center: {
                     lat: 41.2995,
                     lng: 69.2401
-                }, // Centered on Tashkent
+                },
+                // Centered on Tashkent
                 zoom: 10,
             };
 
@@ -171,18 +172,22 @@
             // "Find My Location" button
             document.getElementById('find-my-location').addEventListener('click', function() {
                 if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(function(position) {
-                        const userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-                        map.setCenter(userLocation);
-                        map.setZoom(15);
-                        placeMarker(userLocation);
-                    }, function(error) {
-                        console.error('Error occurred. Error code: ' + error.code);
-                        alert('Error getting your location.');
-                    });
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const userLocation = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude
+                            };
+                            map.setCenter(userLocation);
+                            map.setZoom(15);
+                            placeMarker(userLocation);
+                        },
+                        function(error) {
+                            console.error('Error occurred. Error code: ' + error.code);
+                            console.error('Error message: ' + error.message);
+                            alert('Error getting your location: ' + error.message);
+                        }
+                    );
                 } else {
                     alert('Geolocation is not supported by this browser.');
                 }
