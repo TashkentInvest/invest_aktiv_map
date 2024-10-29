@@ -1,65 +1,163 @@
-@extends('layouts.app')
+@extends('layouts.admin')
 
 @section('content')
     <h1>Edit Aktiv</h1>
 
-    <form method="POST" action="{{ route('aktivs.update', $aktiv) }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('aktivs.update', $aktiv->id) }}" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
-        <!-- Pre-fill the form fields with existing data -->
-        <div class="mb-3">
-            <label for="object_name" class="form-label">Object Name</label>
-            <input type="text" class="form-control" name="object_name" id="object_name" value="{{ old('object_name', $aktiv->object_name) }}">
-            @error('object_name')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
+        <div class="row my-3">
+            <!-- Left Column -->
+            <div class="col-md-6">
+                <!-- Form Inputs -->
+                <div class="mb-3">
+                    <label for="object_name">Объект номи</label>
+                    <input class="form-control" type="text" name="object_name" id="object_name"
+                        value="{{ old('object_name', $aktiv->object_name) }}">
+                    @error('object_name')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!-- Repeat similar blocks for other fields -->
+                <div class="mb-3">
+                    <label for="balance_keeper">Балансда сақловчи</label>
+                    <input class="form-control" type="text" name="balance_keeper" id="balance_keeper"
+                        value="{{ old('balance_keeper', $aktiv->balance_keeper) }}">
+                    @error('balance_keeper')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!-- Continue with other input fields... -->
+                <div class="mb-3">
+                    <label for="location">Мўлжал</label>
+                    <input class="form-control" type="text" name="location" id="location"
+                        value="{{ old('location', $aktiv->location) }}">
+                    @error('location')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!-- ... -->
+                <div class="mb-3">
+                    <label for="land_area">Ер майдони (кв.м)</label>
+                    <input class="form-control" type="number" name="land_area" id="land_area"
+                        value="{{ old('land_area', $aktiv->land_area) }}">
+                    @error('land_area')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!-- ... -->
+                <div class="mb-3">
+                    <label for="building_area">Бино майдони (кв.м)</label>
+                    <input class="form-control" type="number" name="building_area" id="building_area"
+                        value="{{ old('building_area', $aktiv->building_area) }}">
+                    @error('building_area')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+                <!-- ... -->
+                <label for="gas">Газ</label>
+                <select class="form-control form-select mb-3" name="gas" id="gas">
+                    <option value="Мавжуд" {{ old('gas', $aktiv->gas) == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
+                    <option value="Мавжуд эмас" {{ old('gas', $aktiv->gas) == 'Мавжуд эмас' ? 'selected' : '' }}>Мавжуд эмас</option>
+                </select>
+                @error('gas')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+                <!-- Similarly for water and electricity -->
+                <label for="water">Сув</label>
+                <select class="form-control form-select mb-3" name="water" id="water">
+                    <option value="Мавжуд" {{ old('water', $aktiv->water) == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
+                    <option value="Мавжуд эмас" {{ old('water', $aktiv->water) == 'Мавжуд эмас' ? 'selected' : '' }}>Мавжуд эмас</option>
+                </select>
+                @error('water')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
 
-        <!-- Repeat similar blocks for other fields -->
+                <label for="electricity">Электр</label>
+                <select class="form-control form-select mb-3" name="electricity" id="electricity">
+                    <option value="Мавжуд" {{ old('electricity', $aktiv->electricity) == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
+                    <option value="Мавжуд эмас" {{ old('electricity', $aktiv->electricity) == 'Мавжуд эмас' ? 'selected' : '' }}>Мавжуд эмас
+                    </option>
+                </select>
+                @error('electricity')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
 
-        <!-- File Upload -->
-        <div class="mb-3">
-            <label for="files" class="form-label">Upload Additional Files</label>
-            <input type="file" class="form-control" name="files[]" id="files" multiple>
-            @error('files.*')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
-        </div>
+                <div class="mb-3">
+                    <label for="additional_info">Қўшимча маълумот</label>
+                    <input class="form-control" type="text" name="additional_info" id="additional_info"
+                        value="{{ old('additional_info', $aktiv->additional_info) }}">
+                    @error('additional_info')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
-        <!-- Existing Files -->
-        <div class="mb-3">
-            <label class="form-label">Existing Files:</label>
-            @if($aktiv->files->count())
-                <ul>
-                    @foreach($aktiv->files as $file)
-                        <li>
-                            <a href="{{ asset('storage/' . $file->path) }}" target="_blank">{{ basename($file->path) }}</a>
-                        </li>
-                    @endforeach
-                </ul>
-            @else
-                <p>No files uploaded.</p>
-            @endif
-        </div>
+                <!-- Kadastr Raqami -->
+                <div class="mb-3">
+                    <label for="kadastr_raqami">Кадастр рақами</label>
+                    <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami"
+                        value="{{ old('kadastr_raqami', $aktiv->kadastr_raqami) }}">
+                    @error('kadastr_raqami')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
-        <!-- Map Section -->
-        <div class="mb-3">
-            <button id="find-my-location" type="button" class="btn btn-primary mb-3">Find My Location</button>
-            <div id="map" style="height: 500px; width: 100%;"></div>
-        </div>
+            </div>
 
-        <!-- Hidden Fields for Coordinates -->
-        <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $aktiv->latitude) }}">
-        <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $aktiv->longitude) }}">
+            <!-- Right Column -->
+            <div class="col-md-6">
+                <!-- File upload field -->
+                <div class="mb-3">
+                    <label for="files">Upload Additional Files</label>
+                    <input type="file" class="form-control" name="files[]" id="files" multiple>
+                    @error('files.*')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
 
-        <!-- Zone Name -->
-        <div class="mb-3">
-            <label for="zone_name" class="form-label">Zone Name</label>
-            <input type="text" class="form-control" name="zone_name" id="zone_name" value="{{ old('zone_name', $aktiv->zone_name) }}">
-            @error('zone_name')
-                <div class="text-danger">{{ $message }}</div>
-            @enderror
+                <!-- Display Existing Files -->
+                <div class="mb-3">
+                    <label>Existing Files:</label>
+                    @if($aktiv->files->count())
+                        <ul>
+                            @foreach($aktiv->files as $file)
+                                <li>
+                                    <a href="{{ asset('storage/' . $file->path) }}" target="_blank">{{ basename($file->path) }}</a>
+                                </li>
+                            @endforeach
+                        </ul>
+                    @else
+                        <p>No files uploaded.</p>
+                    @endif
+                </div>
+
+                <!-- Map Section -->
+                <div class="mb-3">
+                    <button id="find-my-location" type="button" class="btn btn-primary mb-3">Find My Location</button>
+                    <div id="map" style="height: 500px; width: 100%;"></div>
+                    @error('latitude')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                    @error('longitude')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+
+                <!-- Hidden Fields for Coordinates -->
+                <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $aktiv->latitude) }}">
+                <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $aktiv->longitude) }}">
+
+                <!-- Geolocation URL Field -->
+                <div class="mb-3">
+                    <label for="geolokatsiya">Геолокация (координата)</label>
+                    <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya"
+                        value="{{ old('geolokatsiya', $aktiv->geolokatsiya) }}">
+                    @error('geolokatsiya')
+                        <div class="text-danger">{{ $message }}</div>
+                    @enderror
+                </div>
+            </div>
         </div>
 
         <!-- Submit Button -->
@@ -69,13 +167,11 @@
 
 @section('scripts')
     <!-- Include the Google Maps JavaScript API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY&libraries=geometry"></script>
+    {{-- <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>s --}}
 
     <script>
-        // Similar JavaScript code as in create view, but initialize map with existing coordinates
         let map;
         let marker;
-        const polygons = [];
 
         function initMap() {
             const initialLocation = {
@@ -85,20 +181,56 @@
 
             map = new google.maps.Map(document.getElementById('map'), {
                 center: initialLocation,
-                zoom: 10
+                zoom: 15
             });
 
-            if (!isNaN(initialLocation.lat) && !isNaN(initialLocation.lng)) {
-                placeMarker(initialLocation, '{{ old('zone_name', $aktiv->zone_name) }}');
+            if (initialLocation.lat && initialLocation.lng) {
+                placeMarker(initialLocation);
                 map.setCenter(initialLocation);
-                map.setZoom(15);
             }
 
-            // Load KML and polygons as before
-            // Add event listeners as before
+            // "Find My Location" button
+            document.getElementById('find-my-location').addEventListener('click', function() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(function(position) {
+                        const userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+                        map.setCenter(userLocation);
+                        map.setZoom(15);
+                        placeMarker(userLocation);
+                    }, function(error) {
+                        console.error('Error occurred. Error code: ' + error.code);
+                        alert('Error getting your location.');
+                    });
+                } else {
+                    alert('Geolocation is not supported by this browser.');
+                }
+            });
+
+            // Allow user to place marker by clicking on the map
+            map.addListener('click', function(event) {
+                placeMarker(event.latLng);
+            });
         }
 
-        // Rest of the JavaScript code as in create view
+        function placeMarker(location) {
+            if (marker) {
+                marker.setMap(null);
+            }
+
+            marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+
+            document.getElementById('latitude').value = location.lat();
+            document.getElementById('longitude').value = location.lng();
+
+            const googleMapsUrl = `https://www.google.com/maps?q=${location.lat()},${location.lng()}`;
+            document.getElementById('geolokatsiya').value = googleMapsUrl;
+        }
 
         window.onload = initMap;
     </script>
