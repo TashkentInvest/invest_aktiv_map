@@ -4,10 +4,11 @@
     <h1>Активлар</h1>
     <a href="{{ route('aktivs.create') }}" class="btn btn-primary mb-3">Янги актив яратиш</a>
 
-    @if($aktivs->count())
+    @if ($aktivs->count())
         <table class="table table-bordered">
             <thead>
                 <tr>
+                    <th>Фойдаланувчи</th>
                     <th>Объект номи</th>
                     <th>Балансда сақловчи</th>
                     <th>Мўлжал</th>
@@ -15,8 +16,9 @@
                 </tr>
             </thead>
             <tbody>
-                @foreach($aktivs as $aktiv)
+                @foreach ($aktivs as $aktiv)
                     <tr>
+                        <td>{{ $aktiv->user->name ?? '' }}</td>
                         <td>{{ $aktiv->object_name }}</td>
                         <td>{{ $aktiv->balance_keeper }}</td>
                         <td>{{ $aktiv->location }}</td>

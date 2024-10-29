@@ -7,6 +7,9 @@
         @csrf
         @method('PUT')
 
+        <input type="hidden" name="user_id" value="{{ $aktiv->user->id ?? 1 }}">
+
+
         <div class="row my-3">
             <!-- Left Column -->
             <div class="col-md-6">

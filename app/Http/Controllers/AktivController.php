@@ -38,6 +38,7 @@ class AktivController extends Controller
             'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'nullable',
             'sub_street_id' => 'required',
+            'user_id' => 'nullable'
 
         ]);
 
@@ -89,6 +90,8 @@ class AktivController extends Controller
             'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'nullable',
             'sub_street_id' => 'required',
+            'user_id' => 'nullable'
+
 
         ]);
 

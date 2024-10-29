@@ -6,6 +6,7 @@
     <form method="POST" action="{{ route('aktivs.store') }}" enctype="multipart/form-data">
         @csrf
 
+        <input type="hidden" name="user_id" value="{{ auth()->user()->id ?? 1 }}">
         <div class="row my-3">
             <!-- Left Column -->
             <div class="col-md-6">
@@ -126,7 +127,7 @@
                 <div class="mb-3">
                     <label for="geolokatsiya">Геолокация (координата)</label>
                     <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya"
-                        value="{{ old('geolokatsiya') }}" readonly>
+                        value="{{ old('geolokatsiya') }}">
                     @error('geolokatsiya')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
@@ -157,7 +158,6 @@
                     lat: 41.2995,
                     lng: 69.2401
                 },
-                // Centered on Tashkent
                 zoom: 10,
             };
 
@@ -174,11 +174,10 @@
                             };
                             map.setCenter(userLocation);
                             map.setZoom(15);
-                            placeMarker(userLocation);
+                            placeMarker(userLocation); // Call placeMarker to set fields directly
                         },
                         function(error) {
                             console.error('Error occurred. Error code: ' + error.code);
-                            console.error('Error message: ' + error.message);
                             alert('Error getting your location: ' + error.message);
                         }
                     );
@@ -194,20 +193,22 @@
         }
 
         function placeMarker(location) {
+            // Remove previous marker if it exists
             if (marker) {
                 marker.setMap(null);
             }
 
+            // Create a new marker
             marker = new google.maps.Marker({
                 position: location,
                 map: map
             });
 
+            // Set values to hidden input fields and geolocation field
             document.getElementById('latitude').value = location.lat();
             document.getElementById('longitude').value = location.lng();
-
-            const googleMapsUrl = `https://www.google.com/maps?q=${location.lat()},${location.lng()}`;
-            document.getElementById('geolokatsiya').value = googleMapsUrl;
+            document.getElementById('geolokatsiya').value =
+                `https://www.google.com/maps?q=${location.lat()},${location.lng()}`;
         }
 
         window.onload = initMap;

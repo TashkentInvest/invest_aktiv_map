@@ -17,6 +17,12 @@ class CreateAktivsTable extends Migration
             $table->id();
             $table->unsignedBigInteger('sub_street_id')->nullable();
             $table->foreign('sub_street_id')->references('id')->on('sub_streets')->onDelete('cascade');
+
+            $table->unsignedBigInteger('user_id')->nullable();
+            $table->enum('action', ['created', 'updated', 'deleted'])->nullable();
+            $table->timestamp('action_timestamp')->nullable();
+            $table->softDeletes();
+
             $table->string('object_name');
             $table->string('balance_keeper');
             $table->string('location');
