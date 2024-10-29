@@ -149,7 +149,10 @@
 
 @section('scripts')
     <!-- Include the Google Maps JavaScript API -->
-    
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
+    </script>
+
     <script>
         let map;
         let marker;

@@ -42,9 +42,9 @@
     <!-- [Template CSS Files] -->
     <link rel="stylesheet" href="{{ asset('assets/new/assets/css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('assets/new/assets/css/style-preset.css') }}">
-
+{{-- 
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
-    </script>
+    </script> --}}
 
     @yield('styles')
 </head>

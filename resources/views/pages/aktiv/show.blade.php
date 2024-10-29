@@ -11,9 +11,9 @@
     <!-- Display Files -->
     <div class="mb-3">
         <strong>Uploaded Files:</strong>
-        @if($aktiv->files->count())
+        @if ($aktiv->files->count())
             <ul>
-                @foreach($aktiv->files as $file)
+                @foreach ($aktiv->files as $file)
                     <li>
                         <a href="{{ asset('storage/' . $file->path) }}" target="_blank">{{ basename($file->path) }}</a>
                     </li>
@@ -31,6 +31,9 @@
 @section('scripts')
     <!-- Include the Google Maps JavaScript API -->
 
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
+    </script>
     <script>
         function initMap() {
             const location = {
