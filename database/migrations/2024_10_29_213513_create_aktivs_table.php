@@ -15,6 +15,8 @@ class CreateAktivsTable extends Migration
     {
         Schema::create('aktivs', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('sub_street_id')->nullable();
+            $table->foreign('sub_street_id')->references('id')->on('sub_streets')->onDelete('cascade');
             $table->string('object_name');
             $table->string('balance_keeper');
             $table->string('location');

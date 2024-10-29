@@ -15,6 +15,26 @@
         <strong>Мўлжал (Местоположение):</strong> {{ $aktiv->location }}
     </div>
 
+
+
+
+    <!-- Region Information -->
+    <div class="mb-3">
+        <strong>Вилоят номи (Region Name):</strong>
+        {{ $aktiv->subStreet->district->region->name_uz ?? 'Маълумот йўқ' }}
+    </div>
+
+    <!-- District Information -->
+    <div class="mb-3">
+        <strong>Туман номи (District Name):</strong>
+        {{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}
+    </div>
+    <!-- SubStreet Information -->
+    <div class="mb-3">
+        <strong>Кўча номи (Sub Street Name):</strong>
+        {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}
+    </div>
+
     <div class="mb-3">
         <strong>Ер майдони (Площадь земли) (кв.м):</strong> {{ $aktiv->land_area }}
     </div>

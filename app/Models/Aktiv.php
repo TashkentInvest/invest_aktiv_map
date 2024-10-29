@@ -23,10 +23,17 @@ class Aktiv extends Model
         'latitude',
         'longitude',
         'kadastr_raqami',
+        'sub_street_id',
+
     ];
 
     public function files()
     {
         return $this->hasMany(File::class);
+    }
+
+    public function substreet()
+    {
+        return $this->belongsTo(SubStreet::class, 'sub_street_id','id');
     }
 }

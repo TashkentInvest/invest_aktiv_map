@@ -42,7 +42,7 @@
                 <div class="mb-3">
                     <label for="sub_street_id" class="me-2">Кўча</label>
                     <div class="d-flex align-items-end">
-                        <select class="form-control sub_street_id select2" name="sub_street_id" id="sub_street_id">
+                        <select class="form-control sub_street_id select2" name="sub_street_id" id="sub_street_id" required>
                             <option value="">Кўчани танланг</option>
                         </select>
                         <button type="button" class="btn btn-primary ms-2" id="add_substreet_btn"

@@ -36,7 +36,9 @@ class AktivController extends Controller
             'latitude'         => 'required|numeric',
             'longitude'        => 'required|numeric',
             'kadastr_raqami'   => 'nullable|string|max:255',
-            'files.*'          => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+            'files.*'          => 'nullable',
+            'sub_street_id' => 'required',
+
         ]);
 
         $data = $request->except('files');
@@ -58,6 +60,8 @@ class AktivController extends Controller
 
     public function show(Aktiv $aktiv)
     {
+        $aktiv->load('subStreet.district.region');
+
         return view('pages.aktiv.show', compact('aktiv'));
     }
 
@@ -83,7 +87,9 @@ class AktivController extends Controller
             'latitude'         => 'required|numeric',
             'longitude'        => 'required|numeric',
             'kadastr_raqami'   => 'nullable|string|max:255',
-            'files.*'          => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+            'files.*'          => 'nullable',
+            'sub_street_id' => 'required',
+
         ]);
 
         $data = $request->except('files');

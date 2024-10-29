@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1>Edit Aktiv</h1>
+    <h1>Активни таҳрирлаш</h1>
 
     <form method="POST" action="{{ route('aktivs.update', $aktiv->id) }}" enctype="multipart/form-data">
         @csrf
@@ -19,7 +19,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- Repeat similar blocks for other fields -->
+
                 <div class="mb-3">
                     <label for="balance_keeper">Балансда сақловчи</label>
                     <input class="form-control" type="text" name="balance_keeper" id="balance_keeper"
@@ -28,7 +28,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- Continue with other input fields... -->
+
                 <div class="mb-3">
                     <label for="location">Мўлжал</label>
                     <input class="form-control" type="text" name="location" id="location"
@@ -37,7 +37,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- ... -->
+
                 <div class="mb-3">
                     <label for="land_area">Ер майдони (кв.м)</label>
                     <input class="form-control" type="number" name="land_area" id="land_area"
@@ -46,7 +46,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- ... -->
+
                 <div class="mb-3">
                     <label for="building_area">Бино майдони (кв.м)</label>
                     <input class="form-control" type="number" name="building_area" id="building_area"
@@ -55,7 +55,7 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- ... -->
+
                 <label for="gas">Газ</label>
                 <select class="form-control form-select mb-3" name="gas" id="gas">
                     <option value="Мавжуд" {{ old('gas', $aktiv->gas) == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
@@ -65,7 +65,7 @@
                 @error('gas')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
-                <!-- Similarly for water and electricity -->
+
                 <label for="water">Сув</label>
                 <select class="form-control form-select mb-3" name="water" id="water">
                     <option value="Мавжуд" {{ old('water', $aktiv->water) == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
@@ -97,6 +97,24 @@
                     @enderror
                 </div>
 
+                <!-- Region Information -->
+                <div class="mb-3">
+                    <strong>Вилоят номи (Region Name):</strong>
+                    {{ $aktiv->subStreet->district->region->name_uz ?? 'Маълумот йўқ' }}
+                </div>
+
+                <!-- District Information -->
+                <div class="mb-3">
+                    <strong>Туман номи (District Name):</strong>
+                    {{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}
+                </div>
+                <!-- SubStreet Information -->
+                <div class="mb-3">
+                    <strong>Кўча номи (Sub Street Name):</strong>
+                    {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}
+                </div>
+
+
                 <!-- Include Address Partial -->
                 @include('inc.__address')
 
@@ -106,7 +124,7 @@
             <div class="col-md-6">
                 <!-- File upload field -->
                 <div class="mb-3">
-                    <label for="files">Upload Additional Files</label>
+                    <label for="files">Қўшимча файллар юклаш</label>
                     <input type="file" class="form-control" name="files[]" id="files" multiple>
                     @error('files.*')
                         <div class="text-danger">{{ $message }}</div>
@@ -115,7 +133,7 @@
 
                 <!-- Display Existing Files -->
                 <div class="mb-3">
-                    <label>Existing Files:</label>
+                    <label>Юкланган файллар:</label>
                     @if ($aktiv->files->count())
                         <ul>
                             @foreach ($aktiv->files as $file)
@@ -126,13 +144,14 @@
                             @endforeach
                         </ul>
                     @else
-                        <p>No files uploaded.</p>
+                        <p>Файллар мавжуд эмас.</p>
                     @endif
                 </div>
 
                 <!-- Map Section -->
                 <div class="mb-3">
-                    <button id="find-my-location" type="button" class="btn btn-primary mb-3">Find My Location</button>
+                    <button id="find-my-location" type="button" class="btn btn-primary mb-3">Менинг жойлашувимни
+                        топиш</button>
                     <div id="map" style="height: 500px; width: 100%;"></div>
                     @error('latitude')
                         <div class="text-danger">{{ $message }}</div>
@@ -144,7 +163,8 @@
 
                 <!-- Hidden Fields for Coordinates -->
                 <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude', $aktiv->latitude) }}">
-                <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude', $aktiv->longitude) }}">
+                <input type="hidden" name="longitude" id="longitude"
+                    value="{{ old('longitude', $aktiv->longitude) }}">
 
                 <!-- Geolocation URL Field -->
                 <div class="mb-3">
@@ -156,14 +176,10 @@
                     @enderror
                 </div>
             </div>
-
-            <!-- Include Address Partial (if needed) -->
-            {{-- @include('inc.__address') --}}
-
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn-success">Update</button>
+        <button type="submit" class="btn btn-success">Янгилаш</button>
     </form>
 @endsection
 
