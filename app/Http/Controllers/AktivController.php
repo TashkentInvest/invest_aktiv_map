@@ -37,6 +37,11 @@ class AktivController extends Controller
             'latitude'         => 'required|numeric',
             'longitude'        => 'required|numeric',
             'files.*'          => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+
+            'kadastr_raqami'        => 'nullable',
+
+
+
         ]);
 
         $data = $request->except('files');
@@ -82,6 +87,9 @@ class AktivController extends Controller
             'latitude'         => 'required|numeric',
             'longitude'        => 'required|numeric',
             'files.*'          => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+
+            'kadastr_raqami'        => 'nullable',
+
         ]);
 
         $data = $request->except('files');
