@@ -18,26 +18,25 @@ class AktivController extends Controller
     {
         $regions = Regions::all();
 
-        return view('pages.aktiv.create',compact('regions'));
+        return view('pages.aktiv.create', compact('regions'));
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'object_name' => 'required|string|max:255',
-            'balance_keeper' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'land_area' => 'required|numeric',
-            'building_area' => 'required|numeric',
-            'gas' => 'required|string',
-            'water' => 'required|string',
-            'electricity' => 'required|string',
-            'additional_info' => 'nullable|string|max:255',
-            'zone_name' => 'required|string|max:255',
-            'geolokatsiya' => 'required|string',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'files.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+            'object_name'      => 'required|string|max:255',
+            'balance_keeper'   => 'required|string|max:255',
+            'location'         => 'required|string|max:255',
+            'land_area'        => 'required|numeric',
+            'building_area'    => 'required|numeric',
+            'gas'              => 'required|string',
+            'water'            => 'required|string',
+            'electricity'      => 'required|string',
+            'additional_info'  => 'nullable|string|max:255',
+            'geolokatsiya'     => 'required|string',
+            'latitude'         => 'required|numeric',
+            'longitude'        => 'required|numeric',
+            'files.*'          => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
         ]);
 
         $data = $request->except('files');
@@ -54,7 +53,7 @@ class AktivController extends Controller
             }
         }
 
-        return redirect()->route('pages.aktiv.index')->with('success', 'Aktiv created successfully.');
+        return redirect()->route('aktivs.index')->with('success', 'Aktiv created successfully.');
     }
 
     public function show(Aktiv $aktiv)
@@ -70,20 +69,19 @@ class AktivController extends Controller
     public function update(Request $request, Aktiv $aktiv)
     {
         $request->validate([
-            'object_name' => 'required|string|max:255',
-            'balance_keeper' => 'required|string|max:255',
-            'location' => 'required|string|max:255',
-            'land_area' => 'required|numeric',
-            'building_area' => 'required|numeric',
-            'gas' => 'required|string',
-            'water' => 'required|string',
-            'electricity' => 'required|string',
-            'additional_info' => 'nullable|string|max:255',
-            'zone_name' => 'required|string|max:255',
-            'geolokatsiya' => 'required|string',
-            'latitude' => 'required|numeric',
-            'longitude' => 'required|numeric',
-            'files.*' => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
+            'object_name'      => 'required|string|max:255',
+            'balance_keeper'   => 'required|string|max:255',
+            'location'         => 'required|string|max:255',
+            'land_area'        => 'required|numeric',
+            'building_area'    => 'required|numeric',
+            'gas'              => 'required|string',
+            'water'            => 'required|string',
+            'electricity'      => 'required|string',
+            'additional_info'  => 'nullable|string|max:255',
+            'geolokatsiya'     => 'required|string',
+            'latitude'         => 'required|numeric',
+            'longitude'        => 'required|numeric',
+            'files.*'          => 'file|mimes:jpg,jpeg,png,pdf,doc,docx|max:2048',
         ]);
 
         $data = $request->except('files');
@@ -100,13 +98,13 @@ class AktivController extends Controller
             }
         }
 
-        return redirect()->route('pages.aktiv.index')->with('success', 'Aktiv updated successfully.');
+        return redirect()->route('aktivs.index')->with('success', 'Aktiv updated successfully.');
     }
 
     public function destroy(Aktiv $aktiv)
     {
         $aktiv->delete();
 
-        return redirect()->route('pages.aktiv.index')->with('success', 'Aktiv deleted successfully.');
+        return redirect()->route('aktivs.index')->with('success', 'Aktiv deleted successfully.');
     }
 }

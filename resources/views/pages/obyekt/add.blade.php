@@ -229,6 +229,22 @@
                         </small>
                     </div>
 
+                    <script>
+                        document.getElementById('kadastr_raqami').addEventListener('input', function(e) {
+                            let value = e.target.value.replace(/[^0-9]/g, '');
+                            let formattedValue = '';
+
+                            if (value.length > 0) formattedValue += value.substring(0, 2);
+                            if (value.length > 2) formattedValue += ':' + value.substring(2, 4);
+                            if (value.length > 4) formattedValue += ':' + value.substring(4, 6);
+                            if (value.length > 6) formattedValue += ':' + value.substring(6, 8);
+                            if (value.length > 8) formattedValue += ':' + value.substring(8, 10);
+                            if (value.length > 10) formattedValue += ':' + value.substring(10, 14);
+
+                            e.target.value = formattedValue;
+                        });
+                    </script>
+
                     <div class="mb-3">
                         <label for="ruxsatnoma_berilgan_ish_turi_id">Рухсатнома берилган иш тури</label>
                         <select class="form-control form_select_cof form-select" name="ruxsatnoma_berilgan_ish_turi_id"
@@ -335,7 +351,9 @@
                         <select class="form-control form_select_cof form-select" name="kz_id" id="hududiy_zona">
                             <option value="">Xududiy zona</option>
                             @foreach ($kzs as $kz)
-                                <option value="{{ $kz->id }}" {{ old('kz_id') == $kz->id ? 'selected' : '' }} data-name="{{ $kz->name }}" data-color="{{ $kz->color }}" data-coefficient="{{ $kz->coefficient }}">
+                                <option value="{{ $kz->id }}" {{ old('kz_id') == $kz->id ? 'selected' : '' }}
+                                    data-name="{{ $kz->name }}" data-color="{{ $kz->color }}"
+                                    data-coefficient="{{ $kz->coefficient }}">
                                     {{ $kz->name }}
                                 </option>
                             @endforeach
@@ -344,7 +362,7 @@
                             <span class="error invalid-feedback">{{ $message }}</span>
                         @enderror
                     </div>
-                    
+
 
                     <div class="mb-3">
                         <label for="kj_id">Объект жойлашуви</label>
@@ -379,7 +397,8 @@
                     <!-- Form Inputs for Coordinates -->
                     <div class="mb-3">
                         <label for="geolokatsiya">Зона</label>
-                        <input type="text" class="form-control" name="zone_name" value="{{old('zone_name')}}" id="zone_name">
+                        <input type="text" class="form-control" name="zone_name" value="{{ old('zone_name') }}"
+                            id="zone_name">
                         <label for="geolokatsiya">Геолокация (координата)</label>
                         <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya"
                             value="{{ old('geolokatsiya') }}">

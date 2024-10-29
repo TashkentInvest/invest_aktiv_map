@@ -23,6 +23,7 @@ class Aktiv extends Model
         'geolokatsiya',
         'latitude',
         'longitude',
+        'kadastr_raqami'
     ];
 
     public function files()

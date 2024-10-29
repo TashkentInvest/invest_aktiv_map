@@ -264,25 +264,100 @@
                         </div>
 
                         <!-- Button to open the map modal -->
-                        @include('inc.__select_map')
-
-                        <!-- Form Inputs for Coordinates -->
+                        <!-- Map Section -->
                         <div class="mb-3">
-                            <label for="geolokatsiya">Зона</label>
-                            <input type="text" class="form-control" name="zone_name" value="{{ old('zone_name') }}"
-                                id="zone_name">
+                            <button id="find-my-location" type="button" class="btn btn-primary mb-3">Find My
+                                Location</button>
+                            <div id="map" style="height: 500px; width: 100%;"></div>
+                            @error('latitude')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                            @error('longitude')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+
+                        <!-- Hidden Fields for Coordinates -->
+                        <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
+                        <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
+
+                        <!-- Geolocation URL Field -->
+                        <div class="mb-3">
                             <label for="geolokatsiya">Геолокация (координата)</label>
                             <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya"
                                 value="{{ old('geolokatsiya') }}">
-                            <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
-                            <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
-
+                            @error('geolokatsiya')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
-
                     </div>
-                </div>
 
+                    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
+                    </script>
+                    <script>
+                        let map;
+                        let marker;
+
+                        function initMap() {
+                            const mapOptions = {
+                                center: {
+                                    lat: 41.2995,
+                                    lng: 69.2401
+                                }, // Centered on Tashkent
+                                zoom: 10,
+                            };
+
+                            map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+                            // "Find My Location" button
+                            document.getElementById('find-my-location').addEventListener('click', function() {
+                                if (navigator.geolocation) {
+                                    navigator.geolocation.getCurrentPosition(function(position) {
+                                        const userLocation = {
+                                            lat: position.coords.latitude,
+                                            lng: position.coords.longitude
+                                        };
+                                        map.setCenter(userLocation);
+                                        map.setZoom(15);
+                                        placeMarker(userLocation);
+                                    }, function(error) {
+                                        console.error('Error occurred. Error code: ' + error.code);
+                                        alert('Error getting your location.');
+                                    });
+                                } else {
+                                    alert('Geolocation is not supported by this browser.');
+                                }
+                            });
+
+                            // Allow user to place marker by clicking on the map
+                            map.addListener('click', function(event) {
+                                placeMarker(event.latLng);
+                            });
+                        }
+
+                        function placeMarker(location) {
+                            if (marker) {
+                                marker.setMap(null);
+                            }
+
+                            marker = new google.maps.Marker({
+                                position: location,
+                                map: map
+                            });
+
+                            document.getElementById('latitude').value = location.lat();
+                            document.getElementById('longitude').value = location.lng();
+
+                            const googleMapsUrl = `https://www.google.com/maps?q=${location.lat()},${location.lng()}`;
+                            document.getElementById('geolokatsiya').value = googleMapsUrl;
+                        }
+
+                        window.onload = initMap;
+                    </script>
+                </div>
             </div>
+
+        </div>
         </div>
 
         <!-- Map Section -->

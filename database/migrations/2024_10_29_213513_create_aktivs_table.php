@@ -28,6 +28,9 @@ class CreateAktivsTable extends Migration
             $table->string('geolokatsiya');
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
+            $table->string('kadastr_raqami');
+
+            
             $table->timestamps();
         });
     }
