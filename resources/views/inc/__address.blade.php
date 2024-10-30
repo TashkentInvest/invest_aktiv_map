@@ -53,7 +53,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label for="home_number" class="me-2">home_number</label>
+                    <label for="home_number" class="me-2">Уй рақами (Мажбурий эмас)</label>
                     <div class="d-flex align-items-end">
                         <input class="form-control" name="home_number" type="text" id="home_number" />
                     </div>
@@ -62,7 +62,7 @@
             </div>
             <div class="col-lg-6">
                 <div class="mb-3">
-                    <label for="apartment_number" class="me-2">apartment_number</label>
+                    <label for="apartment_number" class="me-2">Квартира рақами (Мажбурий эмас)</label>
                     <div class="d-flex align-items-end">
                         <input class="form-control" name="apartment_number" type="text" id="apartment_number" />
                     </div>
