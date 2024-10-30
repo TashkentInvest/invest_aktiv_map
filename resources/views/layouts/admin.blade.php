@@ -142,6 +142,8 @@
                                 </a>
                             </div>
                         </li>
+
+                       
                         {{-- <li class="pc-h-item">
                             <a class="pc-head-link pct-c-btn" href="#" data-bs-toggle="offcanvas"
                                 data-bs-target="#offcanvas_pc_layout">
@@ -544,6 +546,44 @@
                             </div>
                         </li> --}}
                     </ul>
+                </div>
+
+                <div class="dropdown d-inline-block">
+                    <button type="button" class="btn header-item waves-effect" id="page-header-user-dropdown"
+                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img class="rounded-circle header-profile-user"
+                            src="{{ asset('assets/images/avatar-dafault.png') }}" alt="Header Avatar">
+                        <span class="d-none d-xl-inline-block ms-1" key="t-henry">
+                            @if (auth()->user())
+                                {{ auth()->user()->name }}
+                            @endif
+                        </span>
+                        <i class="mdi mdi-chevron-down d-none d-xl-inline-block"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-end">
+                        <!-- item-->
+                        <!-- <a class="dropdown-item" href="#"><i class="bx bx-user font-size-16 align-middle me-1"></i> <span key="t-profile">Profile</span></a>
+                                      <a class="dropdown-item" href="#"><i class="bx bx-wallet font-size-16 align-middle me-1"></i> <span key="t-my-wallet">My Wallet</span></a> -->
+                        @if (auth()->user())
+                            <a class="dropdown-item d-block" href="{{ route('userEdit', auth()->user()->id) }}">
+                                <!-- <span class="badge bg-success float-end">11</span> -->
+                                <i class="bx bx-wrench font-size-16 align-middle me-1"></i>
+                                <span key="t-settings">@lang('global.settings')</span>
+                            </a>
+                        @endif
+                        <div class="dropdown-divider"></div>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST"
+                            style="display: none;">
+                            @csrf
+                        </form>
+                        <a class="dropdown-item text-danger" href="#" role="button"
+                            onclick="
+                            event.preventDefault();
+                            document.getElementById('logout-form').submit();">
+                            <i class="bx bx-power-off font-size-16 align-middle me-1 text-danger"></i>
+                            <span key="t-logout">@lang('global.logout')</span>
+                        </a>
+                    </div>
                 </div>
             </div>
         </header>
