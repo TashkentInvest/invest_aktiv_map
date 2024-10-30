@@ -143,8 +143,19 @@ class AktivController extends Controller
      */
     private function authorizeView(Aktiv $aktiv)
     {
-        if (auth()->user()->roles->first()->name != 'Super Admin' || (auth()->user()->roles->first()->name == 'Manager' ||  auth()->user()->roles->first()->name != 'Manager') && $aktiv->user_id != auth()->id()) {
-            abort(403, 'Unauthorized access.');
+        $userRole = auth()->user()->roles->first()->name;
+
+        if ($userRole == 'Super Admin' || $userRole == 'Manager') {
+            // Super Admins and Managers can access any Aktiv
+            return;
         }
+
+        if ($aktiv->user_id == auth()->id()) {
+            // The Aktiv belongs to the authenticated user
+            return;
+        }
+
+        // If none of the above, deny access
+        abort(403, 'Unauthorized access.');
     }
 }
