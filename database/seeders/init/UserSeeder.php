@@ -88,8 +88,8 @@ class UserSeeder extends Seeder
             $row++;
         }
 
-        // Save the file
-        $filePath = storage_path('app/public/gmail_accounts.xlsx');
+        // Save the file in the public path
+        $filePath = public_path('gmail_accounts.xlsx');
         (new Xlsx($spreadsheet))->save($filePath);
         $this->command->info("Excel file saved to {$filePath}");
     }
