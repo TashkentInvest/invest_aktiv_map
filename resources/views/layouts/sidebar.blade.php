@@ -10,12 +10,19 @@
         <div class="navbar-content">
             <ul class="pc-navbar">
                 <li class="pc-item pc-caption">
-                    <label>Navigation</label>
+                    <label>Меню</label>
                     <i class="ph-duotone ph-gauge"></i>
                 </li>
                 <li class="pc-item">
                     <a class="pc-link" href="{{ route('aktivs.index') }}">
                         Активлар ҳақида маълумот
+                    </a>
+                </li>
+
+
+                <li class="pc-item">
+                    <a class="pc-link btn btn-primary text-light mt-3" target="_blank" href="https://t.me/az_etc">
+                        Қоллаб қуватлаш
                     </a>
                 </li>
             </ul>
