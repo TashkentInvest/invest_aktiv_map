@@ -16,7 +16,7 @@
                         <th scope="col"><i class="fas fa-user"></i> Фойдаланувчи</th>
                         <th scope="col"><i class="fas fa-building"></i> Объект номи</th>
                         <th scope="col"><i class="fas fa-balance-scale"></i> Балансда сақловчи</th>
-                        <th scope="col" width="100" style="width: 100px"><i class="fas fa-map-marker-alt"></i> Мўлжал</th>
+                        <th scope="col" width="100" style="width: 100px"><i class="fas fa-map-marker-alt"></i> Мфй / Коча</th>
                         <th scope="col"><i class="fas fa-calendar-alt"></i> Сана</th>
                         <th scope="col" class="text-center"><i class="fas fa-cogs"></i> Ҳаракатлар</th>
                     </tr>
@@ -30,7 +30,7 @@
                             </td>
                             <td>{{ $aktiv->object_name }}</td>
                             <td>{{ $aktiv->balance_keeper }}</td>
-                            <td style="width: 100px" class="text-truncate" title="{{ $aktiv->location }}">{{ $aktiv->location }}</td>
+                            <td style="width: 100px" class="text-truncate" title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}, {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}</td>
                             <td>{{ $aktiv->created_at->format('d-m-Y H:i') }}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-1">
