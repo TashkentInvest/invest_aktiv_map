@@ -11,7 +11,7 @@ class AktivController extends Controller
     public function index()
     {
         // Check if the user is Super Admin
-        if (auth()->user()->roles->first()->name == 'Super Admin') {
+        if (auth()->user()->roles->first()->name == 'Super Admin' || auth()->user()->roles->first()->name == 'Manager') {
             // Show all Aktiv records for Super Admin
             $aktivs = Aktiv::orderBy('created_at', 'desc')->with('files')->paginate(10);
         } else {
