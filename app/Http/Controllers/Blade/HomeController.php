@@ -21,8 +21,11 @@ class HomeController extends Controller
             ->exists();
 
         if ($hasRoles) {
-            return view('pages.dashboard');
+            // dd('dqw');
+            // return view('pages.dashboard');
+            return redirect()->route('aktivs.index');
         } else {
+            // dd($hasRoles);
             return view('welcome');
         }   
     }
