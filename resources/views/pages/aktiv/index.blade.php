@@ -14,7 +14,7 @@
                 <thead class="table-primary">
                     <tr>
                         <th scope="col"><i class="fas fa-user"></i> Фойдаланувчи</th>
-                        <th scope="col"><i class="fas fa-building"></i> Объект номи</th>
+                        <th scope="col" width="200"><i class="fas fa-building"></i> Объект номи</th>
                         <th scope="col"><i class="fas fa-balance-scale"></i> Балансда сақловчи</th>
                         <th scope="col" width="100" style="width: 100px"><i class="fas fa-map-marker-alt"></i> Мфй / Коча</th>
                         <th scope="col"><i class="fas fa-calendar-alt"></i> Сана</th>
