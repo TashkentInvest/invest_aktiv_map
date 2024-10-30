@@ -13,7 +13,7 @@
                         <th scope="col">Электрон почта</th>
                         <th scope="col">Роли</th>
                         <th scope="col">Яратилган Активлар сони</th>
-                        <th scope="col">Ҳаракатлар</th>
+                        {{-- <th scope="col">Ҳаракатлар</th> --}}
                     </tr>
                 </thead>
                 <tbody>
@@ -28,11 +28,11 @@
                                 @endforeach
                             </td>
                             <td>{{ $user->aktivs_count }}</td>
-                            <td>
+                            {{-- <td>
                                 <a href="{{ route('aktivs.index', ['user_id' => $user->id]) }}" class="btn btn-primary btn-sm">
                                     Активларини кўриш
                                 </a>
-                            </td>
+                            </td> --}}
                         </tr>
                     @endforeach
                 </tbody>
