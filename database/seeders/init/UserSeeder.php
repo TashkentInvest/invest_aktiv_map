@@ -2,11 +2,12 @@
 
 namespace Database\Seeders\init;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
 class UserSeeder extends Seeder
 {
@@ -17,57 +18,26 @@ class UserSeeder extends Seeder
      */
     public function run()
     {
-        $superuser = User::create([
-            "name" => "Super Admin",
-            "email" => "superadmin@example.com",
-            "password" => bcrypt("teamdevs")
-        ]);
-
+        $usersData = [];
         $this->createPermissionsAndRoles();
 
-        $superuser->assignRole('Super Admin');
-        $permissions = Permission::all();
-        $superuser->syncPermissions($permissions);
+        // Generate 100 unique users
+        for ($i = 100; $i < 200; $i++) {
+            $email = "{$i}@gmail.com";
+            $password = $this->generateUniquePassword();
 
-        // admin user
+            // Create user and assign 'Employee' role
+            $user = User::create([
+                "name" => "User {$i}",
+                "email" => $email,
+                "password" => bcrypt($password)
+            ])->assignRole('Employee');
 
-        $adminuser = User::create([
-            "name" => "Admin",
-            "email" => "admin@gmail.com",
-            "password" => bcrypt("password")
-        ]);
+            $usersData[] = ['Email' => $email, 'Password' => $password];
+        }
 
-        $this->createPermissionsAndRoles();
-
-        $adminuser->assignRole('Admin');
-        $permissions = Permission::all();
-        $adminuser->syncPermissions($permissions);
-
-        $manager = User::create([
-            "name" => "jakhongir",
-            "email" => "jakhongir.uljabaev@gmail.com",
-            "password" => bcrypt("1100511#")
-        ]);
-
-
-        $this->createPermissionsAndRoles();
-
-        $manager->assignRole('Manager');
-        $permissions = Permission::all();
-        $manager->syncPermissions($permissions);
-
-        $employeer1 = User::create([
-            "name" => "Sirojiddin",
-            "email" => "s.qobulov@tashkentinvest.com",
-            "password" => bcrypt("87654321aA")
-        ]);
-
-
-        $this->createPermissionsAndRoles();
-
-        $employeer1->assignRole('Employee');
-        $permissions = Permission::all();
-        $employeer1->syncPermissions($permissions);
+        // Export to Excel
+        $this->exportToExcel($usersData);
     }
 
     /**
@@ -75,17 +45,52 @@ class UserSeeder extends Seeder
      */
     private function createPermissionsAndRoles()
     {
-        // Permissions
         $permissions = [
-        "permission.show", "permission.edit", "permission.add", "permission.delete",
-        "roles.show", "roles.edit", "roles.add", "roles.delete"
-    ];
+            "permission.show", "permission.edit", "permission.add", "permission.delete",
+            "roles.show", "roles.edit", "roles.add", "roles.delete"
+        ];
 
         foreach ($permissions as $permission) {
             Permission::firstOrCreate(['name' => $permission, 'guard_name' => 'web']);
         }
 
-        // Role
-        Role::firstOrCreate(['name' => 'Admin', 'guard_name' => 'web']);
+        Role::firstOrCreate(['name' => 'Employee', 'guard_name' => 'web']);
+    }
+
+    /**
+     * Generate a unique password
+     *
+     * @return string
+     */
+    private function generateUniquePassword()
+    {
+        return bin2hex(random_bytes(5)); // Generates a 10-character password
+    }
+
+    /**
+     * Export data to an Excel file
+     *
+     * @param array $data
+     * @return void
+     */
+    private function exportToExcel(array $data)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+        $sheet->setCellValue('A1', 'Email');
+        $sheet->setCellValue('B1', 'Password');
+
+        // Populate the data
+        $row = 2;
+        foreach ($data as $user) {
+            $sheet->setCellValue("A{$row}", $user['Email']);
+            $sheet->setCellValue("B{$row}", $user['Password']);
+            $row++;
+        }
+
+        // Save the file
+        $filePath = storage_path('app/public/gmail_accounts.xlsx');
+        (new Xlsx($spreadsheet))->save($filePath);
+        $this->command->info("Excel file saved to {$filePath}");
     }
 }

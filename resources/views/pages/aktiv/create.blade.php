@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1>Create New Aktiv</h1>
+    <h1>Янги Актив Яратиш</h1>
 
     <form method="POST" action="{{ route('aktivs.store') }}" enctype="multipart/form-data">
         @csrf
