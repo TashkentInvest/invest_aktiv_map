@@ -129,7 +129,7 @@
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn-success">Submit</button>
+        <button type="submit" class="btn btn-success">Сақлаш</button>
     </form>
 @endsection
 
