@@ -13,10 +13,10 @@ class AktivController extends Controller
         // Check if the user is Super Admin
         if (auth()->user()->roles->first()->name == 'Super Admin') {
             // Show all Aktiv records for Super Admin
-            $aktivs = Aktiv::with('files')->paginate(10);
+            $aktivs = Aktiv::orderBy('created_at', 'desc')->with('files')->paginate(10);
         } else {
             // Show only the user's own Aktiv records
-            $aktivs = Aktiv::where('user_id', auth()->id())->with('files')->paginate(10);
+            $aktivs = Aktiv::orderBy('created_at', 'desc')->where('user_id', auth()->id())->with('files')->paginate(10);
         }
 
         return view('pages.aktiv.index', compact('aktivs'));
