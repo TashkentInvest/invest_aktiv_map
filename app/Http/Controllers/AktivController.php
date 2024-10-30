@@ -10,7 +10,15 @@ class AktivController extends Controller
 {
     public function index()
     {
-        $aktivs = Aktiv::with('files')->paginate(10);
+        // Check if the user is Super Admin
+        if (auth()->user()->roles->first()->name == 'Super Admin') {
+            // Show all Aktiv records for Super Admin
+            $aktivs = Aktiv::with('files')->paginate(10);
+        } else {
+            // Show only the user's own Aktiv records
+            $aktivs = Aktiv::where('user_id', auth()->id())->with('files')->paginate(10);
+        }
+
         return view('pages.aktiv.index', compact('aktivs'));
     }
 
@@ -37,12 +45,12 @@ class AktivController extends Controller
             'longitude'        => 'required|numeric',
             'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'nullable',
-            'sub_street_id' => 'required',
-            'user_id' => 'nullable'
-
+            'sub_street_id'    => 'required',
+            'user_id'          => 'nullable'
         ]);
 
         $data = $request->except('files');
+        $data['user_id'] = auth()->id(); // Automatically set the authenticated user's ID
 
         $aktiv = Aktiv::create($data);
 
@@ -61,19 +69,24 @@ class AktivController extends Controller
 
     public function show(Aktiv $aktiv)
     {
-        $aktiv->load('subStreet.district.region');
+        $this->authorizeView($aktiv); // Check if the user can view this Aktiv
 
+        $aktiv->load('subStreet.district.region');
         return view('pages.aktiv.show', compact('aktiv'));
     }
 
     public function edit(Aktiv $aktiv)
     {
+        $this->authorizeView($aktiv); // Check if the user can edit this Aktiv
+
         $regions = Regions::get();
         return view('pages.aktiv.edit', compact('aktiv', 'regions'));
     }
 
     public function update(Request $request, Aktiv $aktiv)
     {
+        $this->authorizeView($aktiv); // Check if the user can update this Aktiv
+
         $request->validate([
             'object_name'      => 'required|string|max:255',
             'balance_keeper'   => 'required|string|max:255',
@@ -89,20 +102,16 @@ class AktivController extends Controller
             'longitude'        => 'required|numeric',
             'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'nullable',
-            'sub_street_id' => 'required',
-            'user_id' => 'nullable'
-
-
+            'sub_street_id'    => 'required',
+            'user_id'          => 'nullable'
         ]);
 
         $data = $request->except('files');
-
         $aktiv->update($data);
 
         if ($request->hasFile('files')) {
             foreach ($request->file('files') as $file) {
                 $path = $file->store('assets', 'public');
-
                 $aktiv->files()->create([
                     'path' => $path,
                 ]);
@@ -114,16 +123,28 @@ class AktivController extends Controller
 
     public function destroy(Aktiv $aktiv)
     {
-        // Delete associated files
+        $this->authorizeView($aktiv); // Check if the user can delete this Aktiv
+
         foreach ($aktiv->files as $file) {
-            // Delete the file from storage
             \Storage::disk('public')->delete($file->path);
-            // Delete the file record from the database
             $file->delete();
         }
 
         $aktiv->delete();
 
         return redirect()->route('aktivs.index')->with('success', 'Aktiv deleted successfully.');
+    }
+
+    /**
+     * Check if the authenticated user is authorized to view, edit, or delete an Aktiv.
+     *
+     * @param Aktiv $aktiv
+     * @return void
+     */
+    private function authorizeView(Aktiv $aktiv)
+    {
+        if (auth()->user()->roles->first()->name != 'Super Admin' && $aktiv->user_id != auth()->id()) {
+            abort(403, 'Unauthorized access.');
+        }
     }
 }
