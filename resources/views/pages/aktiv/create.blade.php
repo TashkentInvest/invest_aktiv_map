@@ -119,7 +119,7 @@
                 <!-- Geolocation URL Field -->
                 <div class="mb-3">
                     <label for="geolokatsiya">Геолокация (координата)</label>
-                    <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya" required
+                    <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya" readonly required
                         value="{{ old('geolokatsiya') }}">
                     @error('geolokatsiya')
                         <div class="text-danger">{{ $message }}</div>

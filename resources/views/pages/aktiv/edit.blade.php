@@ -9,7 +9,6 @@
 
         <input type="hidden" name="user_id" value="{{ $aktiv->user->id ?? 1 }}">
 
-
         <div class="row my-3">
             <!-- Left Column -->
             <div class="col-md-6">
@@ -117,7 +116,6 @@
                     {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}
                 </div>
 
-
                 <!-- Include Address Partial -->
                 @include('inc.__address')
 
@@ -187,9 +185,7 @@
 @endsection
 
 @section('scripts')
-    <!-- Include the Google Maps JavaScript API -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
-    </script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_MAPS_API_KEY&libraries=geometry"></script>
     <script>
         let map;
         let marker;
@@ -209,7 +205,6 @@
                 placeMarker(initialLocation);
             }
 
-            // "Find My Location" button
             document.getElementById('find-my-location').addEventListener('click', function() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
@@ -224,7 +219,6 @@
                         },
                         function(error) {
                             console.error('Error occurred. Error code: ' + error.code);
-                            console.error('Error message: ' + error.message);
                             alert('Error getting your location: ' + error.message);
                         }
                     );
@@ -233,7 +227,6 @@
                 }
             });
 
-            // Allow user to place marker by clicking on the map
             map.addListener('click', function(event) {
                 placeMarker(event.latLng);
             });
@@ -249,11 +242,12 @@
                 map: map
             });
 
-            document.getElementById('latitude').value = location.lat();
-            document.getElementById('longitude').value = location.lng();
+            const lat = typeof location.lat === "function" ? location.lat() : location.lat;
+            const lng = typeof location.lng === "function" ? location.lng() : location.lng;
 
-            const googleMapsUrl = `https://www.google.com/maps?q=${location.lat()},${location.lng()}`;
-            document.getElementById('geolokatsiya').value = googleMapsUrl;
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+            document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
         }
 
         window.onload = initMap;

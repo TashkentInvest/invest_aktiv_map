@@ -13,15 +13,17 @@
                     <th>Балансда сақловчи</th>
                     <th>Мўлжал</th>
                     <th>Ҳаракатлар</th>
+                    <th>Сана</th>
                 </tr>
             </thead>
             <tbody>
                 @foreach ($aktivs as $aktiv)
                     <tr>
-                        <td>{{ $aktiv->user->name ?? '' }}</td>
+                        <td>{{ $aktiv->user->id ?? '' }} | {{ $aktiv->user->name ?? '' }} | {{ $aktiv->user->email ?? '' }}</td>
                         <td>{{ $aktiv->object_name }}</td>
                         <td>{{ $aktiv->balance_keeper }}</td>
                         <td>{{ $aktiv->location }}</td>
+                        <td>{{ $aktiv->created_at }}</td>
                         <td>
                             <a href="{{ route('aktivs.show', $aktiv) }}" class="btn btn-info btn-sm">Кўриш</a>
                             <a href="{{ route('aktivs.edit', $aktiv) }}" class="btn btn-warning btn-sm">Таҳрирлаш</a>
