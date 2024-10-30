@@ -95,9 +95,11 @@
         <a href="{{ route('aktivs.index') }}" class="btn btn-secondary">
             <i class="fas fa-arrow-left"></i> Рўйхатга қайтиш (Вернуться к списку)
         </a>
-        <a href="{{ route('aktivs.edit', $aktiv->id) }}" class="btn btn-primary">
-            <i class="fas fa-edit"></i> Объектни таҳрирлаш (Редактировать объект)
-        </a>
+        @if (auth()->user()->roles[0]->name != 'Manager')
+            <a href="{{ route('aktivs.edit', $aktiv->id) }}" class="btn btn-primary">
+                <i class="fas fa-edit"></i> Объектни таҳрирлаш (Редактировать объект)
+            </a>
+        @endif
     </div>
 @endsection
 

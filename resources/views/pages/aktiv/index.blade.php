@@ -38,6 +38,8 @@
                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Кўриш">
                                         <i class="fas fa-eye"></i>
                                     </a>
+                                  
+                                    @if(auth()->user()->roles[0]->name != 'Manager')
                                     <a href="{{ route('aktivs.edit', $aktiv) }}" class="btn btn-warning btn-sm"
                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Таҳрирлаш">
                                         <i class="fas fa-edit"></i>
@@ -52,6 +54,8 @@
                                             <i class="fas fa-trash-alt"></i>
                                         </button>
                                     </form>
+                                    @endif
+
                                 </div>
                             </td>
                         </tr>
