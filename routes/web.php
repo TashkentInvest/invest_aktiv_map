@@ -17,7 +17,6 @@ use App\Http\Controllers\ObyektController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\StreetController;
 use App\Http\Controllers\HistoryController;
-use App\Http\Controllers\ProductController;
 use App\Http\Controllers\CalendarController;
 use App\Http\Controllers\AnalyticsController;
 use App\Http\Controllers\SubStreetController;

@@ -28,7 +28,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- Continue with other input fields... -->
                 <div class="mb-3">
                     <label for="location">Мўлжал</label>
                     <input class="form-control" type="text" name="location" id="location" value="{{ old('location') }}">
@@ -36,7 +35,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- ... -->
                 <div class="mb-3">
                     <label for="land_area">Ер майдони (кв.м)</label>
                     <input class="form-control" type="number" name="land_area" id="land_area"
@@ -45,7 +43,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- ... -->
                 <div class="mb-3">
                     <label for="building_area">Бино майдони (кв.м)</label>
                     <input class="form-control" type="number" name="building_area" id="building_area"
@@ -54,7 +51,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- ... -->
                 <label for="gas">Газ</label>
                 <select class="form-control form-select mb-3" name="gas" id="gas">
                     <option value="Мавжуд" {{ old('gas') == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
@@ -63,7 +59,6 @@
                 @error('gas')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
-                <!-- Similarly for water and electricity -->
                 <label for="water">Сув</label>
                 <select class="form-control form-select mb-3" name="water" id="water">
                     <option value="Мавжуд" {{ old('water') == 'Мавжуд' ? 'selected' : '' }}>Мавжуд</option>
@@ -92,8 +87,6 @@
                     @enderror
                 </div>
                 @include('inc.__address')
-
-
             </div>
 
             <!-- Right Column -->
@@ -133,8 +126,6 @@
                     @enderror
                 </div>
             </div>
-
-
         </div>
 
         <!-- Submit Button -->
@@ -143,11 +134,8 @@
 @endsection
 
 @section('scripts')
-    <!-- Include the Google Maps JavaScript API -->
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
     </script>
-
     <script>
         let map;
         let marker;
@@ -163,7 +151,6 @@
 
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
-            // "Find My Location" button
             document.getElementById('find-my-location').addEventListener('click', function() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
@@ -172,9 +159,16 @@
                                 lat: position.coords.latitude,
                                 lng: position.coords.longitude
                             };
+
                             map.setCenter(userLocation);
                             map.setZoom(15);
-                            placeMarker(userLocation); // Call placeMarker to set fields directly
+                            placeMarker(userLocation);
+
+                            // Set latitude, longitude, and geolocation URL in the input fields
+                            document.getElementById('latitude').value = userLocation.lat;
+                            document.getElementById('longitude').value = userLocation.lng;
+                            document.getElementById('geolokatsiya').value =
+                                `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}`;
                         },
                         function(error) {
                             console.error('Error occurred. Error code: ' + error.code);
@@ -186,29 +180,32 @@
                 }
             });
 
-            // Allow user to place marker by clicking on the map
             map.addListener('click', function(event) {
                 placeMarker(event.latLng);
             });
         }
 
         function placeMarker(location) {
-            // Remove previous marker if it exists
+            // Clear previous marker if any
             if (marker) {
                 marker.setMap(null);
             }
 
-            // Create a new marker
+            // Place new marker
             marker = new google.maps.Marker({
                 position: location,
                 map: map
             });
 
-            // Set values to hidden input fields and geolocation field
-            document.getElementById('latitude').value = location.lat();
-            document.getElementById('longitude').value = location.lng();
-            document.getElementById('geolokatsiya').value =
-                `https://www.google.com/maps?q=${location.lat()},${location.lng()}`;
+            // Use `location.lat` and `location.lng` as properties if passed from `getCurrentPosition`
+            // Use `location.lat()` and `location.lng()` as functions if passed from map click
+            const lat = typeof location.lat === "function" ? location.lat() : location.lat;
+            const lng = typeof location.lng === "function" ? location.lng() : location.lng;
+
+            // Set latitude, longitude, and geolocation URL in the input fields
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+            document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
         }
 
         window.onload = initMap;
