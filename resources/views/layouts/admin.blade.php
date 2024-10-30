@@ -91,7 +91,7 @@
                                 <i class="ti ti-menu-2"></i>
                             </a>
                         </li>
-                        <li class="dropdown pc-h-item d-inline-flex d-md-none">
+                        {{-- <li class="dropdown pc-h-item d-inline-flex d-md-none">
                             <a class="pc-head-link dropdown-toggle arrow-none m-0" data-bs-toggle="dropdown"
                                 href="#" role="button" aria-haspopup="false" aria-expanded="false">
                                 <i class="ph-duotone ph-magnifying-glass"></i>
@@ -116,7 +116,7 @@
                                     style="padding: 0"><kbd>ctrl+k</kbd></button>
                             </form>
 
-                        </li>
+                        </li> --}}
                     </ul>
                 </div>
                 <!-- [Mobile Media Block end] -->
