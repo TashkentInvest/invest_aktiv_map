@@ -129,7 +129,15 @@
         </div>
 
         <!-- Submit Button -->
-        <button type="submit" class="btn btn-success">Сақлаш</button>
+        {{-- <button type="submit" class="btn btn-success">Сақлаш</button> --}}
+        <button type="submit" class="btn btn-success" id="submit-btn">Сақлаш</button>
+
+        <script>
+            document.querySelector('form').addEventListener('submit', function() {
+                document.getElementById('submit-btn').disabled = true;
+                document.getElementById('submit-btn').innerText = 'Юкланмоқда...';
+            });
+        </script>
     </form>
 @endsection
 
