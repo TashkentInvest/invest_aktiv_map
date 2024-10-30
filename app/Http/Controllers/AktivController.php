@@ -143,7 +143,7 @@ class AktivController extends Controller
      */
     private function authorizeView(Aktiv $aktiv)
     {
-        if (auth()->user()->roles->first()->name != 'Super Admin' || auth()->user()->roles->first()->name != 'Manager' && $aktiv->user_id != auth()->id()) {
+        if (auth()->user()->roles->first()->name != 'Super Admin' || auth()->user()->roles->first()->name == 'Manager' && $aktiv->user_id != auth()->id()) {
             abort(403, 'Unauthorized access.');
         }
     }
