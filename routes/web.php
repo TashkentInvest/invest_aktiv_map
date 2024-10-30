@@ -70,6 +70,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::get('aktivs/{aktiv}/edit', [AktivController::class, 'edit'])->name('aktivs.edit');
     Route::put('aktivs/{aktiv}', [AktivController::class, 'update'])->name('aktivs.update');
     Route::delete('aktivs/{aktiv}', [AktivController::class, 'destroy'])->name('aktivs.destroy');
+    Route::get('aktiv/users', [AktivController::class, 'userAktivCounts'])->name('aktivs.userAktivCounts');
 
 
     Route::get('/optimize-cache', [HomeController::class, 'optimize'])->name('optimize.command');

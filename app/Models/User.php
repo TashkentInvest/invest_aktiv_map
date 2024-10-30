@@ -17,7 +17,10 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email','password','theme'
+        'name',
+        'email',
+        'password',
+        'theme'
     ];
 
     /**
@@ -26,7 +29,8 @@ class User extends Authenticatable
      * @var array
      */
     protected $hidden = [
-        'password', 'remember_token',
+        'password',
+        'remember_token',
     ];
 
     /**
@@ -44,7 +48,7 @@ class User extends Authenticatable
         $this->save();
     }
 
-    public function theme():array
+    public function theme(): array
     {
         $classes = [
             'default' => [
@@ -64,10 +68,10 @@ class User extends Authenticatable
             ]
         ];
         return $classes[$this->theme] ?? [
-                'body' => '',
-                'navbar' => ' navbar-light ',
-                'sidebar' => ' sidebar-dark-primary ',
-            ];
+            'body' => '',
+            'navbar' => ' navbar-light ',
+            'sidebar' => ' sidebar-dark-primary ',
+        ];
     }
 
     /**
@@ -81,7 +85,13 @@ class User extends Authenticatable
         return $date->format('Y-m-d H:i:s');
     }
 
-    public function view(){
+    public function view()
+    {
         return $this->hasOne(View::class);
+    }
+
+    public function aktivs()
+    {
+        return $this->hasMany(Aktiv::class);
     }
 }

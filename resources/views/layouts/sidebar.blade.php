@@ -19,7 +19,16 @@
                     </a>
                 </li>
 
+                @if(auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')
+                <li class="pc-item">
+                    <a class="pc-link" href="{{ route('aktivs.userAktivCounts') }}">
+                        Фойдаланувчилар Активлари
+                    </a>
+                </li>
+                @endif
 
+
+              
                 <li class="pc-item">
                     <a class="pc-link btn btn-primary text-light mt-3" target="_blank" href="https://t.me/az_etc">
                         Қоллаб қуватлаш

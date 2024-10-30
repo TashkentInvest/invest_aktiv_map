@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Aktiv;
 use App\Models\Regions;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AktivController extends Controller
@@ -157,5 +158,20 @@ class AktivController extends Controller
 
         // If none of the above, deny access
         abort(403, 'Unauthorized access.');
+    }
+
+    public function userAktivCounts()
+    {
+        $userRole = auth()->user()->roles->first()->name;
+
+        // Only Super Admins and Managers can access this page
+        if ($userRole != 'Super Admin' && $userRole != 'Manager') {
+            abort(403, 'Unauthorized access.');
+        }
+
+        // Get users and their Aktiv counts
+        $users = User::withCount('aktivs')->get();
+        // dd('dwq');
+        return view('pages.aktiv.user_counts', compact('users'));
     }
 }
