@@ -19,21 +19,37 @@
                     </a>
                 </li>
 
-                @if(auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')
-                <li class="pc-item">
-                    <a class="pc-link" href="{{ route('aktivs.userAktivCounts') }}">
-                        Фойдаланувчилар Активлари
-                    </a>
-                </li>
+                @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')
+                    <li class="pc-item">
+                        <a class="pc-link" href="{{ route('aktivs.userAktivCounts') }}">
+                            Фойдаланувчилар Активлари
+                        </a>
+                    </li>
                 @endif
 
 
-              
+
                 <li class="pc-item">
                     <a class="pc-link btn btn-primary text-light mt-3" target="_blank" href="https://t.me/az_etc">
                         Қоллаб қуватлаш
                     </a>
                 </li>
+
+
+                @if (auth()->user()->roles[0]->name == 'Super Admin')
+                    <li class="pc-item">
+                        <form action="{{ route('userUpdateNames') }}" method="POST" enctype="multipart/form-data">
+                            @csrf
+                            <div class="mb-3">
+                                <label for="excel_file" class="form-label">Upload Excel File</label>
+                                <input type="file" name="excel_file" id="excel_file" class="form-control"
+                                    accept=".xlsx,.xls" required>
+                            </div>
+                            <button type="submit" class="btn btn-primary">Update User Names</button>
+                        </form>
+                    </li>
+                @endif
+
             </ul>
 
 

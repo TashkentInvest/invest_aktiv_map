@@ -8,6 +8,7 @@ use App\Services\LogWriter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Maatwebsite\Excel\Facades\Excel;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -158,5 +159,53 @@ class UserController extends Controller
         }
 
         return redirect()->back();
+    }
+
+    public function updateUserNames(Request $request)
+    {
+        // dd('das');
+        // Validate the uploaded file
+        $request->validate([
+            'excel_file' => 'required|file|mimes:xlsx,xls',
+        ]);
+
+        try {
+            $path = $request->file('excel_file')->getRealPath();
+
+            // Load the Excel file
+            $data = Excel::toArray([], $request->file('excel_file'));
+
+            if (empty($data) || count($data[0]) == 0) {
+                return redirect()->back()->with('errors', 'The Excel file is empty.');
+            }
+
+            $updatedUsers = 0;
+
+            // Loop through the rows
+            foreach ($data[0] as $row) {
+                // Assuming the first column is 'gmail' and the second column is 'name'
+                if (!isset($row[0]) || !isset($row[1])) {
+                    continue; // Skip rows that don't have both email and name
+                }
+
+                $email = trim($row[0]);
+                $name = trim($row[1]);
+
+                // Find the user by email
+                $user = User::where('email', $email)->first();
+
+                if ($user) {
+                    // Update the user's name
+                    $user->name = $name;
+                    $user->save();
+
+                    $updatedUsers++;
+                }
+            }
+
+            return redirect()->back()->with('success', "Successfully updated $updatedUsers user(s).");
+        } catch (\Exception $e) {
+            return redirect()->back()->with('errors', 'An error occurred while processing the Excel file.');
+        }
     }
 }

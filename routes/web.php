@@ -197,6 +197,7 @@ Route::group(['middleware' => ['auth']], function () {
         Route::delete('/delete/{id}', [UserController::class, 'destroy'])->name('userDestroy');
         Route::get('/theme-set/{id}', [UserController::class, 'setTheme'])->name('userSetTheme');
     });
+    Route::post('user/update/users', [UserController::class, 'updateUserNames'])->name('userUpdateNames');
     // Constructions
     Route::prefix('constructions')->group(function () {
         Route::get('/', [ConstructionController::class, 'index'])->name('construction.index');
