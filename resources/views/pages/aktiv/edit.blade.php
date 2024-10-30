@@ -183,7 +183,7 @@
         <button type="submit" class="btn btn-success">Янгилаш</button>
     </form>
 @endsection
-
+`
 @section('scripts')
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
     </script>

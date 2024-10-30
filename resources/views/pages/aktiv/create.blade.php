@@ -94,7 +94,7 @@
                 <!-- File upload field -->
                 <div class="mb-3">
                     <label for="files">Upload Files</label>
-                    <input type="file" class="form-control" name="files[]" id="files" multiple>
+                    <input type="file" class="form-control" name="files[]" id="files" multiple required>
                     @error('files.*')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror

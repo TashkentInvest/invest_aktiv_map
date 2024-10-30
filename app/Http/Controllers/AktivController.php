@@ -44,7 +44,7 @@ class AktivController extends Controller
             'latitude'         => 'required|numeric',
             'longitude'        => 'required|numeric',
             'kadastr_raqami'   => 'nullable|string|max:255',
-            'files.*'          => 'nullable',
+            'files.*'          => 'required',
             'sub_street_id'    => 'required',
             'user_id'          => 'nullable'
         ]);
@@ -101,7 +101,7 @@ class AktivController extends Controller
             'latitude'         => 'required|numeric',
             'longitude'        => 'required|numeric',
             'kadastr_raqami'   => 'nullable|string|max:255',
-            'files.*'          => 'nullable',
+            'files.*'          => 'required',
             'sub_street_id'    => 'required',
             'user_id'          => 'nullable'
         ]);
