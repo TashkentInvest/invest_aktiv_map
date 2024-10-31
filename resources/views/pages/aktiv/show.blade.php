@@ -74,11 +74,11 @@
                     @foreach ($aktiv->files as $file)
                         <div class="col-md-4 mb-3">
                             <div class="card h-100">
-                                <a href="{{ asset('storage/' . $file->path) }}" target="_blank">
+                                <a href="{{ asset('storage/' . $file->path) }}" class="glightbox"
+                                    data-gallery="aktiv-gallery" data-title="{{ $aktiv->object_name }}"
+                                    data-description="{{ $aktiv->additional_info }}">
                                     <img src="{{ asset('storage/' . $file->path) }}" class="card-img-top" alt="Image">
                                 </a>
-
-
                             </div>
                         </div>
                     @endforeach
@@ -109,6 +109,9 @@
 @endsection
 
 @section('styles')
+    <!-- GLightbox CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+
     <style>
         .card {
             border: none;
@@ -145,27 +148,44 @@
 @endsection
 
 @section('scripts')
+    <!-- Include GLightbox JS -->
+    <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
+
+    <!-- Initialize GLightbox and Google Maps -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize GLightbox
+            const lightbox = GLightbox({
+                selector: '.glightbox',
+                touchNavigation: true,
+                loop: true,
+                zoomable: true,
+                autoplayVideos: true
+            });
+
+            // Initialize Google Maps
+            function initMap() {
+                const location = {
+                    lat: parseFloat('{{ $aktiv->latitude }}'),
+                    lng: parseFloat('{{ $aktiv->longitude }}')
+                };
+
+                const map = new google.maps.Map(document.getElementById('map'), {
+                    center: location,
+                    zoom: 15
+                });
+
+                const marker = new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
+            }
+
+            window.onload = initMap;
+        });
+    </script>
+
     <!-- Include the Google Maps JavaScript API -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
-    </script>
-    <script>
-        function initMap() {
-            const location = {
-                lat: parseFloat('{{ $aktiv->latitude }}'),
-                lng: parseFloat('{{ $aktiv->longitude }}')
-            };
-
-            const map = new google.maps.Map(document.getElementById('map'), {
-                center: location,
-                zoom: 15
-            });
-
-            const marker = new google.maps.Marker({
-                position: location,
-                map: map
-            });
-        }
-
-        window.onload = initMap;
     </script>
 @endsection
