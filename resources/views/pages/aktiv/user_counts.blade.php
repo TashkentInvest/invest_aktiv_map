@@ -25,7 +25,7 @@
                                 <td>{{ $user->email }}</td>
                                 <td>
                                     @foreach ($user->roles as $role)
-                                        <span class="badge bg-info text-dark">{{ $role->name }}</span>
+                                        <span class="badge bg-info text-light">{{ $role->name }}</span>
                                     @endforeach
                                 </td>
                                 <td>{{ $user->aktivs_count }}</td>
