@@ -3,7 +3,7 @@
 @section('content')
     <h1>Янги Актив Яратиш</h1>
 
-    <form method="POST" action="{{ route('aktivs.store') }}" enctype="multipart/form-data">
+    <form method="POST" action="{{ route('aktivs.store') }}" enctype="multipart/form-data" id="aktiv-form">
         @csrf
 
         <input type="hidden" name="user_id" value="{{ auth()->user()->id ?? 1 }}">
@@ -87,64 +87,41 @@
                 </div>
                 @include('inc.__address')
             </div>
-
             <!-- Right Column -->
             <div class="col-md-6">
-                <!-- File upload field -->
+                <!-- File upload fields -->
                 <div class="mb-3">
-                    <label for="files" class="text-danger">Upload Files (Minimum 4)</label>
-                    <input type="file" class="form-control" name="files[]" id="files" multiple required
-                        onchange="validateFiles()">
-                    <div id="file-error" class="text-danger"></div>
+                    <label class="text-danger">Файлларни юклаш (Камида 4 та расм мажбурий !!!)</label>
                 </div>
+                <div class="mb-3">
+                    <label for="file1">Биринчи файл</label>
+                    <input type="file" class="form-control" name="files[]" id="file1" required>
+                </div>
+                <div class="mb-3">
+                    <label for="file2">Иккинчи файл</label>
+                    <input type="file" class="form-control" name="files[]" id="file2" required>
+                </div>
+                <div class="mb-3">
+                    <label for="file3">Учинчи файл</label>
+                    <input type="file" class="form-control" name="files[]" id="file3" required>
+                </div>
+                <div class="mb-3">
+                    <label for="file4">Тўртинчи файл</label>
+                    <input type="file" class="form-control" name="files[]" id="file4" required>
+                </div>
+
+                <!-- Error message display -->
+                <div id="file-error" class="text-danger mb-3"></div>
 
                 <!-- Container to hold additional file inputs -->
                 <div id="file-upload-container"></div>
 
-                <button type="button" onclick="addFileInput()">Add More Files</button>
-
-                <script>
-                    document.getElementById('files').addEventListener('change', validateFiles);
-
-                    function validateFiles() {
-                        const fileInput = document.getElementById('files');
-                        const submitBtn = document.getElementById('submit-btn');
-                        const errorDiv = document.getElementById('file-error');
-
-                        // Count the files selected in the main file input and any additional inputs
-                        let totalFiles = fileInput.files.length;
-                        const additionalFileInputs = document.querySelectorAll('#file-upload-container input[type="file"]');
-                        additionalFileInputs.forEach(input => {
-                            totalFiles += input.files.length;
-                        });
-
-                        // Validate minimum file requirement
-                        if (totalFiles < 4) {
-                            errorDiv.textContent = 'Please upload at least 4 files.';
-                            submitBtn.disabled = true;
-                        } else {
-                            errorDiv.textContent = '';
-                            submitBtn.disabled = false;
-                        }
-                    }
-
-                    function addFileInput() {
-                        const container = document.getElementById('file-upload-container');
-                        const newInput = document.createElement('input');
-                        newInput.setAttribute('type', 'file');
-                        newInput.setAttribute('name', 'files[]');
-                        newInput.setAttribute('class', 'form-control mt-2');
-                        newInput.setAttribute('onchange', 'validateFiles()'); // Add onchange event for validation
-                        container.appendChild(newInput);
-                    }
-
-                    // Disable submit button initially if fewer than 4 files are selected
-                    document.getElementById('submit-btn').disabled = true;
-                </script>
+                <button type="button" class="btn btn-secondary mb-3" onclick="addFileInput()">Янги файл қўшиш</button>
 
                 <!-- Map Section -->
                 <div class="mb-3">
-                    <button id="find-my-location" type="button" class="btn btn-primary mb-3">Find My Location</button>
+                    <button id="find-my-location" type="button" class="btn btn-primary mb-3">Менинг жойлашувимни
+                        топиш</button>
                     <div id="map" style="height: 500px; width: 100%;"></div>
                     @error('latitude')
                         <div class="text-danger">{{ $message }}</div>
@@ -172,86 +149,156 @@
 
         <!-- Submit Button -->
         <button type="submit" class="btn btn-success" id="submit-btn">Сақлаш</button>
-
-        <script>
-            document.querySelector('form').addEventListener('submit', function() {
-                document.getElementById('submit-btn').disabled = true;
-                document.getElementById('submit-btn').innerText = 'Юкланмоқда...';
-            });
-        </script>
     </form>
 @endsection
 
 @section('scripts')
+    <!-- Include Google Maps script and initialization code -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
     </script>
+    <!-- Place the JavaScript code at the end, inside the 'scripts' section -->
     <script>
-        let map;
-        let marker;
+        document.addEventListener('DOMContentLoaded', function() {
+            // JavaScript code goes here
+            function validateFiles() {
+                const submitBtn = document.getElementById('submit-btn');
+                const errorDiv = document.getElementById('file-error');
 
-        function initMap() {
-            const mapOptions = {
-                center: {
-                    lat: 41.2995,
-                    lng: 69.2401
-                },
-                zoom: 10,
-            };
+                // Get all file inputs
+                const fileInputs = document.querySelectorAll('input[type="file"][name="files[]"]');
 
-            map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                let totalFiles = 0;
+                fileInputs.forEach(input => {
+                    totalFiles += input.files.length;
+                });
 
-            document.getElementById('find-my-location').addEventListener('click', function() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        function(position) {
-                            const userLocation = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude
-                            };
-
-                            map.setCenter(userLocation);
-                            map.setZoom(15);
-                            placeMarker(userLocation);
-
-                            // Set latitude, longitude, and geolocation URL in the input fields
-                            document.getElementById('latitude').value = userLocation.lat;
-                            document.getElementById('longitude').value = userLocation.lng;
-                            document.getElementById('geolokatsiya').value =
-                                `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}`;
-                        },
-                        function(error) {
-                            console.error('Error occurred. Error code: ' + error.code);
-                            alert('Error getting your location: ' + error.message);
-                        }
-                    );
+                // Validate minimum file requirement
+                if (totalFiles < 4) {
+                    let filesNeeded = 4 - totalFiles;
+                    if (totalFiles === 0) {
+                        errorDiv.textContent = 'Сиз ҳеч қандай файл юкламадингиз.';
+                    } else {
+                        errorDiv.textContent = 'Сиз янги ' + filesNeeded + ' та файл юклашингиз керак.';
+                    }
+                    submitBtn.disabled = true;
                 } else {
-                    alert('Geolocation is not supported by this browser.');
+                    errorDiv.textContent = '';
+                    submitBtn.disabled = false;
+                }
+            }
+
+            function addFileInput() {
+                const container = document.getElementById('file-upload-container');
+                const fileInputCount = container.querySelectorAll('input[type="file"]').length + 4; // Adjust count
+                const newDiv = document.createElement('div');
+                newDiv.classList.add('mb-3');
+                const label = document.createElement('label');
+                label.textContent = 'Қўшимча файл ' + (fileInputCount + 1);
+                const input = document.createElement('input');
+                input.setAttribute('type', 'file');
+                input.setAttribute('name', 'files[]');
+                input.setAttribute('class', 'form-control');
+                input.addEventListener('change', validateFiles);
+                newDiv.appendChild(label);
+                newDiv.appendChild(input);
+                container.appendChild(newDiv);
+            }
+
+            // Disable submit button initially
+            document.getElementById('submit-btn').disabled = true;
+
+            // Add event listeners to initial file inputs
+            document.getElementById('file1').addEventListener('change', validateFiles);
+            document.getElementById('file2').addEventListener('change', validateFiles);
+            document.getElementById('file3').addEventListener('change', validateFiles);
+            document.getElementById('file4').addEventListener('change', validateFiles);
+
+            // Initial validation
+            validateFiles();
+
+            // Form submission handling
+            document.getElementById('aktiv-form').addEventListener('submit', function(event) {
+                // Re-validate files on submit
+                validateFiles();
+
+                // If the submit button is disabled, prevent form submission
+                if (document.getElementById('submit-btn').disabled) {
+                    event.preventDefault();
+                } else {
+                    document.getElementById('submit-btn').disabled = true;
+                    document.getElementById('submit-btn').innerText = 'Юкланмоқда...';
                 }
             });
 
-            map.addListener('click', function(event) {
-                placeMarker(event.latLng);
-            });
-        }
+            // Google Maps initialization
+            let map;
+            let marker;
 
-        function placeMarker(location) {
-            if (marker) {
-                marker.setMap(null);
+            function initMap() {
+                const mapOptions = {
+                    center: {
+                        lat: 41.2995,
+                        lng: 69.2401
+                    },
+                    zoom: 10,
+                };
+
+                map = new google.maps.Map(document.getElementById('map'), mapOptions);
+
+                document.getElementById('find-my-location').addEventListener('click', function() {
+                    if (navigator.geolocation) {
+                        navigator.geolocation.getCurrentPosition(
+                            function(position) {
+                                const userLocation = {
+                                    lat: position.coords.latitude,
+                                    lng: position.coords.longitude
+                                };
+
+                                map.setCenter(userLocation);
+                                map.setZoom(15);
+                                placeMarker(userLocation);
+
+                                // Set latitude, longitude, and geolocation URL in the input fields
+                                document.getElementById('latitude').value = userLocation.lat;
+                                document.getElementById('longitude').value = userLocation.lng;
+                                document.getElementById('geolokatsiya').value =
+                                    `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}`;
+                            },
+                            function(error) {
+                                console.error('Error occurred. Error code: ' + error.code);
+                                alert('Жойлашувингиз аниқланмади: ' + error.message);
+                            }
+                        );
+                    } else {
+                        alert('Жойлашувни аниқлаш браузерингиз томонидан қўлланилмайди.');
+                    }
+                });
+
+                map.addListener('click', function(event) {
+                    placeMarker(event.latLng);
+                });
             }
 
-            marker = new google.maps.Marker({
-                position: location,
-                map: map
-            });
+            function placeMarker(location) {
+                if (marker) {
+                    marker.setMap(null);
+                }
 
-            const lat = typeof location.lat === "function" ? location.lat() : location.lat;
-            const lng = typeof location.lng === "function" ? location.lng() : location.lng;
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map
+                });
 
-            document.getElementById('latitude').value = lat;
-            document.getElementById('longitude').value = lng;
-            document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
-        }
+                const lat = typeof location.lat === "function" ? location.lat() : location.lat;
+                const lng = typeof location.lng === "function" ? location.lng() : location.lng;
 
-        window.onload = initMap;
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+                document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
+            }
+
+            // Initialize the map after the page has loaded
+            initMap();
+        });
     </script>
 @endsection

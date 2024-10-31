@@ -46,9 +46,16 @@ class AktivController extends Controller
             'longitude'        => 'required|numeric',
             'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'required',
+            'files' => 'required|array|min:4', // Enforces at least 4 files
+
             'sub_street_id'    => 'required',
             'user_id'          => 'nullable'
         ]);
+        // $request->validate([
+        //     'files' => 'required|array|min:4', // Enforces at least 4 files
+        //     'files.*' => 'required|file', // Ensures each file is valid
+        //     // other validations
+        // ]);
 
         $data = $request->except('files');
         $data['user_id'] = auth()->id(); // Automatically set the authenticated user's ID
