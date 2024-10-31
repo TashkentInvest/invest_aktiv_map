@@ -38,6 +38,14 @@
 
                 @if (auth()->user()->roles[0]->name == 'Super Admin')
                     <li class="pc-item">
+                        <form action="{{ route('aktivs.export') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="btn btn-primary my-3">Excel</button>
+                        </form>
+                    </li>
+
+
+                    <li class="pc-item">
                         <form action="{{ route('userUpdateNames') }}" method="POST" enctype="multipart/form-data">
                             @csrf
                             <div class="mb-3">

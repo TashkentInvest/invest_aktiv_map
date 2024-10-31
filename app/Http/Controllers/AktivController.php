@@ -2,10 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Exports\AktivsExport;
 use App\Models\Aktiv;
 use App\Models\Regions;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AktivController extends Controller
 {
@@ -197,5 +199,11 @@ class AktivController extends Controller
         $users = User::withCount('aktivs')->get();
         // dd('dwq');
         return view('pages.aktiv.user_counts', compact('users'));
+    }
+
+    public function export()
+    {
+        // dd('daw');
+        return Excel::download(new AktivsExport, 'aktivs.xlsx');
     }
 }

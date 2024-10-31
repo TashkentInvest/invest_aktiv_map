@@ -71,6 +71,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::put('aktivs/{aktiv}', [AktivController::class, 'update'])->name('aktivs.update');
     Route::delete('aktivs/{aktiv}', [AktivController::class, 'destroy'])->name('aktivs.destroy');
     Route::get('aktiv/users', [AktivController::class, 'userAktivCounts'])->name('aktivs.userAktivCounts');
+    Route::post('/aktivs/export', [AktivController::class, 'export'])->name('aktivs.export');
 
 
     Route::get('/optimize-cache', [HomeController::class, 'optimize'])->name('optimize.command');
