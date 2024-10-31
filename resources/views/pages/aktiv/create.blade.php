@@ -19,7 +19,6 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                <!-- Repeat similar blocks for other fields -->
                 <div class="mb-3">
                     <label for="balance_keeper">Балансда сақловчи</label>
                     <input class="form-control" type="text" name="balance_keeper" id="balance_keeper"
@@ -93,12 +92,55 @@
             <div class="col-md-6">
                 <!-- File upload field -->
                 <div class="mb-3">
-                    <label for="files">Upload Files</label>
-                    <input type="file" class="form-control" name="files[]" id="files" multiple required>
-                    @error('files.*')
-                        <div class="text-danger">{{ $message }}</div>
-                    @enderror
+                    <label for="files" class="text-danger">Upload Files (Minimum 4)</label>
+                    <input type="file" class="form-control" name="files[]" id="files" multiple required
+                        onchange="validateFiles()">
+                    <div id="file-error" class="text-danger"></div>
                 </div>
+
+                <!-- Container to hold additional file inputs -->
+                <div id="file-upload-container"></div>
+
+                <button type="button" onclick="addFileInput()">Add More Files</button>
+
+                <script>
+                    document.getElementById('files').addEventListener('change', validateFiles);
+
+                    function validateFiles() {
+                        const fileInput = document.getElementById('files');
+                        const submitBtn = document.getElementById('submit-btn');
+                        const errorDiv = document.getElementById('file-error');
+
+                        // Count the files selected in the main file input and any additional inputs
+                        let totalFiles = fileInput.files.length;
+                        const additionalFileInputs = document.querySelectorAll('#file-upload-container input[type="file"]');
+                        additionalFileInputs.forEach(input => {
+                            totalFiles += input.files.length;
+                        });
+
+                        // Validate minimum file requirement
+                        if (totalFiles < 4) {
+                            errorDiv.textContent = 'Please upload at least 4 files.';
+                            submitBtn.disabled = true;
+                        } else {
+                            errorDiv.textContent = '';
+                            submitBtn.disabled = false;
+                        }
+                    }
+
+                    function addFileInput() {
+                        const container = document.getElementById('file-upload-container');
+                        const newInput = document.createElement('input');
+                        newInput.setAttribute('type', 'file');
+                        newInput.setAttribute('name', 'files[]');
+                        newInput.setAttribute('class', 'form-control mt-2');
+                        newInput.setAttribute('onchange', 'validateFiles()'); // Add onchange event for validation
+                        container.appendChild(newInput);
+                    }
+
+                    // Disable submit button initially if fewer than 4 files are selected
+                    document.getElementById('submit-btn').disabled = true;
+                </script>
 
                 <!-- Map Section -->
                 <div class="mb-3">
@@ -129,7 +171,6 @@
         </div>
 
         <!-- Submit Button -->
-        {{-- <button type="submit" class="btn btn-success">Сақлаш</button> --}}
         <button type="submit" class="btn btn-success" id="submit-btn">Сақлаш</button>
 
         <script>
@@ -194,23 +235,18 @@
         }
 
         function placeMarker(location) {
-            // Clear previous marker if any
             if (marker) {
                 marker.setMap(null);
             }
 
-            // Place new marker
             marker = new google.maps.Marker({
                 position: location,
                 map: map
             });
 
-            // Use `location.lat` and `location.lng` as properties if passed from `getCurrentPosition`
-            // Use `location.lat()` and `location.lng()` as functions if passed from map click
             const lat = typeof location.lat === "function" ? location.lat() : location.lat;
             const lng = typeof location.lng === "function" ? location.lng() : location.lng;
 
-            // Set latitude, longitude, and geolocation URL in the input fields
             document.getElementById('latitude').value = lat;
             document.getElementById('longitude').value = lng;
             document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
