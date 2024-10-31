@@ -114,6 +114,23 @@ class AktivController extends Controller
             'user_id'          => 'nullable'
         ]);
 
+        // $totalFiles = $aktiv->files()->count() - count($request->delete_files ?? []) + count($request->file('files') ?? []);
+        // if ($totalFiles < 4) {
+        //     return back()->withErrors(['files' => 'Камида 4 та файл бўлиши шарт.'])->withInput();
+        // }
+
+        if ($request->has('delete_files')) {
+            foreach ($request->delete_files as $fileId) {
+                $file = $aktiv->files()->find($fileId);
+                if ($file) {
+                    \Storage::disk('public')->delete($file->path);
+                    $file->delete();
+                }
+            }
+        }
+
+
+
         $data = $request->except('files');
         $aktiv->update($data);
 
