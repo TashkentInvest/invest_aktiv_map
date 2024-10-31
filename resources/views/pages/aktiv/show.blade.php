@@ -70,14 +70,19 @@
         <h5 class="card-title text-primary">Юкланган файллар (Загруженные файлы)</h5>
         <div class="card-body">
             @if ($aktiv->files->count())
-                <ul>
+                <div class="row">
                     @foreach ($aktiv->files as $file)
-                        <li>
-                            <a href="{{ asset('storage/' . $file->path) }}"
-                                target="_blank">{{ basename($file->path) }}</a>
-                        </li>
+                        <div class="col-md-4 mb-3">
+                            <div class="card h-100">
+                                <a href="{{ asset('storage/' . $file->path) }}" target="_blank">
+                                    <img src="{{ asset('storage/' . $file->path) }}" class="card-img-top" alt="Image">
+                                </a>
+
+
+                            </div>
+                        </div>
                     @endforeach
-                </ul>
+                </div>
             @else
                 <p class="text-muted">Файллар мавжуд эмас (Нет загруженных файлов).</p>
             @endif
@@ -130,6 +135,11 @@
         .btn-primary:hover {
             transform: translateY(-2px);
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .card-img-top {
+            height: 200px;
+            object-fit: cover;
         }
     </style>
 @endsection
