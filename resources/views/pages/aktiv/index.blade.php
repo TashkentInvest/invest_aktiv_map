@@ -14,7 +14,7 @@
                 <thead class="table-primary">
                     <tr>
                         <th scope="col"><i class="fas fa-user"></i> Фойдаланувчи</th>
-                        <th scope="col" width="200"><i class="fas fa-building"></i> Объект номи</th>
+                        <th scope="col" width="50"><i class="fas fa-building"></i> Объект номи</th>
                         <th scope="col"><i class="fas fa-balance-scale"></i> Балансда сақловчи</th>
                         <th scope="col" width="100" style="width: 100px"><i class="fas fa-map-marker-alt"></i> Мфй /
                             Коча</th>
@@ -29,7 +29,20 @@
                                 {{ $aktiv->user->name ?? 'No Name' }}<br>
                                 <small class="text-muted">{{ $aktiv->user->email ?? 'No Email' }}</small>
                             </td>
-                            <td style="width:100px">{{ $aktiv->object_name }}</td>
+                            <td style="max-width: 200px" class="text-truncate" title="...">
+
+                                {{ $aktiv->object_name }}
+
+                                <style>
+                                    .text-truncate {
+                                        word-wrap: break-word;
+                                        word-break: break-word;
+                                        white-space: normal;
+                                    }
+
+                                 
+                                </style>
+                            </td>
                             <td>{{ $aktiv->balance_keeper }}</td>
                             <td style="width: 100px" class="text-truncate"
                                 title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">
