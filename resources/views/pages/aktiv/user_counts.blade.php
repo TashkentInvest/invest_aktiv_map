@@ -13,12 +13,13 @@
                         <th scope="col">Электрон почта</th>
                         <th scope="col">Роли</th>
                         <th scope="col">Яратилган Активлар сони</th>
-                        {{-- <th scope="col">Ҳаракатлар</th> --}}
+                        <th scope="col">Ҳаракатлар</th>
                     </tr>
                 </thead>
+
                 <tbody>
                     @foreach ($users as $user)
-                        @if($user->name != 'Employee')
+                        @if ($user->name != 'Employee')
                             <tr>
                                 <td>{{ $user->id }}</td>
                                 <td>{{ $user->name }}</td>
@@ -30,7 +31,8 @@
                                 </td>
                                 <td>{{ $user->aktivs_count }}</td>
                                 <td>
-                                    <a href="{{ route('aktivs.index', ['user_id' => $user->id]) }}" class="btn btn-primary btn-sm">
+                                    <a href="{{ route('aktivs.index', ['user_id' => $user->id]) }}"
+                                        class="btn btn-primary btn-sm">
                                         Активларини кўриш
                                     </a>
                                 </td>
@@ -38,6 +40,7 @@
                         @endif
                     @endforeach
                 </tbody>
+
             </table>
         </div>
     @else
