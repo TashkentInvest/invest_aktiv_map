@@ -26,7 +26,7 @@ class AktivsExport implements FromCollection, WithHeadings
                 'latitude' => $aktiv->latitude,
                 'longitude' => $aktiv->longitude,
                 'kadastr_raqami' => $aktiv->kadastr_raqami,
-                'user_id' => $aktiv->user_id,
+                'user_id' => $aktiv->user->email,
                 'street_id' => $aktiv->street_id,
                 'sub_street_id' => $aktiv->sub_street_id,
                 // Add other fields as needed
