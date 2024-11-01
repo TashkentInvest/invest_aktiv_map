@@ -10,7 +10,7 @@
                     <select class="form-control region_id select2" name="region_id" id="region_id">
                         <option value="">Худудни танланг</option>
                         @foreach ($regions as $region)
-                            <option value="{{ $region->id }}">{{ $region->name_uz }}</option>
+                            <option value="{{ $region->id == 1 }}" selected>{{ $region->name_uz }}</option>
                         @endforeach
                     </select>
                     <span class="text-danger error-message" id="region_id_error"></span>
