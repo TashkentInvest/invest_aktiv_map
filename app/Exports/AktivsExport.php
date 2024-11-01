@@ -27,6 +27,8 @@ class AktivsExport implements FromCollection, WithHeadings
                 'longitude' => $aktiv->longitude,
                 'kadastr_raqami' => $aktiv->kadastr_raqami,
                 'user_id' => $aktiv->user_id,
+                'street_id' => $aktiv->street_id,
+                'sub_street_id' => $aktiv->sub_street_id,
                 // Add other fields as needed
             ];
         });
@@ -50,6 +52,8 @@ class AktivsExport implements FromCollection, WithHeadings
             'Longitude',
             'Kadastr Raqami',
             'User ID',
+            'MFY',
+            'Kocha',
             // Match the order of fields above
         ];
     }
