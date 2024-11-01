@@ -28,10 +28,10 @@
             <div class="mb-3">
                 <strong>Туман номи (District Name):</strong> {{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}
             </div>
-            <div class="mb-3">
+            {{-- <div class="mb-3">
                 <strong>Мфй номи (Sub Street Name):</strong>
                 {{ $aktiv->subStreet->district->street->name ?? 'Маълумот йўқ' }}
-            </div>
+            </div> --}}
             <div class="mb-3">
                 <strong>Кўча номи (Sub Street Name):</strong> {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}
             </div>

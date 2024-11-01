@@ -46,7 +46,7 @@
                             <td>{{ $aktiv->balance_keeper }}</td>
                             <td style="width: 100px" class="text-truncate"
                                 title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">
-                                {{ $aktiv->subStreet->district->street->name ?? 'Маълумот йўқ' }},
+                                {{-- {{ $aktiv->subStreet->district->street->name ?? 'Маълумот йўқ' }}, --}}
                                 {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}</td>
                             <td>{{ $aktiv->created_at->format('d-m-Y H:i') }}</td>
                             <td class="text-center">
