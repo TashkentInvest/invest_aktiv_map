@@ -29,11 +29,11 @@
                                     @endforeach
                                 </td>
                                 <td>{{ $user->aktivs_count }}</td>
-                                {{-- <td>
+                                <td>
                                     <a href="{{ route('aktivs.index', ['user_id' => $user->id]) }}" class="btn btn-primary btn-sm">
                                         Активларини кўриш
                                     </a>
-                                </td> --}}
+                                </td>
                             </tr>
                         @endif
                     @endforeach

@@ -11,19 +11,38 @@ use Maatwebsite\Excel\Facades\Excel;
 
 class AktivController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        // Check if the user is Super Admin
-        if (auth()->user()->roles->first()->name == 'Super Admin' || auth()->user()->roles->first()->name == 'Manager') {
-            // Show all Aktiv records for Super Admin
-            $aktivs = Aktiv::orderBy('created_at', 'desc')->with('files')->paginate(10);
+        $user_id = $request->input('user_id');
+        $userRole = auth()->user()->roles->first()->name;
+
+        if ($userRole == 'Super Admin' || $userRole == 'Manager') {
+            if ($user_id) {
+                // Show aktivs for the specified user
+                $aktivs = Aktiv::where('user_id', $user_id)
+                    ->orderBy('created_at', 'desc')
+                    ->with('files')
+                    ->paginate(10)
+                    ->appends($request->query()); // Ensure query parameters are appended
+            } else {
+                // Show all aktivs
+                $aktivs = Aktiv::orderBy('created_at', 'desc')
+                    ->with('files')
+                    ->paginate(10)
+                    ->appends($request->query());
+            }
         } else {
-            // Show only the user's own Aktiv records
-            $aktivs = Aktiv::orderBy('created_at', 'desc')->where('user_id', auth()->id())->with('files')->paginate(10);
+            // Show only the user's own aktivs
+            $aktivs = Aktiv::where('user_id', auth()->id())
+                ->orderBy('created_at', 'desc')
+                ->with('files')
+                ->paginate(10)
+                ->appends($request->query());
         }
 
         return view('pages.aktiv.index', compact('aktivs'));
     }
+
 
     public function create()
     {
