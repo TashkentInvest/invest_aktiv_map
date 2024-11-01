@@ -20,39 +20,37 @@ class UpdateStreetIdFromExcel extends Command
     public function handle()
     {
         $filePath = public_path('assets/aktivs_mfy_codes.xlsx');
-    
+
         // Load the Excel data
         $data = Excel::toCollection(null, $filePath)->first();
-    
+
         // Skip the header row
         $rows = $data->skip(1);
-    
+
         foreach ($rows as $row) {
             // Access MFY_CODE by index 16
             $mfyCode = $row[16] ?? null;
-    
+
             if ($mfyCode) {
                 $street = Street::where('code', $mfyCode)->first();
-    
+
                 if ($street) {
-                    // Update aktivs with the found street_id
-                    $updatedAktivs = Aktiv::whereNull('street_id')
+                    // Update aktivs with the specific MFY_CODE and where street_id is currently NULL
+                    $updatedAktivs = Aktiv::where('street_id', 88)
                         ->update(['street_id' => $street->id]);
-    
+
                     $this->info("Updated aktivs with MFY_CODE: {$mfyCode} to street_id: {$street->id}");
                 } else {
-                    // If no matching street found, set street_id to 1
-                    Aktiv::whereNull('street_id')
-                        ->update(['street_id' => 1]);
-    
+                    // If no matching street found, set street_id to 88 where it is null
+                    Aktiv::where('street_id', 88)
+                        ->update(['street_id' => $street->id ?? null]);
+
                     $this->info("No matching street found for MFY_CODE: {$mfyCode}, set street_id to 1.");
                 }
             }
         }
-    
+
         $this->info('Street IDs update process completed.');
         return 0;
     }
-    
-    
 }
