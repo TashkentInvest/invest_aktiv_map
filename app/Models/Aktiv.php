@@ -50,6 +50,7 @@ class Aktiv extends Model
         'longitude',
         'kadastr_raqami',
         'sub_street_id',
+        'street_id'
     ];
 
     public function files()
@@ -65,5 +66,10 @@ class Aktiv extends Model
     public function substreet()
     {
         return $this->belongsTo(SubStreet::class, 'sub_street_id', 'id');
+    }
+
+    public function street()
+    {
+        return $this->belongsTo(Street::class, 'street_id', 'id');
     }
 }

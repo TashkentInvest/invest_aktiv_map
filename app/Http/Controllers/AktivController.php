@@ -51,6 +51,7 @@ class AktivController extends Controller
             'files' => 'required|array|min:4', // Enforces at least 4 files
 
             'sub_street_id'    => 'required',
+            'street_id'    => 'required',
             'user_id'          => 'nullable'
         ]);
         // $request->validate([
@@ -113,6 +114,8 @@ class AktivController extends Controller
             'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'required',
             'sub_street_id'    => 'required',
+            'street_id'    => 'required',
+
             'user_id'          => 'nullable'
         ]);
 
