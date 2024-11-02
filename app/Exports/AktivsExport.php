@@ -39,7 +39,6 @@ class AktivsExport implements FromCollection, WithHeadings
     public function headings(): array
     {
         return [
-            'ID',
             'Object Name',
             'Balance Keeper',
             'Location',
@@ -56,6 +55,8 @@ class AktivsExport implements FromCollection, WithHeadings
             'User ID',
             'MFY',
             'Kocha',
+            'ID',
+
             // Match the order of fields above
         ];
     }
