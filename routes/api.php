@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AktivController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\ApiAuthController;
@@ -15,6 +16,9 @@ use App\Http\Controllers\Blade\ApiUserController;
 
 # Api Clients
 Route::post('/login', [ApiAuthController::class, 'login']);
+
+Route::get('/aktivs', [AktivController::class, 'getLots']);
+
 
 Route::group(['middleware' => 'api-auth'], function () {
     Route::post('/me', [ApiAuthController::class, 'me']);

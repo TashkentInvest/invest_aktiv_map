@@ -228,4 +228,51 @@ class AktivController extends Controller
         // dd('daw');
         return Excel::download(new AktivsExport, 'aktivs.xlsx');
     }
+
+    public function myMap(){
+        return view('pages.aktiv.map_orginal');
+    }
+
+    // map code with source data
+    public function getLots()
+    {
+        $aktivs = Aktiv::with('files')->get();
+
+        $lots = $aktivs->map(function($aktiv) {
+            return [
+                'lat' => $aktiv->latitude,
+                'lng' => $aktiv->longitude,
+                'property_name' => $aktiv->object_name,
+                'main_image' => $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : null,
+                'land_area' => $aktiv->land_area,
+                'start_price' => 0, // Adjust if you have a price field
+                'lot_link' => route('aktivs.show', $aktiv->id),
+                'lot_number' => $aktiv->id,
+                'address' => $aktiv->location,
+                // Add other fields as necessary
+            ];
+        });
+
+        return response()->json(['lots' => $lots]);
+    }
+
+    /**
+     * Generate a QR code for the given lot's latitude and longitude
+     *
+     * @param string $lat Latitude of the lot
+     * @param string $lng Longitude of the lot
+     * @return \Illuminate\Http\Response
+     */
+    public function generateQRCode($lat, $lng)
+    {
+        $url = url("/?lat={$lat}&lng={$lng}");
+
+        // Use the SVG format
+        $qrCode = QrCode::format('svg')
+            ->size(200)
+            ->errorCorrection('H')
+            ->generate($url);
+
+        return response($qrCode, 200)->header('Content-Type', 'image/svg+xml');
+    }
 }
