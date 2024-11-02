@@ -12,7 +12,7 @@ class AktivsExport implements FromCollection, WithHeadings
     {
         return Aktiv::with('files')->get()->map(function ($aktiv) {
             return [
-                'id' => $aktiv->id,
+                // 'id' => $aktiv->id,
                 'object_name' => $aktiv->object_name,
                 'balance_keeper' => $aktiv->balance_keeper,
                 'location' => $aktiv->location,
@@ -29,6 +29,8 @@ class AktivsExport implements FromCollection, WithHeadings
                 'user_id' => $aktiv->user->email,
                 'street_id' => $aktiv->street_id,
                 'sub_street_id' => $aktiv->sub_street_id,
+                'id' => "https://aktiv.toshkentinvest.uz/aktivs/" .$aktiv->id,
+
                 // Add other fields as needed
             ];
         });
