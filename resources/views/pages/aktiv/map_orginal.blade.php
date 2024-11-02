@@ -418,7 +418,7 @@
             document.head.appendChild(script);
         });
 
-       
+
 
         function initMap() {
             const urlParams = new URLSearchParams(window.location.search);
@@ -571,42 +571,52 @@
             const qrCodeUrl = `${baseUrl}/api/lot/qr-code/${markerData.lat}/${markerData.lng}`;
 
             sidebar.innerHTML = `
-                <span class="close-btn">&times;</span>
-                <div class="info-content">
-                    ${markerData.main_image ? `<img class="custom_sidebar_image" src="${markerData.main_image}" alt="Marker Image"/>` : ''}
-                    <button id="toggle-currency-btn">${isInUSD ? 'Valyutani tahrirlash UZS' : 'Valyutani tahrirlash USD'}</button>
-                    <h4 class="custom_sidebar_title"><b>${markerData.property_name || 'No Title'}</b></h4>
-                    <table>
-                        <tr>
-                            <th class="sidebar_key">Lot raqami</th>
-                            <td>${markerData.lot_number || 'N/A'}</td>
-                        </tr>
-                        <tr>
-                            <th class="sidebar_key">Manzili</th>
-                            <td>${markerData.address || 'N/A'}</td>
-                        </tr>
-                        <tr>
-                            <th class="sidebar_key">Yer maydoni (ga)</th>
-                            <td>${markerData.land_area || 'N/A'}</td>
-                        </tr>
-                        ${priceUZS > 0 ? `
-                                <tr>
-                                    <th class="sidebar_key">Boshlang'ich narxi</th>
-                                    <td id="price-td">${lotPriceFormatted}</td>
-                                </tr>
-                                <tr>
-                                    <th class="sidebar_key">1 sotix uchun narx</th>
-                                    <td>${lotPricePerSotixFormatted}</td>
-                                </tr>` : ''}
-                    </table>
-                    <div id="qr-code-container">
-                        <img src="${qrCodeUrl}" alt="QR Code" type="image/svg+xml" />
-                        <a href="${qrCodeUrl}" download="qr_code.svg">QR Kodni yuklab olish</a>
-                    </div>
-                    <a target="_blank" href="${markerData.lot_link || '#'}" class="btn-link">Lotni ko'rish</a>
-                </div>
-            `;
+        <span class="close-btn">&times;</span>
+        <div class="info-content">
+            <img class="custom_sidebar_image" src="${markerData.main_image}" alt="Marker Image"/>
+            <button id="toggle-currency-btn">${isInUSD ? 'Valyutani tahrirlash UZS' : 'Valyutani tahrirlash USD'}</button>
+            <h4 class="custom_sidebar_title"><b>${markerData.property_name || 'No Title'}</b></h4>
+            <table>
+                <tr>
+                    <th class="sidebar_key">Lot raqami</th>
+                    <td>${markerData.lot_number || 'N/A'}</td>
+                </tr>
+                <tr>
+                    <th class="sidebar_key">Manzili</th>
+                    <td>${markerData.address || 'N/A'}</td>
+                </tr>
+                <tr>
+                    <th class="sidebar_key">Yer maydoni (ga)</th>
+                    <td>${markerData.land_area || 'N/A'}</td>
+                </tr>
+                ${priceUZS > 0 ? `
+                    <tr>
+                        <th class="sidebar_key">Boshlang'ich narxi</th>
+                        <td id="price-td">${lotPriceFormatted}</td>
+                    </tr>
+                    <tr>
+                        <th class="sidebar_key">1 sotix uchun narx</th>
+                        <td>${lotPricePerSotixFormatted}</td>
+                    </tr>` : ''}
+                <tr>
+                    <th class="sidebar_key">Yaratilgan foydalanuvchi</th>
+                    <td>${markerData.user_name || 'N/A'}</td>
+                </tr>
+                <tr>
+                    <th class="sidebar_key">Email</th>
+                    <td>${markerData.user_email || 'N/A'}</td>
+                </tr>
+            </table>
+            <div id="qr-code-container">
+                <img src="${qrCodeUrl}" alt="QR Code" type="image/svg+xml" />
+                <a href="${qrCodeUrl}" download="qr_code.svg">QR Kodni yuklab olish</a>
+            </div>
+            <a target="_blank" href="${markerData.lot_link || '#'}" class="btn-link">Lotni ko'rish</a>
+        </div>
+    `;
         }
+
+
 
         function setupEventListeners() {
             document.addEventListener('click', function(event) {

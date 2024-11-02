@@ -236,25 +236,35 @@ class AktivController extends Controller
     // map code with source data
     public function getLots()
     {
-        $aktivs = Aktiv::with('files')->get();
-
-        $lots = $aktivs->map(function($aktiv) {
+        $aktivs = Aktiv::with(['files', 'user'])->get();
+    
+        $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+    
+        $lots = $aktivs->map(function($aktiv) use ($defaultImage) {
+            $mainImagePath = $aktiv->files->first() ? 'storage/' . $aktiv->files->first()->path : null;
+            $mainImageUrl = $mainImagePath && file_exists(public_path($mainImagePath))
+                ? asset($mainImagePath)
+                : $defaultImage;
+    
             return [
                 'lat' => $aktiv->latitude,
                 'lng' => $aktiv->longitude,
                 'property_name' => $aktiv->object_name,
-                'main_image' => $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : null,
+                'main_image' => $mainImageUrl,
                 'land_area' => $aktiv->land_area,
                 'start_price' => 0, // Adjust if you have a price field
                 'lot_link' => route('aktivs.show', $aktiv->id),
                 'lot_number' => $aktiv->id,
                 'address' => $aktiv->location,
+                'user_name' => $aktiv->user ? $aktiv->user->name : 'N/A',
+                'user_email' => $aktiv->user ? $aktiv->user->email : 'N/A',
                 // Add other fields as necessary
             ];
         });
-
+    
         return response()->json(['lots' => $lots]);
     }
+    
 
     /**
      * Generate a QR code for the given lot's latitude and longitude
