@@ -324,29 +324,38 @@
             }
 
             function openAktivModal(aktiv) {
+                // Access the first file path if available, otherwise set default image
+                const mainImagePath = aktiv.files && aktiv.files.length > 0 ?
+                    `/storage/${aktiv.files[0].path}` :
+                    'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+
                 // Create a modal to display aktiv information
                 const modalContent = `
-                    <div id="aktiv-modal" class="modal" tabindex="-1" role="dialog" style="display:block;">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title">${aktiv.object_name}</h5>
-                                    <button type="button" class="close" onclick="closeAktivModal()">&times;</button>
-                                </div>
-                                <div class="modal-body">
-                                    <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
-                                    <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
-                                    <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
-                                    <p><strong>Бино майдони (кв.м):</strong> ${aktiv.building_area || 'N/A'}</p>
-                                    <p><strong>Газ:</strong> ${aktiv.gas || 'N/A'}</p>
-                                    <p><strong>Сув:</strong> ${aktiv.water || 'N/A'}</p>
-                                    <p><strong>Электр:</strong> ${aktiv.electricity || 'N/A'}</p>
-                                    <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
-                                </div>
-                            </div>
-                        </div>
+        <div id="aktiv-modal" class="modal fade" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title">${aktiv.object_name}</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                `;
+                    <div class="modal-body">
+                        <img class="custom_sidebar_image" src="${mainImagePath}" alt="Marker Image"/>
+                        <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
+                        <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
+                        <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
+                        <p><strong>Бино майдони (кв.м):</strong> ${aktiv.building_area || 'N/A'}</p>
+                        <p><strong>Газ:</strong> ${aktiv.gas || 'N/A'}</p>
+                        <p><strong>Сув:</strong> ${aktiv.water || 'N/A'}</p>
+                        <p><strong>Электр:</strong> ${aktiv.electricity || 'N/A'}</p>
+                        <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
+                        <p><strong>Қарта:</strong> <a href="${aktiv.geolokatsiya || '#'}" target="_blank">${aktiv.geolokatsiya || 'N/A'}</a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 
                 // Append modal to body
                 const modalDiv = document.createElement('div');
@@ -355,22 +364,21 @@
 
                 // Show the modal using Bootstrap's modal method
                 $('#aktiv-modal').modal('show');
+
+                // Remove modal from DOM after it is hidden
+                $('#aktiv-modal').on('hidden.bs.modal', function() {
+                    $('#aktiv-modal').modal('dispose').remove();
+                });
             }
 
-            function closeAktivModal() {
-                // Hide and remove the modal
-                $('#aktiv-modal').modal('hide');
-                setTimeout(function() {
-                    document.getElementById('aktiv-modal').remove();
-                }, 500); // Delay to ensure the modal is fully hidden
-            }
+
 
             // Initialize the map after the page has loaded
             initMap();
         });
     </script>
-     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-     <!-- Include Bootstrap CSS and JS (if not already included in your layout) -->
-     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Include Bootstrap CSS and JS (if not already included in your layout) -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @endsection

@@ -53,10 +53,18 @@ class AktivController extends Controller
     public function create()
     {
         $regions = Regions::get();
-        $aktivs = Aktiv::where('user_id', '!=', auth()->id())->get();
-        return view('pages.aktiv.create', compact('aktivs','regions'));
+        $aktivs = Aktiv::with('files')->where('user_id', '!=', auth()->id())->get();
+    
+        $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+    
+        $aktivs->map(function ($aktiv) use ($defaultImage) {
+            $aktiv->main_image = $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : $defaultImage;
+            return $aktiv;
+        });
+    
+        return view('pages.aktiv.create', compact('aktivs', 'regions'));
     }
-
+    
     public function store(Request $request)
     {
         $request->validate([
