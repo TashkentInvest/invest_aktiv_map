@@ -159,6 +159,9 @@
     <!-- Place the JavaScript code at the end, inside the 'scripts' section -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+
+            let aktivs = @json($aktivs);
+
             // JavaScript code goes here
             function validateFiles() {
                 const submitBtn = document.getElementById('submit-btn');
@@ -245,6 +248,29 @@
 
                 map = new google.maps.Map(document.getElementById('map'), mapOptions);
 
+                // Add markers for other users' aktivs
+                aktivs.forEach(function(aktiv) {
+                    if (aktiv.latitude && aktiv.longitude) {
+                        const position = {
+                            lat: parseFloat(aktiv.latitude),
+                            lng: parseFloat(aktiv.longitude)
+                        };
+
+                        const aktivMarker = new google.maps.Marker({
+                            position: position,
+                            map: map,
+                            title: aktiv.object_name,
+                            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png' // Yellow marker icon
+                        });
+
+                        // Add click event to open modal with aktiv information
+                        aktivMarker.addListener('click', function() {
+                            // Open modal with aktiv information
+                            openAktivModal(aktiv);
+                        });
+                    }
+                });
+
                 document.getElementById('find-my-location').addEventListener('click', function() {
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
@@ -297,8 +323,54 @@
                 document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
             }
 
+            function openAktivModal(aktiv) {
+                // Create a modal to display aktiv information
+                const modalContent = `
+                    <div id="aktiv-modal" class="modal" tabindex="-1" role="dialog" style="display:block;">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">${aktiv.object_name}</h5>
+                                    <button type="button" class="close" onclick="closeAktivModal()">&times;</button>
+                                </div>
+                                <div class="modal-body">
+                                    <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
+                                    <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
+                                    <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
+                                    <p><strong>Бино майдони (кв.м):</strong> ${aktiv.building_area || 'N/A'}</p>
+                                    <p><strong>Газ:</strong> ${aktiv.gas || 'N/A'}</p>
+                                    <p><strong>Сув:</strong> ${aktiv.water || 'N/A'}</p>
+                                    <p><strong>Электр:</strong> ${aktiv.electricity || 'N/A'}</p>
+                                    <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+
+                // Append modal to body
+                const modalDiv = document.createElement('div');
+                modalDiv.innerHTML = modalContent;
+                document.body.appendChild(modalDiv);
+
+                // Show the modal using Bootstrap's modal method
+                $('#aktiv-modal').modal('show');
+            }
+
+            function closeAktivModal() {
+                // Hide and remove the modal
+                $('#aktiv-modal').modal('hide');
+                setTimeout(function() {
+                    document.getElementById('aktiv-modal').remove();
+                }, 500); // Delay to ensure the modal is fully hidden
+            }
+
             // Initialize the map after the page has loaded
             initMap();
         });
     </script>
+     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+     <!-- Include Bootstrap CSS and JS (if not already included in your layout) -->
+     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 @endsection

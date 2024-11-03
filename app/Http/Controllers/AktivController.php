@@ -44,10 +44,17 @@ class AktivController extends Controller
     }
 
 
+    // public function create()
+    // {
+    //     $regions = Regions::get();
+    //     return view('pages.aktiv.create', compact('regions'));
+    // }
+
     public function create()
     {
         $regions = Regions::get();
-        return view('pages.aktiv.create', compact('regions'));
+        $aktivs = Aktiv::where('user_id', '!=', auth()->id())->get();
+        return view('pages.aktiv.create', compact('aktivs','regions'));
     }
 
     public function store(Request $request)
@@ -229,7 +236,8 @@ class AktivController extends Controller
         return Excel::download(new AktivsExport, 'aktivs.xlsx');
     }
 
-    public function myMap(){
+    public function myMap()
+    {
         return view('pages.aktiv.map_orginal');
     }
 
@@ -237,15 +245,15 @@ class AktivController extends Controller
     public function getLots()
     {
         $aktivs = Aktiv::with(['files', 'user'])->get();
-    
+
         $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-    
-        $lots = $aktivs->map(function($aktiv) use ($defaultImage) {
+
+        $lots = $aktivs->map(function ($aktiv) use ($defaultImage) {
             $mainImagePath = $aktiv->files->first() ? 'storage/' . $aktiv->files->first()->path : null;
             $mainImageUrl = $mainImagePath && file_exists(public_path($mainImagePath))
                 ? asset($mainImagePath)
                 : $defaultImage;
-    
+
             return [
                 'lat' => $aktiv->latitude,
                 'lng' => $aktiv->longitude,
@@ -261,10 +269,10 @@ class AktivController extends Controller
                 // Add other fields as necessary
             ];
         });
-    
+
         return response()->json(['lots' => $lots]);
     }
-    
+
 
     /**
      * Generate a QR code for the given lot's latitude and longitude
