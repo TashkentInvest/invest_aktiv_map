@@ -159,44 +159,39 @@
     <!-- Place the JavaScript code at the end, inside the 'scripts' section -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-
             let aktivs = @json($aktivs);
-
-            // JavaScript code goes here
+            let map;
+            let marker;
+            let infoWindow;
+    
             function validateFiles() {
                 const submitBtn = document.getElementById('submit-btn');
                 const errorDiv = document.getElementById('file-error');
-
-                // Get all file inputs
                 const fileInputs = document.querySelectorAll('input[type="file"][name="files[]"]');
-
+    
                 let totalFiles = 0;
                 fileInputs.forEach(input => {
                     totalFiles += input.files.length;
                 });
-
-                // Validate minimum file requirement
+    
                 if (totalFiles < 4) {
                     let filesNeeded = 4 - totalFiles;
-                    if (totalFiles === 0) {
-                        errorDiv.textContent = 'Сиз ҳеч қандай файл юкламадингиз.';
-                    } else {
-                        errorDiv.textContent = 'Сиз янги ' + filesNeeded + ' та файл юклашингиз керак.';
-                    }
+                    errorDiv.textContent = filesNeeded === 4 
+                        ? 'Сиз ҳеч қандай файл юкламадингиз.' 
+                        : `Сиз янги ${filesNeeded} та файл юклашингиз керак.`;
                     submitBtn.disabled = true;
                 } else {
                     errorDiv.textContent = '';
                     submitBtn.disabled = false;
                 }
             }
-
+    
             function addFileInput() {
                 const container = document.getElementById('file-upload-container');
-                const fileInputCount = container.querySelectorAll('input[type="file"]').length + 4; // Adjust count
                 const newDiv = document.createElement('div');
                 newDiv.classList.add('mb-3');
                 const label = document.createElement('label');
-                label.textContent = 'Қўшимча файл ' + (fileInputCount + 1);
+                label.textContent = `Қўшимча файл ${container.children.length + 5}`;
                 const input = document.createElement('input');
                 input.setAttribute('type', 'file');
                 input.setAttribute('name', 'files[]');
@@ -206,25 +201,16 @@
                 newDiv.appendChild(input);
                 container.appendChild(newDiv);
             }
-
-            // Disable submit button initially
+    
             document.getElementById('submit-btn').disabled = true;
-
-            // Add event listeners to initial file inputs
             document.getElementById('file1').addEventListener('change', validateFiles);
             document.getElementById('file2').addEventListener('change', validateFiles);
             document.getElementById('file3').addEventListener('change', validateFiles);
             document.getElementById('file4').addEventListener('change', validateFiles);
-
-            // Initial validation
             validateFiles();
-
-            // Form submission handling
+    
             document.getElementById('aktiv-form').addEventListener('submit', function(event) {
-                // Re-validate files on submit
                 validateFiles();
-
-                // If the submit button is disabled, prevent form submission
                 if (document.getElementById('submit-btn').disabled) {
                     event.preventDefault();
                 } else {
@@ -232,45 +218,36 @@
                     document.getElementById('submit-btn').innerText = 'Юкланмоқда...';
                 }
             });
-
-            // Google Maps initialization
-            let map;
-            let marker;
-
+    
             function initMap() {
                 const mapOptions = {
-                    center: {
-                        lat: 41.2995,
-                        lng: 69.2401
-                    },
+                    center: { lat: 41.2995, lng: 69.2401 },
                     zoom: 10,
                 };
-
+    
                 map = new google.maps.Map(document.getElementById('map'), mapOptions);
-
-                // Add markers for other users' aktivs
+                infoWindow = new google.maps.InfoWindow();
+    
                 aktivs.forEach(function(aktiv) {
                     if (aktiv.latitude && aktiv.longitude) {
                         const position = {
                             lat: parseFloat(aktiv.latitude),
                             lng: parseFloat(aktiv.longitude)
                         };
-
+    
                         const aktivMarker = new google.maps.Marker({
                             position: position,
                             map: map,
                             title: aktiv.object_name,
                             icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png' // Yellow marker icon
                         });
-
-                        // Add click event to open modal with aktiv information
+    
                         aktivMarker.addListener('click', function() {
-                            // Open modal with aktiv information
-                            openAktivModal(aktiv);
+                            openInfoWindow(aktiv, aktivMarker);
                         });
                     }
                 });
-
+    
                 document.getElementById('find-my-location').addEventListener('click', function() {
                     if (navigator.geolocation) {
                         navigator.geolocation.getCurrentPosition(
@@ -279,12 +256,11 @@
                                     lat: position.coords.latitude,
                                     lng: position.coords.longitude
                                 };
-
+    
                                 map.setCenter(userLocation);
                                 map.setZoom(15);
                                 placeMarker(userLocation);
-
-                                // Set latitude, longitude, and geolocation URL in the input fields
+    
                                 document.getElementById('latitude').value = userLocation.lat;
                                 document.getElementById('longitude').value = userLocation.lng;
                                 document.getElementById('geolokatsiya').value =
@@ -299,49 +275,39 @@
                         alert('Жойлашувни аниқлаш браузерингиз томонидан қўлланилмайди.');
                     }
                 });
-
+    
                 map.addListener('click', function(event) {
                     placeMarker(event.latLng);
                 });
             }
-
+    
             function placeMarker(location) {
                 if (marker) {
                     marker.setMap(null);
                 }
-
+    
                 marker = new google.maps.Marker({
                     position: location,
                     map: map
                 });
-
+    
                 const lat = typeof location.lat === "function" ? location.lat() : location.lat;
                 const lng = typeof location.lng === "function" ? location.lng() : location.lng;
-
+    
                 document.getElementById('latitude').value = lat;
                 document.getElementById('longitude').value = lng;
                 document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
             }
-
-            function openAktivModal(aktiv) {
-                // Access the first file path if available, otherwise set default image
-                const mainImagePath = aktiv.files && aktiv.files.length > 0 ?
-                    `/storage/${aktiv.files[0].path}` :
-                    'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
-                // Create a modal to display aktiv information
-                const modalContent = `
-        <div id="aktiv-modal" class="modal fade" tabindex="-1" role="dialog">
-            <div class="modal-dialog" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">${aktiv.object_name}</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <img class="custom_sidebar_image" src="${mainImagePath}" alt="Marker Image"/>
+    
+            function openInfoWindow(aktiv, marker) {
+                const mainImagePath = aktiv.files && aktiv.files.length > 0 
+                    ? `/storage/${aktiv.files[0].path}` 
+                    : 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+    
+                const contentString = `
+                    <div style="width:250px;">
+                        <h5>${aktiv.object_name}</h5>
+                        <img src="${mainImagePath}" alt="Marker Image" style="width:100%;height:auto;"/>
                         <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
                         <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
                         <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
@@ -352,31 +318,16 @@
                         <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
                         <p><strong>Қарта:</strong> <a href="${aktiv.geolokatsiya || '#'}" target="_blank">${aktiv.geolokatsiya || 'N/A'}</a></p>
                     </div>
-                </div>
-            </div>
-        </div>
-    `;
-
-                // Append modal to body
-                const modalDiv = document.createElement('div');
-                modalDiv.innerHTML = modalContent;
-                document.body.appendChild(modalDiv);
-
-                // Show the modal using Bootstrap's modal method
-                $('#aktiv-modal').modal('show');
-
-                // Remove modal from DOM after it is hidden
-                $('#aktiv-modal').on('hidden.bs.modal', function() {
-                    $('#aktiv-modal').modal('dispose').remove();
-                });
+                `;
+    
+                infoWindow.setContent(contentString);
+                infoWindow.open(map, marker);
             }
-
-
-
-            // Initialize the map after the page has loaded
+    
             initMap();
         });
     </script>
+    
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <!-- Include Bootstrap CSS and JS (if not already included in your layout) -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
