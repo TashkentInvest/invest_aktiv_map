@@ -3,6 +3,7 @@
 @section('content')
     <h1 class="mb-4">Объект маълумотлари (Детали объекта)</h1>
 
+    <!-- General Information -->
     <div class="card shadow-sm p-4 mb-4">
         <h5 class="card-title text-primary">Общая информация</h5>
         <div class="card-body">
@@ -18,6 +19,7 @@
         </div>
     </div>
 
+    <!-- Location Information -->
     <div class="card shadow-sm p-4 mb-4">
         <h5 class="card-title text-primary">Расположение</h5>
         <div class="card-body">
@@ -38,6 +40,7 @@
         </div>
     </div>
 
+    <!-- Technical Information -->
     <div class="card shadow-sm p-4 mb-4">
         <h5 class="card-title text-primary">Техническая информация</h5>
         <div class="card-body">
@@ -150,7 +153,6 @@
         }
     </style>
 @endsection
-
 @section('scripts')
     <!-- Include GLightbox JS -->
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
@@ -158,34 +160,95 @@
     <!-- Initialize GLightbox and Google Maps -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            // Initialize GLightbox
-            const lightbox = GLightbox({
-                selector: '.glightbox',
-                touchNavigation: true,
-                loop: true,
-                zoomable: true,
-                autoplayVideos: true
-            });
+            const currentAktiv = @json($aktiv);
+            const aktivs = @json($aktivs);
 
-            // Initialize Google Maps
+            let map;
+            let infoWindow;
+
             function initMap() {
-                const location = {
-                    lat: parseFloat('{{ $aktiv->latitude }}'),
-                    lng: parseFloat('{{ $aktiv->longitude }}')
+                const aktivLatitude = parseFloat(currentAktiv.latitude);
+                const aktivLongitude = parseFloat(currentAktiv.longitude);
+
+                const mapOptions = {
+                    center: {
+                        lat: aktivLatitude,
+                        lng: aktivLongitude
+                    },
+                    zoom: 15,
                 };
 
-                const map = new google.maps.Map(document.getElementById('map'), {
-                    center: location,
-                    zoom: 15
+                map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                infoWindow = new google.maps.InfoWindow();
+
+                // Place a marker for the current Aktiv
+                const currentAktivPosition = {
+                    lat: aktivLatitude,
+                    lng: aktivLongitude
+                };
+
+                const currentAktivMarker = new google.maps.Marker({
+                    position: currentAktivPosition,
+                    map: map,
+                    title: currentAktiv.object_name,
+                    icon: {
+                        url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // URL of the marker image
+                        scaledSize: new google.maps.Size(50, 50) // Adjust the size as needed
+                    }
                 });
 
-                const marker = new google.maps.Marker({
-                    position: location,
-                    map: map
+                currentAktivMarker.addListener('click', function() {
+                    openInfoWindow(currentAktiv, currentAktivMarker);
+                });
+
+                // Then, loop through other aktivs to place markers
+                aktivs.forEach(function(a) {
+                    if (a.latitude && a.longitude) {
+                        const position = {
+                            lat: parseFloat(a.latitude),
+                            lng: parseFloat(a.longitude)
+                        };
+
+                        const aktivMarker = new google.maps.Marker({
+                            position: position,
+                            map: map,
+                            title: a.object_name,
+                            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png' // Yellow marker icon
+                        });
+
+                        aktivMarker.addListener('click', function() {
+                            openInfoWindow(a, aktivMarker);
+                        });
+                    }
                 });
             }
 
-            window.onload = initMap;
+            function openInfoWindow(aktiv, marker) {
+                const mainImagePath = aktiv.files && aktiv.files.length > 0 ?
+                    `/storage/${aktiv.files[0].path}` :
+                    'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+
+                const contentString = `
+                    <div style="width:250px;">
+                        <h5>${aktiv.object_name}</h5>
+                        <img src="${mainImagePath}" alt="Marker Image" style="width:100%;height:auto;"/>
+                        <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
+                        <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
+                        <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
+                        <p><strong>Бино майдони (кв.м):</strong> ${aktiv.building_area || 'N/A'}</p>
+                        <p><strong>Газ:</strong> ${aktiv.gas || 'N/A'}</p>
+                        <p><strong>Сув:</strong> ${aktiv.water || 'N/A'}</p>
+                        <p><strong>Электр:</strong> ${aktiv.electricity || 'N/A'}</p>
+                        <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
+                        <p><strong>Қарта:</strong> <a href="${aktiv.geolokatsiya || '#'}" target="_blank">${aktiv.geolokatsiya || 'N/A'}</a></p>
+                    </div>
+                `;
+
+                infoWindow.setContent(contentString);
+                infoWindow.open(map, marker);
+            }
+
+            initMap();
         });
     </script>
 

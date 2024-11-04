@@ -115,11 +115,27 @@ class AktivController extends Controller
     public function show(Aktiv $aktiv)
     {
         $this->authorizeView($aktiv); // Check if the user can view this Aktiv
-
-        $aktiv->load('subStreet.district.region');
-        return view('pages.aktiv.show', compact('aktiv'));
+    
+        // Load necessary relationships
+        $aktiv->load('subStreet.district.region', 'files');
+    
+        $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+    
+        // Add main_image attribute to the current Aktiv
+        $aktiv->main_image = $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : $defaultImage;
+    
+        // Get all Aktivs to display on the map, including the current one
+        $aktivs = Aktiv::with('files')->get();
+    
+        // Add main_image attribute to each Aktiv
+        $aktivs->map(function ($a) use ($defaultImage) {
+            $a->main_image = $a->files->first() ? asset('storage/' . $a->files->first()->path) : $defaultImage;
+            return $a;
+        });
+    
+        return view('pages.aktiv.show', compact('aktiv', 'aktivs'));
     }
-
+    
     public function edit(Aktiv $aktiv)
     {
         $this->authorizeView($aktiv); // Check if the user can edit this Aktiv
