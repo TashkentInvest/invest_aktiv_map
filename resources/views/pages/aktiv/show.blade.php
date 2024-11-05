@@ -76,24 +76,37 @@
         <h5 class="card-title text-primary">Юкланган файллар (Загруженные файлы)</h5>
         <div class="card-body">
             @if ($aktiv->files->count())
-                <div class="row">
-                    @foreach ($aktiv->files as $file)
-                        <div class="col-md-4 mb-3">
-                            <div class="card h-100">
-                                <a href="{{ asset('storage/' . $file->path) }}" class="glightbox"
-                                    data-gallery="aktiv-gallery" data-title="{{ $aktiv->object_name }}"
-                                    data-description="{{ $aktiv->additional_info }}">
-                                    <img src="{{ asset('storage/' . $file->path) }}" class="card-img-top" alt="Image">
-                                </a>
+                <!-- Swiper Container -->
+                <div class="swiper-container">
+                    <div class="swiper-wrapper">
+                        @foreach ($aktiv->files as $file)
+                            <div class="swiper-slide">
+                                @if (pathinfo($file->path, PATHINFO_EXTENSION) === 'heic')
+                                    <!-- HEIC images will be converted using HEIC2ANY -->
+                                    <img data-heic="{{ asset('storage/' . $file->path) }}" class="heic-image"
+                                        alt="Image">
+                                @else
+                                    <!-- Display non-HEIC images directly -->
+                                    <a href="{{ asset('storage/' . $file->path) }}" class="glightbox"
+                                        data-gallery="aktiv-gallery" data-title="{{ $aktiv->object_name }}"
+                                        data-description="{{ $aktiv->additional_info }}">
+                                        <img src="{{ asset('storage/' . $file->path) }}" alt="Image">
+                                    </a>
+                                @endif
                             </div>
-                        </div>
-                    @endforeach
+                        @endforeach
+                    </div>
+                    <!-- Add Pagination and Navigation -->
+                    <div class="swiper-pagination"></div>
+                    <div class="swiper-button-next"></div>
+                    <div class="swiper-button-prev"></div>
                 </div>
             @else
                 <p class="text-muted">Файллар мавжуд эмас (Нет загруженных файлов).</p>
             @endif
         </div>
     </div>
+
 
     <!-- Map Section -->
     <div class="card shadow-sm p-4 mb-4">
@@ -117,6 +130,8 @@
 @section('styles')
     <!-- GLightbox CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/glightbox/dist/css/glightbox.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@9/swiper-bundle.min.css">
+
 
     <style>
         .card {
@@ -150,6 +165,18 @@
             height: 200px;
             object-fit: cover;
         }
+
+        .swiper-container {
+            width: 100%;
+            height: 300px;
+        }
+
+        .swiper-slide img {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 10px;
+        }
     </style>
 @endsection
 
@@ -160,73 +187,107 @@
     <!-- Initialize GLightbox and Google Maps -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const currentAktiv = @json($aktiv);
-            const aktivs = @json($aktivs);
-            const defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+            const swiper = new Swiper('.swiper-container', {
+                loop: true,
+                pagination: {
+                    el: '.swiper-pagination',
+                    clickable: true,
+                },
+                navigation: {
+                    nextEl: '.swiper-button-next',
+                    prevEl: '.swiper-button-prev',
+                },
+            });
 
-            let map;
-            let infoWindow;
+            // Convert and display HEIC images
+            document.querySelectorAll('.heic-image').forEach(async (img) => {
+                const heicUrl = img.getAttribute('data-heic');
+                try {
+                    const response = await fetch(heicUrl);
+                    const blob = await response.blob();
+                    const convertedImage = await heic2any({
+                        blob,
+                        toType: 'image/png',
+                    });
+                    img.src = URL.createObjectURL(convertedImage);
+                } catch (error) {
+                    console.error('Error converting HEIC image:', error);
+                }
+            });
 
-            function initMap() {
-                const aktivLatitude = parseFloat(currentAktiv.latitude);
-                const aktivLongitude = parseFloat(currentAktiv.longitude);
+            // Initialize GLightbox for image lightbox effect
+            const lightbox = GLightbox({
+                selector: '.glightbox',
+                loop: true,
+            });
+        });
+        const currentAktiv = @json($aktiv);
+        const aktivs = @json($aktivs);
+        const defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
 
-                const mapOptions = {
-                    center: {
-                        lat: aktivLatitude,
-                        lng: aktivLongitude
-                    },
-                    zoom: 15,
-                };
+        let map;
+        let infoWindow;
 
-                map = new google.maps.Map(document.getElementById('map'), mapOptions);
-                infoWindow = new google.maps.InfoWindow();
+        function initMap() {
+            const aktivLatitude = parseFloat(currentAktiv.latitude);
+            const aktivLongitude = parseFloat(currentAktiv.longitude);
 
-                const currentAktivPosition = {
+            const mapOptions = {
+                center: {
                     lat: aktivLatitude,
                     lng: aktivLongitude
-                };
+                },
+                zoom: 15,
+            };
 
-                const currentAktivMarker = new google.maps.Marker({
-                    position: currentAktivPosition,
-                    map: map,
-                    title: currentAktiv.object_name,
-                    icon: {
-                        url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
-                        scaledSize: new google.maps.Size(50, 50)
-                    }
-                });
+            map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            infoWindow = new google.maps.InfoWindow();
 
-                currentAktivMarker.addListener('click', function() {
-                    openInfoWindow(currentAktiv, currentAktivMarker);
-                });
+            const currentAktivPosition = {
+                lat: aktivLatitude,
+                lng: aktivLongitude
+            };
 
-                aktivs.forEach(function(a) {
-                    if (a.latitude && a.longitude) {
-                        const position = {
-                            lat: parseFloat(a.latitude),
-                            lng: parseFloat(a.longitude)
-                        };
+            const currentAktivMarker = new google.maps.Marker({
+                position: currentAktivPosition,
+                map: map,
+                title: currentAktiv.object_name,
+                icon: {
+                    url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                    scaledSize: new google.maps.Size(50, 50)
+                }
+            });
 
-                        const aktivMarker = new google.maps.Marker({
-                            position: position,
-                            map: map,
-                            title: a.object_name,
-                            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
-                        });
+            currentAktivMarker.addListener('click', function() {
+                openInfoWindow(currentAktiv, currentAktivMarker);
+            });
 
-                        aktivMarker.addListener('click', function() {
-                            openInfoWindow(a, aktivMarker);
-                        });
-                    }
-                });
-            }
+            aktivs.forEach(function(a) {
+                if (a.latitude && a.longitude) {
+                    const position = {
+                        lat: parseFloat(a.latitude),
+                        lng: parseFloat(a.longitude)
+                    };
 
-            function openInfoWindow(aktiv, marker) {
-                const mainImagePath = aktiv.files && aktiv.files.length > 0 ?
-                    `/storage/${aktiv.files[0].path}` : defaultImage;
+                    const aktivMarker = new google.maps.Marker({
+                        position: position,
+                        map: map,
+                        title: a.object_name,
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+                    });
 
-                const contentString = `
+                    aktivMarker.addListener('click', function() {
+                        openInfoWindow(a, aktivMarker);
+                    });
+                }
+            });
+        }
+
+        function openInfoWindow(aktiv, marker) {
+            const mainImagePath = aktiv.files && aktiv.files.length > 0 ?
+                `/storage/${aktiv.files[0].path}` : defaultImage;
+
+            const contentString = `
                     <div style="width:250px;">
                         <h5>${aktiv.object_name}</h5>
                         <img src="${mainImagePath}" alt="Marker Image" style="width:100%;height:auto;"/>
@@ -242,11 +303,11 @@
                     </div>
                 `;
 
-                infoWindow.setContent(contentString);
-                infoWindow.open(map, marker);
-            }
+            infoWindow.setContent(contentString);
+            infoWindow.open(map, marker);
+        }
 
-            initMap();
+        initMap();
         });
     </script>
 
