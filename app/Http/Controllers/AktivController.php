@@ -54,17 +54,17 @@ class AktivController extends Controller
     {
         $regions = Regions::get();
         $aktivs = Aktiv::with('files')->where('user_id', '!=', auth()->id())->get();
-
+    
         $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
+    
         $aktivs->map(function ($aktiv) use ($defaultImage) {
             $aktiv->main_image = $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : $defaultImage;
             return $aktiv;
         });
-
+    
         return view('pages.aktiv.create', compact('aktivs', 'regions'));
     }
-
+    
     public function store(Request $request)
     {
         $request->validate([
@@ -114,28 +114,40 @@ class AktivController extends Controller
 
     public function show(Aktiv $aktiv)
     {
-        $this->authorizeView($aktiv); // Check if the user can view this Aktiv
-
+        // Check if the user can view this Aktiv (for authorization)
+        $this->authorizeView($aktiv);
+    
         // Load necessary relationships
         $aktiv->load('subStreet.district.region', 'files');
-
+    
         $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
+    
         // Add main_image attribute to the current Aktiv
         $aktiv->main_image = $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : $defaultImage;
-
+    
+        // Check if the user is the Super Admin (user_id = 1)
+        $isSuperAdmin = auth()->id() === 1;
+    
         // Get all Aktivs to display on the map, including the current one
-        $aktivs = Aktiv::with('files')->get();
-
+        if ($isSuperAdmin) {
+            // Super Admin can see all aktivs
+            $aktivs = Aktiv::with('files')->get();
+        } else {
+            // Other users should not see aktivs created by Super Admin (user_id = 1)
+            $aktivs = Aktiv::with('files')
+                ->where('user_id', '!=', 1)  // Exclude records created by the Super Admin
+                ->get();
+        }
+    
         // Add main_image attribute to each Aktiv
         $aktivs->map(function ($a) use ($defaultImage) {
             $a->main_image = $a->files->first() ? asset('storage/' . $a->files->first()->path) : $defaultImage;
             return $a;
         });
-
+    
         return view('pages.aktiv.show', compact('aktiv', 'aktivs'));
     }
-
+    
     public function edit(Aktiv $aktiv)
     {
         $this->authorizeView($aktiv); // Check if the user can edit this Aktiv
@@ -266,55 +278,24 @@ class AktivController extends Controller
     }
 
     // map code with source data
-    // public function getLots()
-    // {
-    //     $aktivs = Aktiv::with(['files', 'user'])->get();
-
-    //     $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
-    //     $lots = $aktivs->map(function ($aktiv) use ($defaultImage) {
-    //         $mainImagePath = $aktiv->files->first() ? 'storage/' . $aktiv->files->first()->path : null;
-    //         $mainImageUrl = $mainImagePath && file_exists(public_path($mainImagePath))
-    //             ? asset($mainImagePath)
-    //             : $defaultImage;
-
-    //         return [
-    //             'lat' => $aktiv->latitude,
-    //             'lng' => $aktiv->longitude,
-    //             'property_name' => $aktiv->object_name,
-    //             'main_image' => $mainImageUrl,
-    //             'land_area' => $aktiv->land_area,
-    //             'start_price' => 0, // Adjust if you have a price field
-    //             'lot_link' => route('aktivs.show', $aktiv->id),
-    //             'lot_number' => $aktiv->id,
-    //             'address' => $aktiv->location,
-    //             'user_name' => $aktiv->user ? $aktiv->user->name : 'N/A',
-    //             'user_email' => $aktiv->user ? $aktiv->user->email : 'N/A',
-    //             // Add other fields as necessary
-    //         ];
-    //     });
-
-    //     return response()->json(['lots' => $lots]);
-    // }
-
     public function getLots()
     {
-        // Check if the authenticated user is a Super Admin
-        $isSuperAdmin = auth()->user()->roles[0]->name === 'Super Admin';
-
-        // Fetch the aktivs with the related files and user
-        $aktivs = Aktiv::with(['files', 'user'])->get();
-
+        // Check if the authenticated user is the Super Admin (user_id = 1)
+        $isSuperAdmin = auth()->id() === 1;
+    
+        if ($isSuperAdmin) {
+            // Super Admin sees all aktivs
+            $aktivs = Aktiv::with(['files', 'user'])->get();
+        } else {
+            // Other users should not see aktivs created by the Super Admin (user_id = 1)
+            $aktivs = Aktiv::with(['files', 'user'])
+                ->where('user_id', '!=', 1)  // Exclude records created by the Super Admin
+                ->get();
+        }
+    
         // Define the default image in case there is no image
         $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
-        // Filter out the aktivs belonging to the current user if they are a Super Admin
-        if ($isSuperAdmin) {
-            $aktivs = $aktivs->reject(function ($aktiv) {
-                return $aktiv->user && $aktiv->user->id === auth()->id();
-            });
-        }
-
+    
         // Map the aktivs to the required format
         $lots = $aktivs->map(function ($aktiv) use ($defaultImage) {
             // Determine the main image URL
@@ -322,7 +303,7 @@ class AktivController extends Controller
             $mainImageUrl = $mainImagePath && file_exists(public_path($mainImagePath))
                 ? asset($mainImagePath)
                 : $defaultImage;
-
+    
             // Return the necessary data
             return [
                 'lat' => $aktiv->latitude,
@@ -330,20 +311,19 @@ class AktivController extends Controller
                 'property_name' => $aktiv->object_name,
                 'main_image' => $mainImageUrl,
                 'land_area' => $aktiv->land_area,
-                'start_price' => 0, // Adjust if you have a price field
+                'start_price' => $aktiv->start_price ?? 0,
                 'lot_link' => route('aktivs.show', $aktiv->id),
                 'lot_number' => $aktiv->id,
                 'address' => $aktiv->location,
                 'user_name' => $aktiv->user ? $aktiv->user->name : 'N/A',
                 'user_email' => $aktiv->user ? $aktiv->user->email : 'N/A',
-                // Add other fields as necessary
             ];
         });
-
+    
         // Return the response as JSON
         return response()->json(['lots' => $lots]);
     }
-
+    
 
 
     /**

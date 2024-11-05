@@ -31,11 +31,10 @@
                 <strong>Туман номи (District Name):</strong> {{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}
             </div>
             <div class="mb-3">
-                <strong>Мфй номи (Sub Street Name):</strong>
-                {{ $aktiv->street->name ?? 'Маълумот йўқ' }}
+                <strong>Мфй номи (Sub Street Name):</strong> {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}
             </div>
             <div class="mb-3">
-                <strong>Кўча номи (Sub Street Name):</strong> {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}
+                <strong>Кўча номи (Street Name):</strong> {{ $aktiv->street->name ?? 'Маълумот йўқ' }}
             </div>
         </div>
     </div>
@@ -66,8 +65,8 @@
                 <strong>Кадастр рақами (Кадастровый номер):</strong> {{ $aktiv->kadastr_raqami }}
             </div>
             <div class="mb-3">
-                <strong>Геолокация (Ссылка на геолокацию):</strong> <a href="{{ $aktiv->geolokatsiya }}"
-                    target="_blank">{{ $aktiv->geolokatsiya }}</a>
+                <strong>Геолокация (Ссылка на геолокацию):</strong>
+                <a href="{{ $aktiv->geolokatsiya }}" target="_blank">{{ $aktiv->geolokatsiya }}</a>
             </div>
         </div>
     </div>
@@ -153,6 +152,7 @@
         }
     </style>
 @endsection
+
 @section('scripts')
     <!-- Include GLightbox JS -->
     <script src="https://cdn.jsdelivr.net/npm/glightbox/dist/js/glightbox.min.js"></script>
@@ -162,6 +162,7 @@
         document.addEventListener('DOMContentLoaded', function() {
             const currentAktiv = @json($aktiv);
             const aktivs = @json($aktivs);
+            const defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
 
             let map;
             let infoWindow;
@@ -181,7 +182,6 @@
                 map = new google.maps.Map(document.getElementById('map'), mapOptions);
                 infoWindow = new google.maps.InfoWindow();
 
-                // Place a marker for the current Aktiv
                 const currentAktivPosition = {
                     lat: aktivLatitude,
                     lng: aktivLongitude
@@ -192,8 +192,8 @@
                     map: map,
                     title: currentAktiv.object_name,
                     icon: {
-                        url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png', // URL of the marker image
-                        scaledSize: new google.maps.Size(50, 50) // Adjust the size as needed
+                        url: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png',
+                        scaledSize: new google.maps.Size(50, 50)
                     }
                 });
 
@@ -201,7 +201,6 @@
                     openInfoWindow(currentAktiv, currentAktivMarker);
                 });
 
-                // Then, loop through other aktivs to place markers
                 aktivs.forEach(function(a) {
                     if (a.latitude && a.longitude) {
                         const position = {
@@ -213,7 +212,7 @@
                             position: position,
                             map: map,
                             title: a.object_name,
-                            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png' // Yellow marker icon
+                            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
                         });
 
                         aktivMarker.addListener('click', function() {
@@ -225,8 +224,7 @@
 
             function openInfoWindow(aktiv, marker) {
                 const mainImagePath = aktiv.files && aktiv.files.length > 0 ?
-                    `/storage/${aktiv.files[0].path}` :
-                    'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+                    `/storage/${aktiv.files[0].path}` : defaultImage;
 
                 const contentString = `
                     <div style="width:250px;">
