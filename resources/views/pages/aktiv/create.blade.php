@@ -111,7 +111,6 @@
             </div>
             <!-- Right Column -->
             <div class="col-md-6">
-                <!-- File Upload Fields -->
                 <div class="mb-3">
                     <label class="text-danger">Файлларни юклаш (Камида 4 та расм мажбурий)</label>
                 </div>
@@ -130,16 +129,11 @@
                     @endfor
                 </div>
 
-                <!-- Error Message Display -->
                 <div id="file-error" class="text-danger mb-3"></div>
 
-                <!-- Container for Additional File Inputs -->
                 <div id="file-upload-container"></div>
-
-                <!-- Add New File Button -->
                 <button type="button" class="btn btn-secondary mb-3" id="add-file-btn">Янги файл қўшиш</button>
 
-                <!-- Map Section -->
                 <div class="mb-3">
                     <button id="find-my-location" type="button" class="btn btn-primary mb-3">Менинг жойлашувимни
                         топиш</button>
@@ -152,11 +146,9 @@
                     @enderror
                 </div>
 
-                <!-- Hidden Fields for Coordinates -->
                 <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
                 <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
 
-                <!-- Geolocation URL Field -->
                 <div class="mb-3">
                     <label for="geolokatsiya">Геолокация (координата)</label>
                     <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya" readonly required
@@ -168,34 +160,25 @@
             </div>
         </div>
 
-        <!-- Submit Button -->
         <button type="submit" class="btn btn-success" id="submit-btn">Сақлаш</button>
     </form>
 @endsection
 
 @section('scripts')
-    <!-- Include Google Maps Script -->
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
-    </script>    <!-- Include Bootstrap JS for Modal -->
+    </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-    <!-- JavaScript Code -->
+
     <script>
-        // Global Variables
-        let fileInputCount = 4; // Initial number of file inputs
+        let fileInputCount = 4;
         let activeFileInput;
         let videoStream;
-        let aktivs = @json($aktivs ?? []);
-        let map;
-        let marker;
-        let infoWindow;
 
-        // Open Camera Modal Function
         function openCameraModal(fileInputId) {
             activeFileInput = document.getElementById(fileInputId);
             const cameraModal = new bootstrap.Modal(document.getElementById('cameraModal'), {});
             cameraModal.show();
 
-            // Access the user's camera
             navigator.mediaDevices.getUserMedia({
                     video: {
                         facingMode: 'environment'
@@ -206,45 +189,36 @@
                     document.getElementById('cameraPreview').srcObject = stream;
                 })
                 .catch(error => {
-                    console.error("Camera access error:", error);
                     alert('Камерага кириш мумкин эмас: ' + error.message);
                 });
         }
 
-        // Capture Button Event
         document.getElementById('captureButton').addEventListener('click', () => {
             const video = document.getElementById('cameraPreview');
             const canvas = document.getElementById('snapshotCanvas');
             const context = canvas.getContext('2d');
-
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
             context.drawImage(video, 0, 0, canvas.width, canvas.height);
-
-            // Stop the video stream after capturing
             videoStream.getTracks().forEach(track => track.stop());
-
-            document.getElementById('saveButton').disabled = false; // Enable save button
+            document.getElementById('saveButton').disabled = false;
         });
 
-        // Save Button Event
         document.getElementById('saveButton').addEventListener('click', () => {
             const canvas = document.getElementById('snapshotCanvas');
             canvas.toBlob(blob => {
-                const file = new File([blob], 'snapshot.jpg', {
+                const file = new File([blob], `snapshot-${Date.now()}.jpg`, {
                     type: 'image/jpeg'
                 });
                 const dataTransfer = new DataTransfer();
                 dataTransfer.items.add(file);
                 activeFileInput.files = dataTransfer.files;
+                validateFiles();
             });
-
-            // Clear the video preview
             document.getElementById('cameraPreview').srcObject = null;
-            document.getElementById('saveButton').disabled = true; // Disable save button
+            document.getElementById('saveButton').disabled = true;
         });
 
-        // Function to Add New File Input
         document.getElementById('add-file-btn').addEventListener('click', () => {
             fileInputCount++;
             const container = document.getElementById('file-upload-container');
@@ -259,8 +233,8 @@
             input.name = 'files[]';
             input.classList.add('form-control');
             input.accept = 'image/*';
-            input.id = 'file' + fileInputCount;
             input.required = true;
+            input.id = 'file' + fileInputCount;
             input.addEventListener('change', validateFiles);
             const button = document.createElement('button');
             button.type = 'button';
@@ -277,23 +251,19 @@
             validateFiles();
         });
 
-        // Function to Validate Files
         function validateFiles() {
             const submitBtn = document.getElementById('submit-btn');
             const errorDiv = document.getElementById('file-error');
             const fileInputs = document.querySelectorAll('input[type="file"][name="files[]"]');
-
             let totalFiles = 0;
             fileInputs.forEach(input => {
                 if (input.files.length > 0) {
                     totalFiles += input.files.length;
                 }
             });
-
             if (totalFiles < 4) {
                 let filesNeeded = 4 - totalFiles;
-                errorDiv.textContent = filesNeeded === 4 ?
-                    'Сиз ҳеч қандай файл юкламадингиз.' :
+                errorDiv.textContent = filesNeeded === 4 ? 'Сиз ҳеч қандай файл юкламадингиз.' :
                     `Сиз яна ${filesNeeded} та файл юклашингиз керак.`;
                 submitBtn.disabled = true;
             } else {
@@ -302,15 +272,11 @@
             }
         }
 
-        // Initial Validation
         validateFiles();
-
-        // Event Listeners for Initial File Inputs
         for (let i = 1; i <= fileInputCount; i++) {
             document.getElementById('file' + i).addEventListener('change', validateFiles);
         }
 
-        // Form Submission Event
         document.getElementById('aktiv-form').addEventListener('submit', function(event) {
             validateFiles();
             if (document.getElementById('submit-btn').disabled) {
@@ -321,13 +287,14 @@
             }
         });
 
-        // Initialize Google Map
         function initMap() {
             const mapOptions = {
-                center: { lat: 41.2995, lng: 69.2401 }, // Default center (Tashkent, Uzbekistan)
-                zoom: 10,
+                center: {
+                    lat: 41.2995,
+                    lng: 69.2401
+                },
+                zoom: 10
             };
-
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
             infoWindow = new google.maps.InfoWindow();
 
@@ -338,14 +305,12 @@
                             lat: parseFloat(aktiv.latitude),
                             lng: parseFloat(aktiv.longitude)
                         };
-
                         const aktivMarker = new google.maps.Marker({
                             position: position,
                             map: map,
                             title: aktiv.object_name,
-                            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png' // Yellow marker icon
+                            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
                         });
-
                         aktivMarker.addListener('click', function() {
                             openInfoWindow(aktiv, aktivMarker);
                         });
@@ -361,7 +326,6 @@
                                 lat: position.coords.latitude,
                                 lng: position.coords.longitude
                             };
-
                             map.setCenter(userLocation);
                             map.setZoom(15);
                             placeMarker(userLocation);
@@ -372,7 +336,6 @@
                                 `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}`;
                         },
                         function(error) {
-                            console.error('Error occurred. Error code: ' + error.code);
                             alert('Жойлашувингиз аниқланмади: ' + error.message);
                         }
                     );
@@ -390,7 +353,6 @@
             if (marker) {
                 marker.setMap(null);
             }
-
             marker = new google.maps.Marker({
                 position: location,
                 map: map
@@ -404,32 +366,6 @@
             document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
         }
 
-        function openInfoWindow(aktiv, marker) {
-            const mainImagePath = aktiv.files && aktiv.files.length > 0
-                ? `/storage/${aktiv.files[0].path}`
-                : 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
-            const contentString = `
-                <div style="width:250px;">
-                    <h5>${aktiv.object_name}</h5>
-                    <img src="${mainImagePath}" alt="Marker Image" style="width:100%;height:auto;"/>
-                    <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
-                    <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
-                    <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
-                    <p><strong>Бино майдони (кв.м):</strong> ${aktiv.building_area || 'N/A'}</p>
-                    <p><strong>Газ:</strong> ${aktiv.gas || 'N/A'}</p>
-                    <p><strong>Сув:</strong> ${aktiv.water || 'N/A'}</p>
-                    <p><strong>Электр:</strong> ${aktiv.electricity || 'N/A'}</p>
-                    <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
-                    <p><strong>Қарта:</strong> <a href="${aktiv.geolokatsiya || '#'}" target="_blank">${aktiv.geolokatsiya || 'N/A'}</a></p>
-                </div>
-            `;
-
-            infoWindow.setContent(contentString);
-            infoWindow.open(map, marker);
-        }
-
-        // Initialize Map after DOM content is loaded
         document.addEventListener('DOMContentLoaded', function() {
             initMap();
         });
