@@ -27,7 +27,6 @@
     <!-- Main Form -->
     <form method="POST" action="{{ route('aktivs.store') }}" enctype="multipart/form-data" id="aktiv-form">
         @csrf
-
         <input type="hidden" name="user_id" value="{{ auth()->user()->id ?? 1 }}">
         <div class="row my-3">
             <!-- Left Column -->
@@ -130,7 +129,6 @@
                 </div>
 
                 <div id="file-error" class="text-danger mb-3"></div>
-
                 <div id="file-upload-container"></div>
                 <button type="button" class="btn btn-secondary mb-3" id="add-file-btn">Янги файл қўшиш</button>
 
@@ -148,7 +146,6 @@
 
                 <input type="hidden" name="latitude" id="latitude" value="{{ old('latitude') }}">
                 <input type="hidden" name="longitude" id="longitude" value="{{ old('longitude') }}">
-
                 <div class="mb-3">
                     <label for="geolokatsiya">Геолокация (координата)</label>
                     <input class="form-control" type="text" name="geolokatsiya" id="geolokatsiya" readonly required
@@ -287,6 +284,10 @@
             }
         });
 
+        // Initialize map and add markers
+        let aktivs = @json($aktivs ?? []);
+        let map, marker, infoWindow;
+
         function initMap() {
             const mapOptions = {
                 center: {
@@ -298,56 +299,80 @@
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
             infoWindow = new google.maps.InfoWindow();
 
-            if (Array.isArray(aktivs)) {
-                aktivs.forEach(function(aktiv) {
+            if (aktivs && aktivs.length > 0) {
+                aktivs.forEach(aktiv => {
                     if (aktiv.latitude && aktiv.longitude) {
                         const position = {
                             lat: parseFloat(aktiv.latitude),
                             lng: parseFloat(aktiv.longitude)
                         };
+
                         const aktivMarker = new google.maps.Marker({
                             position: position,
                             map: map,
                             title: aktiv.object_name,
                             icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
                         });
+
                         aktivMarker.addListener('click', function() {
                             openInfoWindow(aktiv, aktivMarker);
                         });
                     }
                 });
             }
-
-            document.getElementById('find-my-location').addEventListener('click', function() {
-                if (navigator.geolocation) {
-                    navigator.geolocation.getCurrentPosition(
-                        function(position) {
-                            const userLocation = {
-                                lat: position.coords.latitude,
-                                lng: position.coords.longitude
-                            };
-                            map.setCenter(userLocation);
-                            map.setZoom(15);
-                            placeMarker(userLocation);
-
-                            document.getElementById('latitude').value = userLocation.lat;
-                            document.getElementById('longitude').value = userLocation.lng;
-                            document.getElementById('geolokatsiya').value =
-                                `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}`;
-                        },
-                        function(error) {
-                            alert('Жойлашувингиз аниқланмади: ' + error.message);
-                        }
-                    );
-                } else {
-                    alert('Жойлашувни аниқлаш браузерингиз томонидан қўлланилмайди.');
-                }
-            });
-
-            map.addListener('click', function(event) {
-                placeMarker(event.latLng);
-            });
         }
+
+        function openInfoWindow(aktiv, marker) {
+            const mainImagePath = aktiv.files && aktiv.files.length > 0 ?
+                `/storage/${aktiv.files[0].path}` :
+                'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+
+            const contentString = `
+                <div style="width:250px;">
+                    <h5>${aktiv.object_name}</h5>
+                    <img src="${mainImagePath}" alt="Marker Image" style="width:100%;height:auto;"/>
+                    <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
+                    <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
+                    <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
+                    <p><strong>Бино майдони (кв.м):</strong> ${aktiv.building_area || 'N/A'}</p>
+                    <p><strong>Газ:</strong> ${aktiv.gas || 'N/A'}</p>
+                    <p><strong>Сув:</strong> ${aktiv.water || 'N/A'}</p>
+                    <p><strong>Электр:</strong> ${aktiv.electricity || 'N/A'}</p>
+                    <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
+                    <p><strong>Қарта:</strong> <a href="${aktiv.geolokatsiya || '#'}" target="_blank">${aktiv.geolokatsiya || 'N/A'}</a></p>
+                </div>
+            `;
+
+            infoWindow.setContent(contentString);
+            infoWindow.open(map, marker);
+        }
+
+        document.getElementById('find-my-location').addEventListener('click', function() {
+            if (navigator.geolocation) {
+                navigator.geolocation.getCurrentPosition(
+                    function(position) {
+                        const userLocation = {
+                            lat: position.coords.latitude,
+                            lng: position.coords.longitude
+                        };
+
+                        map.setCenter(userLocation);
+                        map.setZoom(15);
+                        placeMarker(userLocation);
+
+                        document.getElementById('latitude').value = userLocation.lat;
+                        document.getElementById('longitude').value = userLocation.lng;
+                        document.getElementById('geolokatsiya').value =
+                            `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}`;
+                    },
+                    function(error) {
+                        alert('Жойлашувингиз аниқланмади: ' + error.message);
+                    }
+                );
+            } else {
+                alert('Жойлашувни аниқлаш браузерингиз томонидан қўлланилмайди.');
+            }
+        });
 
         function placeMarker(location) {
             if (marker) {
