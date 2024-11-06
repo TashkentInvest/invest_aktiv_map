@@ -184,6 +184,10 @@
         let fileInputCount = 4; // Initial number of file inputs
         let activeFileInput;
         let videoStream;
+        let aktivs = @json($aktivs ?? []);
+        let map;
+        let marker;
+        let infoWindow;
 
         // Open Camera Modal Function
         function openCameraModal(fileInputId) {
@@ -320,18 +324,35 @@
         // Initialize Google Map
         function initMap() {
             const mapOptions = {
-                center: {
-                    lat: 41.2995,
-                    lng: 69.2401
-                }, // Default center (Tashkent, Uzbekistan)
+                center: { lat: 41.2995, lng: 69.2401 }, // Default center (Tashkent, Uzbekistan)
                 zoom: 10,
             };
 
-            const map = new google.maps.Map(document.getElementById('map'), mapOptions);
-            let marker;
-            const infoWindow = new google.maps.InfoWindow();
+            map = new google.maps.Map(document.getElementById('map'), mapOptions);
+            infoWindow = new google.maps.InfoWindow();
 
-            // Event Listener for "Find My Location" Button
+            if (Array.isArray(aktivs)) {
+                aktivs.forEach(function(aktiv) {
+                    if (aktiv.latitude && aktiv.longitude) {
+                        const position = {
+                            lat: parseFloat(aktiv.latitude),
+                            lng: parseFloat(aktiv.longitude)
+                        };
+
+                        const aktivMarker = new google.maps.Marker({
+                            position: position,
+                            map: map,
+                            title: aktiv.object_name,
+                            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png' // Yellow marker icon
+                        });
+
+                        aktivMarker.addListener('click', function() {
+                            openInfoWindow(aktiv, aktivMarker);
+                        });
+                    }
+                });
+            }
+
             document.getElementById('find-my-location').addEventListener('click', function() {
                 if (navigator.geolocation) {
                     navigator.geolocation.getCurrentPosition(
@@ -360,32 +381,55 @@
                 }
             });
 
-            // Map Click Event to Place Marker
             map.addListener('click', function(event) {
                 placeMarker(event.latLng);
             });
-
-            // Function to Place Marker on Map
-            function placeMarker(location) {
-                if (marker) {
-                    marker.setMap(null);
-                }
-
-                marker = new google.maps.Marker({
-                    position: location,
-                    map: map
-                });
-
-                const lat = typeof location.lat === "function" ? location.lat() : location.lat;
-                const lng = typeof location.lng === "function" ? location.lng() : location.lng;
-
-                document.getElementById('latitude').value = lat;
-                document.getElementById('longitude').value = lng;
-                document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
-            }
         }
 
-        // Initialize Map on DOM Content Loaded
+        function placeMarker(location) {
+            if (marker) {
+                marker.setMap(null);
+            }
+
+            marker = new google.maps.Marker({
+                position: location,
+                map: map
+            });
+
+            const lat = typeof location.lat === "function" ? location.lat() : location.lat;
+            const lng = typeof location.lng === "function" ? location.lng() : location.lng;
+
+            document.getElementById('latitude').value = lat;
+            document.getElementById('longitude').value = lng;
+            document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
+        }
+
+        function openInfoWindow(aktiv, marker) {
+            const mainImagePath = aktiv.files && aktiv.files.length > 0
+                ? `/storage/${aktiv.files[0].path}`
+                : 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+
+            const contentString = `
+                <div style="width:250px;">
+                    <h5>${aktiv.object_name}</h5>
+                    <img src="${mainImagePath}" alt="Marker Image" style="width:100%;height:auto;"/>
+                    <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
+                    <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
+                    <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
+                    <p><strong>Бино майдони (кв.м):</strong> ${aktiv.building_area || 'N/A'}</p>
+                    <p><strong>Газ:</strong> ${aktiv.gas || 'N/A'}</p>
+                    <p><strong>Сув:</strong> ${aktiv.water || 'N/A'}</p>
+                    <p><strong>Электр:</strong> ${aktiv.electricity || 'N/A'}</p>
+                    <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
+                    <p><strong>Қарта:</strong> <a href="${aktiv.geolokatsiya || '#'}" target="_blank">${aktiv.geolokatsiya || 'N/A'}</a></p>
+                </div>
+            `;
+
+            infoWindow.setContent(contentString);
+            infoWindow.open(map, marker);
+        }
+
+        // Initialize Map after DOM content is loaded
         document.addEventListener('DOMContentLoaded', function() {
             initMap();
         });
