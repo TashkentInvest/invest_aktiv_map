@@ -1,50 +1,36 @@
 <!DOCTYPE html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <title>@lang('panel.site_title')</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    {{-- <link rel="shortcut icon" href="{{ asset('assets/images/favicon_techwiz.ico') }}"> --}}
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Favicon -->
     <link rel="shortcut icon" href="{{ asset('assets/images/dark_logo.png') }}">
 
-    <link href="{{ asset('assets/libs/select2/css/select2.min.css') }}" rel="stylesheet" type="text/css" />
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
-
-
-
+    <!-- App CSS -->
     <link href="{{ asset('assets/css/app.min.css') }}" id="app-style" rel="stylesheet" type="text/css" />
 
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-
-    <!-- Include Select2 CSS -->
+    <!-- Select2 CSS -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/css/select2.min.css" rel="stylesheet">
 
-    <!-- Include Select2 JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.13/js/select2.min.js"></script>
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/3.3.4/jquery.inputmask.bundle.min.js"></script>
-    {{-- new --}}
+    <!-- Additional Plugin CSS -->
     <link rel="stylesheet" href="{{ asset('assets/new/assets/css/plugins/jsvectormap.min.css') }}">
-    <!-- [Google Font : Public Sans] icon -->
-    <link href="../../../css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <!-- [phosphor Icons] https://phosphoricons.com/ -->
+    
+    <!-- Icon Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/new/assets/fonts/phosphor/duotone/style.css') }}">
-    <!-- [Tabler Icons] https://tablericons.com -->
     <link rel="stylesheet" href="{{ asset('assets/new/assets/fonts/tabler-icons.min.css') }}">
-    <!-- [Feather Icons] https://feathericons.com -->
     <link rel="stylesheet" href="{{ asset('assets/new/assets/fonts/feather.css') }}">
-    <!-- [Font Awesome Icons] https://fontawesome.com/icons -->
     <link rel="stylesheet" href="{{ asset('assets/new/assets/fonts/fontawesome.css') }}">
-    <!-- [Material Icons] https://fonts.google.com/icons -->
     <link rel="stylesheet" href="{{ asset('assets/new/assets/fonts/material.css') }}">
-    <!-- [Template CSS Files] -->
+
+    <!-- Template Styles -->
     <link rel="stylesheet" href="{{ asset('assets/new/assets/css/style.css') }}" id="main-style-link">
     <link rel="stylesheet" href="{{ asset('assets/new/assets/css/style-preset.css') }}">
-{{-- 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
-    </script> --}}
+
 
     @yield('styles')
 </head>
