@@ -14,9 +14,10 @@
                 <div class="modal-body">
                     <video id="cameraPreview" width="100%" autoplay></video>
                     <canvas id="snapshotCanvas" style="display:none;"></canvas>
+                    <div id="cameraError" class="text-danger"></div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" id="captureButton">Расм олиш</button>
+                    <button type="button" class="btn btn-secondary" id="captureButton" disabled>Расм олиш</button>
                     <button type="button" class="btn btn-primary" id="saveButton" data-bs-dismiss="modal"
                         disabled>Сақлаш</button>
                 </div>
@@ -162,8 +163,12 @@
 @endsection
 
 @section('scripts')
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
+    <!-- Include Google Maps JavaScript API with Places Library -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries&libraries=places&callback=initMap" async defer>
     </script>
+
+{{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
+</script> --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
@@ -176,18 +181,27 @@
             const cameraModal = new bootstrap.Modal(document.getElementById('cameraModal'), {});
             cameraModal.show();
 
-            navigator.mediaDevices.getUserMedia({
-                    video: {
-                        facingMode: 'environment'
-                    }
-                })
-                .then(stream => {
-                    videoStream = stream;
-                    document.getElementById('cameraPreview').srcObject = stream;
-                })
-                .catch(error => {
-                    alert('Камерага кириш мумкин эмас: ' + error.message);
-                });
+            // Check for camera support
+            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                navigator.mediaDevices.getUserMedia({
+                        video: {
+                            facingMode: 'environment'
+                        }
+                    })
+                    .then(stream => {
+                        videoStream = stream;
+                        document.getElementById('cameraPreview').srcObject = stream;
+                        document.getElementById('captureButton').disabled = false;
+                        document.getElementById('cameraError').textContent = '';
+                    })
+                    .catch(error => {
+                        document.getElementById('cameraError').textContent = 'Камерага кириш мумкин эмас: ' + error.message;
+                        document.getElementById('captureButton').disabled = true;
+                    });
+            } else {
+                document.getElementById('cameraError').textContent = 'Браузерингиз камерадан фойдаланишни қўллаб-қувватламайди.';
+                document.getElementById('captureButton').disabled = true;
+            }
         }
 
         document.getElementById('captureButton').addEventListener('click', () => {
@@ -299,6 +313,7 @@
             map = new google.maps.Map(document.getElementById('map'), mapOptions);
             infoWindow = new google.maps.InfoWindow();
 
+            // Existing aktivs markers
             if (aktivs && aktivs.length > 0) {
                 aktivs.forEach(aktiv => {
                     if (aktiv.latitude && aktiv.longitude) {
@@ -311,7 +326,7 @@
                             position: position,
                             map: map,
                             title: aktiv.object_name,
-                            icon: 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png'
+                            icon: 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png' // Updated to HTTPS
                         });
 
                         aktivMarker.addListener('click', function() {
@@ -319,6 +334,24 @@
                         });
                     }
                 });
+            }
+
+            // Add click event to place custom marker
+            map.addListener('click', function(event) {
+                placeMarker(event.latLng);
+            });
+
+            // If latitude and longitude are already set, place a marker
+            const latInput = document.getElementById('latitude').value;
+            const lngInput = document.getElementById('longitude').value;
+            if (latInput && lngInput) {
+                const position = {
+                    lat: parseFloat(latInput),
+                    lng: parseFloat(lngInput)
+                };
+                placeMarker(position);
+                map.setCenter(position);
+                map.setZoom(15);
             }
         }
 
@@ -359,11 +392,6 @@
                         map.setCenter(userLocation);
                         map.setZoom(15);
                         placeMarker(userLocation);
-
-                        document.getElementById('latitude').value = userLocation.lat;
-                        document.getElementById('longitude').value = userLocation.lng;
-                        document.getElementById('geolokatsiya').value =
-                            `https://www.google.com/maps?q=${userLocation.lat},${userLocation.lng}`;
                     },
                     function(error) {
                         alert('Жойлашувингиз аниқланмади: ' + error.message);
@@ -392,7 +420,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-            initMap();
+            // Map initialization is now handled by the callback in the Google Maps API script tag
         });
     </script>
 @endsection
