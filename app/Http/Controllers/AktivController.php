@@ -135,7 +135,7 @@ class AktivController extends Controller
         } else {
             $aktivs = Aktiv::with('files')
                 ->where('user_id', '!=', 1)
-                . where('district_id', $userDistrictId)  // Filter by user's district
+                ->where('district_id', $userDistrictId)  // Filter by user's district
                 ->get();
         }
 
@@ -290,7 +290,7 @@ class AktivController extends Controller
         } else {
             $aktivs = Aktiv::with(['files', 'user'])
                 ->where('user_id', '!=', 1)
-                . where('district_id', $userDistrictId)  // Filter by user's district
+                ->where('district_id', $userDistrictId)  // Filter by user's district
                 ->get();
         }
 
