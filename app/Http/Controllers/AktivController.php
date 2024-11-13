@@ -303,16 +303,15 @@ class AktivController extends Controller
         $userDistrictId = auth()->user()->district_id;  // Get the district ID of the authenticated user
     
         if ($isSuperAdmin) {
-            // Super Admin sees all aktivs, adjust join to include street's district
-            $aktivs = Aktiv::with(['files', 'user'])
-                ->join('streets', 'aktivs.street_id', '=', 'streets.id')
-                ->get();
+            // Super Admin sees all aktivs
+            $aktivs = Aktiv::with(['files', 'user', 'street.district'])->get();
         } else {
-            // Other users should see aktivs only from their district
-            $aktivs = Aktiv::with(['files', 'user'])
-                ->join('streets', 'aktivs.street_id', '=', 'streets.id')
-                ->where('streets.district_id', $userDistrictId)  // Filter by user's district through streets
-                ->where('user_id', '!=', 1)
+            // Other users should see only aktivs from their district and not created by Super Admin
+            $aktivs = Aktiv::with(['files', 'user', 'street.district'])
+                ->whereHas('street', function ($query) use ($userDistrictId) {
+                    $query->where('district_id', $userDistrictId);  // Filter by the district ID from street relationship
+                })
+                ->where('user_id', '!=', 1)  // Exclude records created by the Super Admin
                 ->get();
         }
     
@@ -347,6 +346,54 @@ class AktivController extends Controller
         return response()->json(['lots' => $lots]);
     }
     
+    
+    
+    
+    // public function getLots()
+    // {
+    //     // Check if the authenticated user is the Super Admin (user_id = 1)
+    //     $isSuperAdmin = auth()->id() === 1;
+    
+    //     if ($isSuperAdmin) {
+    //         // Super Admin sees all aktivs
+    //         $aktivs = Aktiv::with(['files', 'user'])->get();
+    //     } else {
+    //         // Other users should not see aktivs created by the Super Admin (user_id = 1)
+    //         $aktivs = Aktiv::with(['files', 'user'])
+    //             ->where('user_id', '!=', 1)  // Exclude records created by the Super Admin
+    //             ->get();
+    //     }
+    
+    //     // Define the default image in case there is no image
+    //     $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+    
+    //     // Map the aktivs to the required format
+    //     $lots = $aktivs->map(function ($aktiv) use ($defaultImage) {
+    //         // Determine the main image URL
+    //         $mainImagePath = $aktiv->files->first() ? 'storage/' . $aktiv->files->first()->path : null;
+    //         $mainImageUrl = $mainImagePath && file_exists(public_path($mainImagePath))
+    //             ? asset($mainImagePath)
+    //             : $defaultImage;
+    
+    //         // Return the necessary data
+    //         return [
+    //             'lat' => $aktiv->latitude,
+    //             'lng' => $aktiv->longitude,
+    //             'property_name' => $aktiv->object_name,
+    //             'main_image' => $mainImageUrl,
+    //             'land_area' => $aktiv->land_area,
+    //             'start_price' => $aktiv->start_price ?? 0,
+    //             'lot_link' => route('aktivs.show', $aktiv->id),
+    //             'lot_number' => $aktiv->id,
+    //             'address' => $aktiv->location,
+    //             'user_name' => $aktiv->user ? $aktiv->user->name : 'N/A',
+    //             'user_email' => $aktiv->user ? $aktiv->user->email : 'N/A',
+    //         ];
+    //     });
+    
+    //     // Return the response as JSON
+    //     return response()->json(['lots' => $lots]);
+    // }
 
 
 
