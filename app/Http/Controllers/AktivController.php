@@ -52,18 +52,33 @@ class AktivController extends Controller
 
     public function create()
     {
-        $regions = Regions::get();
-        $aktivs = Aktiv::with('files')->where('user_id', '!=', auth()->id())->get();
-
+        $regions = Regions::get();  // Assuming this needs no filtering
+        $isSuperAdmin = auth()->id() === 1;  // Check if the user is the Super Admin
+        $userDistrictId = auth()->user()->district_id;  // Get the district ID of the authenticated user
+    
+        if ($isSuperAdmin) {
+            // Super Admin gets to see all Aktivs except their own creations
+            $aktivs = Aktiv::with('files')->where('user_id', '!=', auth()->id())->get();
+        } else {
+            // Regular users see only Aktivs from their district and not created by themselves
+            $aktivs = Aktiv::with('files')
+                            ->join('streets', 'aktivs.street_id', '=', 'streets.id')  // Join the streets table
+                            ->where('streets.district_id', $userDistrictId)  // Filter by user's district
+                            ->where('aktivs.user_id', '!=', auth()->id())  // Exclude their own Aktivs
+                            ->get();
+        }
+    
         $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
+    
+        // Assign a default image if no files are associated with an Aktiv
         $aktivs->map(function ($aktiv) use ($defaultImage) {
             $aktiv->main_image = $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : $defaultImage;
             return $aktiv;
         });
-
+    
         return view('pages.aktiv.create', compact('aktivs', 'regions'));
     }
+    
 
     public function store(Request $request)
     {
@@ -116,37 +131,40 @@ class AktivController extends Controller
     {
         // Check if the user can view this Aktiv (for authorization)
         $this->authorizeView($aktiv);
-
-        // Load necessary relationships
+    
+        // Load necessary relationships including the street to district relationship
+        // It's crucial that subStreet is correctly mapped to district in your Aktiv model
         $aktiv->load('subStreet.district.region', 'files');
-
+    
         $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
+    
         // Add main_image attribute to the current Aktiv
         $aktiv->main_image = $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : $defaultImage;
-
-        // Check if the user is the Super Admin (user_id = 1)
-        $isSuperAdmin = auth()->id() === 1;
-
+    
+        // Retrieve user district ID from the authenticated user's associated street
         $userDistrictId = auth()->user()->district_id;  // Get the district ID of the authenticated user
-
+    
         if (auth()->id() === 1) {
-            $aktivs = Aktiv::with('files')->where('district_id', $userDistrictId)->get();
+            // Super Admin can see all aktivs
+            $aktivs = Aktiv::with('files')->get();
         } else {
+            // Regular users see only aktivs from their district and not created by Super Admin
             $aktivs = Aktiv::with('files')
-                ->where('user_id', '!=', 1)
-                ->where('district_id', $userDistrictId)  // Filter by user's district
+                ->join('streets', 'aktivs.street_id', '=', 'streets.id')  // Ensure street is joined correctly
+                ->where('streets.district_id', $userDistrictId)  // Filter by user's district from street relationship
+                ->where('user_id', '!=', 1)  // Exclude aktivs created by Super Admin
                 ->get();
         }
-
+    
         // Add main_image attribute to each Aktiv
         $aktivs->map(function ($a) use ($defaultImage) {
             $a->main_image = $a->files->first() ? asset('storage/' . $a->files->first()->path) : $defaultImage;
             return $a;
         });
-
+    
         return view('pages.aktiv.show', compact('aktiv', 'aktivs'));
     }
+    
 
     public function edit(Aktiv $aktiv)
     {
@@ -282,21 +300,25 @@ class AktivController extends Controller
     {
         // Check if the authenticated user is the Super Admin (user_id = 1)
         $isSuperAdmin = auth()->id() === 1;
-
         $userDistrictId = auth()->user()->district_id;  // Get the district ID of the authenticated user
-
+    
         if ($isSuperAdmin) {
-            $aktivs = Aktiv::with(['files', 'user'])->where('district_id', $userDistrictId)->get();
-        } else {
+            // Super Admin sees all aktivs, adjust join to include street's district
             $aktivs = Aktiv::with(['files', 'user'])
+                ->join('streets', 'aktivs.street_id', '=', 'streets.id')
+                ->get();
+        } else {
+            // Other users should see aktivs only from their district
+            $aktivs = Aktiv::with(['files', 'user'])
+                ->join('streets', 'aktivs.street_id', '=', 'streets.id')
+                ->where('streets.district_id', $userDistrictId)  // Filter by user's district through streets
                 ->where('user_id', '!=', 1)
-                ->where('district_id', $userDistrictId)  // Filter by user's district
                 ->get();
         }
-
+    
         // Define the default image in case there is no image
         $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
+    
         // Map the aktivs to the required format
         $lots = $aktivs->map(function ($aktiv) use ($defaultImage) {
             // Determine the main image URL
@@ -304,7 +326,7 @@ class AktivController extends Controller
             $mainImageUrl = $mainImagePath && file_exists(public_path($mainImagePath))
                 ? asset($mainImagePath)
                 : $defaultImage;
-
+    
             // Return the necessary data
             return [
                 'lat' => $aktiv->latitude,
@@ -320,10 +342,11 @@ class AktivController extends Controller
                 'user_email' => $aktiv->user ? $aktiv->user->email : 'N/A',
             ];
         });
-
+    
         // Return the response as JSON
         return response()->json(['lots' => $lots]);
     }
+    
 
 
 
