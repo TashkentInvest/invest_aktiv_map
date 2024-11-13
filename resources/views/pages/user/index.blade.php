@@ -37,10 +37,11 @@
                         <thead>
                             <tr>
                                 <th>@lang('cruds.user.fields.id')</th>
+                                <th>@lang('cruds.user.fields.district')</th>
                                 <th>@lang('cruds.user.fields.name')</th>
                                 <th>@lang('cruds.user.fields.email')</th>
                                 <th>@lang('cruds.user.fields.roles')</th>
-                                <th>@lang('cruds.permission.fields.permissions')</th>
+                                {{-- <th>@lang('cruds.permission.fields.permissions')</th> --}}
                                 <th class="w-25">@lang('global.actions')</th>
                             </tr>
                         </thead>
@@ -48,19 +49,20 @@
                             @foreach ($users as $user)
                                 <tr>
                                     <td>{{ $user->id }}</td>
+                                    <td>{{ $user->district ? $user->district->name : '' }}</td>
                                     <td>{{ $user->name }}</td>
                                     <td>{{ $user->email }}</td>
                                     <td>
 
                                         @foreach ($user->roles()->pluck('name') as $role)
-                                            <span class="badge badge-soft-primary">{{ $role }} </span>
+                                            <span class="badge text-primary">{{ $role }} </span>
                                         @endforeach
                                     </td>
-                                    <td>
+                                    {{-- <td>
                                         @foreach ($user->getAllPermissions()->pluck('name') as $permission)
-                                            <span class="badge badge-soft-secondary">{{ $permission }} </span>
+                                            <span class="badge text-secondary">{{ $permission }} </span>
                                         @endforeach
-                                    </td>
+                                    </td> --}}
                                     <td class="text-center">
                                         @can('user.delete')
                                             <form action="{{ route('userDestroy', $user->id) }}" method="post">

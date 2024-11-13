@@ -33,6 +33,22 @@
                         @csrf
 
                         <div class="mb-3">
+                            <label for="district_id" class="col-form-label">District</label>
+                            <select name="district_id" id="district_id" class="form-control">
+                                <option value="">Select District</option>
+                                @foreach($districts as $district)
+                                    <option value="{{ $district->id }}" {{ old('district_id', $user->district_id) == $district->id ? 'selected' : '' }}>
+                                        {{ $district->name }}
+                                    </option>
+                                @endforeach
+                            </select>
+                            @if($errors->has('district_id'))
+                                <span class="error invalid-feedback">{{ $errors->first('district_id') }}</span>
+                            @endif
+                        </div>
+                        
+
+                        <div class="mb-3">
                             <label for="name" class="col-md-2 col-form-label">@lang('cruds.user.fields.name')</label>
                             <input class="form-control {{ $errors->has('name') ? 'is-invalid' : '' }}" type="text"
                                 name="name" id="name" placeholder="@lang('cruds.user.fields.name')"

@@ -48,4 +48,16 @@ class Districts extends Model
     {
         return $this->hasOne(Street::class,'district_id');
     }
+
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
+    // Accessor for 'name' attribute
+    public function getNameAttribute()
+    {
+        // Adjust based on your preferred language or logic
+        return $this->name_uz ?? $this->name_ru;
+    }
 }

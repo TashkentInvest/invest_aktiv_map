@@ -20,7 +20,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'theme'
+        'theme',
+        'district_id'
     ];
 
     /**
@@ -93,5 +94,9 @@ class User extends Authenticatable
     public function aktivs()
     {
         return $this->hasMany(Aktiv::class);
+    }
+    public function district()
+    {
+        return $this->belongsTo(Districts::class);
     }
 }

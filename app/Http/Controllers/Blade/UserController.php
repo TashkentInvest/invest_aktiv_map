@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Blade;
 
 use App\Http\Controllers\Controller;
+use App\Models\Districts;
 use App\Models\User;
 use App\Services\LogWriter;
 use Illuminate\Http\Request;
@@ -17,46 +18,48 @@ class UserController extends Controller
     public function index()
     {
         abort_if_forbidden('user.show');
-        $users = User::where('id', '!=', auth()->user()->id)->get();
-
-        if (auth()->user()->hasRole('Super Admin'))
-            $users = User::where('id', '!=', auth()->user()->id)->get();
-        else
-            $users = User::where('id', '!=', auth()->user()->id)
-                ->where('id', '!=', 1)->get();
-
-        // if (auth()->user()->hasRole('Super Admin'))
-        //     $roles = Role::with('permissions')->get();
-        // else
-        //     $roles = Role::where('name', '!=', 'Super Admin')->with('permissions')->get();
-
+    
+        $users = User::with(['district'])
+            ->where('id', '!=', auth()->user()->id)
+            ->when(!auth()->user()->hasRole('Super Admin'), function ($query) {
+                $query->where('id', '!=', 1);
+            })
+            ->get();
+    
         return view('pages.user.index', compact('users'));
     }
+    
     // user add page
     public function add()
     {
         abort_if_forbidden('user.add');
-        if (auth()->user()->hasRole('Super Admin'))
-            $roles = Role::all();
-        else
-            $roles = Role::where('name', '!=', 'Super Admin')->get();
 
-        return view('pages.user.add', compact('roles'));
+        $roles = auth()->user()->hasRole('Super Admin')
+            ? Role::all()
+            : Role::where('name', '!=', 'Super Admin')->get();
+
+        $districts = Districts::all(); // Fetch all districts
+
+        return view('pages.user.add', compact('roles', 'districts'));
     }
+
     // user create
     public function create(Request $request)
     {
         abort_if_forbidden('user.add');
+
         $this->validate($request, [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'string', 'min:8', 'confirmed'],
+            'name'        => ['required', 'string', 'max:255'],
+            'email'       => ['required', 'string', 'email', 'max:255', 'unique:users'],
+            'password'    => ['required', 'string', 'min:8', 'confirmed'],
+            'district_id' => ['nullable', 'exists:districts,id'],
         ]);
 
         $user = User::create([
-            'name' => $request->get('name'),
-            'email' => $request->get('email'),
-            'password' => Hash::make($request->get('password')),
+            'name'        => $request->get('name'),
+            'email'       => $request->get('email'),
+            'password'    => Hash::make($request->get('password')),
+            'district_id' => $request->get('district_id'),
         ]);
 
         $user->assignRole($request->get('roles'));
@@ -77,17 +80,19 @@ class UserController extends Controller
         $user = User::find($id);
 
         if ($user->hasRole('Super Admin') && !auth()->user()->hasRole('Super Admin')) {
-            message_set("У вас нет разрешения на редактирование администратора", 'error', 5);
+            message_set("You don't have permission to edit the administrator", 'error', 5);
             return redirect()->back();
         }
 
-        if (auth()->user()->hasRole('Super Admin'))
-            $roles = Role::all();
-        else
-            $roles = Role::where('name', '!=', 'Super Admin')->get();
+        $roles = auth()->user()->hasRole('Super Admin')
+            ? Role::all()
+            : Role::where('name', '!=', 'Super Admin')->get();
 
-        return view('pages.user.edit', compact('user', 'roles'));
+        $districts = Districts::all(); // Fetch all districts
+
+        return view('pages.user.edit', compact('user', 'roles', 'districts'));
     }
+
     // update user dates
     public function update(Request $request, $id)
     {
@@ -98,6 +103,8 @@ class UserController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email,' . $id],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+            'district_id' => ['nullable', 'exists:districts,id'],
+
         ]);
 
         $user = User::find($id);
