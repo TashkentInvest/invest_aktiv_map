@@ -26,7 +26,7 @@ class AktivsExport implements FromCollection, WithHeadings
                 'latitude' => $aktiv->latitude,
                 'longitude' => $aktiv->longitude,
                 'kadastr_raqami' => $aktiv->kadastr_raqami,
-                'user_id' => $aktiv->user->email,
+                // 'user_id' => $aktiv->user->email,
                 'district_name' => $aktiv->street->district->name_uz ?? '',  // New district name column
                 'street_id' => $aktiv->street->name ?? '',
                 'sub_street_id' => $aktiv->substreet->name ?? '',
@@ -53,8 +53,8 @@ class AktivsExport implements FromCollection, WithHeadings
             'Latitude',
             'Longitude',
             'Kadastr Raqami',
-            'User ID',
-            'Tuman',  // New heading for district name
+            // 'User ID',
+            'Tuman', 
             'MFY',
             'Kocha',
             'ID',
