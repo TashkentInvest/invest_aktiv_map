@@ -19,38 +19,95 @@ class UpdateStreetIdFromExcel extends Command
 
     public function handle()
     {
+        // Path to your Excel file
         $filePath = public_path('assets/aktivs_mfy_codes.xlsx');
 
-        // Load the Excel data
-        $data = Excel::toCollection(null, $filePath)->first();
+        if (!file_exists($filePath)) {
+            $this->error("File not found at path: {$filePath}");
+            return;
+        }
 
-        // Skip the header row
-        $rows = $data->skip(1);
+        // Load the Excel data
+        $data = Excel::toCollection(null, $filePath);
+
+        // Assuming the data is in the first sheet
+        $sheet = $data->first();
+
+        if (!$sheet) {
+            $this->error("No data found in the Excel file.");
+            return;
+        }
+
+        // Get the header row
+        $headerRow = $sheet->first()->toArray();
+
+        // Ensure the header contains necessary columns
+        if (!in_array('Object Name', $headerRow) || !in_array('Balance Keeper', $headerRow) || !in_array('MFY_CODE', $headerRow)) {
+            $this->error("The Excel file must contain 'Object Name', 'Balance Keeper', and 'MFY_CODE' columns.");
+            return;
+        }
+
+        // Get the data rows (skip the header)
+        $rows = $sheet->skip(1);
+
+        // Build a mapping of (object_name, balance_keeper) => MFY_CODE
+        $excelData = [];
 
         foreach ($rows as $row) {
-            // Access MFY_CODE by index 16
-            $mfyCode = $row[16] ?? null;
+            $rowData = array_combine($headerRow, $row->toArray());
 
-            if ($mfyCode) {
-                $street = Street::where('code', $mfyCode)->first();
+            $objectName = trim($rowData['Object Name'] ?? '');
+            $balanceKeeper = trim($rowData['Balance Keeper'] ?? '');
+            $mfyCode = trim($rowData['MFY_CODE'] ?? '');
 
-                if ($street) {
-                    // Update aktivs with the specific MFY_CODE and where street_id is currently NULL
-                    $updatedAktivs = Aktiv::where('street_id', 88)
-                        ->update(['street_id' => $street->id]);
-
-                    $this->info("Updated aktivs with MFY_CODE: {$mfyCode} to street_id: {$street->id}");
-                } else {
-                    // If no matching street found, set street_id to 88 where it is null
-                    Aktiv::where('street_id', 88)
-                        ->update(['street_id' => $street->id ?? null]);
-
-                    $this->info("No matching street found for MFY_CODE: {$mfyCode}, set street_id to 1.");
-                }
+            if ($objectName && $balanceKeeper && $mfyCode) {
+                // Use a composite key (lowercased to ensure case-insensitive matching)
+                $key = strtolower($objectName) . '|' . strtolower($balanceKeeper);
+                $excelData[$key] = $mfyCode;
+            } else {
+                $this->warn("Incomplete data in Excel row. Skipping row with Object Name: '{$objectName}' and Balance Keeper: '{$balanceKeeper}'.");
             }
         }
 
-        $this->info('Street IDs update process completed.');
+        // Now, update aktivs where street_id is NULL
+        $aktivs = Aktiv::whereNull('street_id')->get();
+
+        $updatedCount = 0;
+        $notFoundCount = 0;
+        $streetNotFoundCount = 0;
+
+        foreach ($aktivs as $aktiv) {
+            $objectName = trim($aktiv->object_name);
+            $balanceKeeper = trim($aktiv->balance_keeper);
+
+            // Create the composite key
+            $key = strtolower($objectName) . '|' . strtolower($balanceKeeper);
+
+            if (isset($excelData[$key])) {
+                $mfyCode = $excelData[$key];
+                $street = Street::where('code', $mfyCode)->first();
+
+                if ($street) {
+                    $aktiv->street_id = $street->id;
+                    $aktiv->save();
+
+                    $this->info("Updated Aktiv ID {$aktiv->id} with street_id: {$street->id} (Street Code: {$mfyCode}).");
+                    $updatedCount++;
+                } else {
+                    $this->warn("No matching street found for MFY_CODE: {$mfyCode} for Aktiv ID: {$aktiv->id}.");
+                    $streetNotFoundCount++;
+                }
+            } else {
+                $this->warn("No matching Excel data for Aktiv ID: {$aktiv->id} with Object Name: '{$objectName}' and Balance Keeper: '{$balanceKeeper}'.");
+                $notFoundCount++;
+            }
+        }
+
+        $this->info("Street IDs update process completed.");
+        $this->info("Total aktivs updated: {$updatedCount}");
+        $this->info("Total aktivs not found in Excel data: {$notFoundCount}");
+        $this->info("Total aktivs with missing streets: {$streetNotFoundCount}");
+
         return 0;
     }
 }
