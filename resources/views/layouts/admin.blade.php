@@ -18,9 +18,10 @@
 
     <!-- Additional Plugin CSS -->
     <link rel="stylesheet" href="{{ asset('assets/new/assets/css/plugins/jsvectormap.min.css') }}">
-    
+
     <!-- Icon Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="{{ asset('assets/new/assets/fonts/phosphor/duotone/style.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/new/assets/fonts/tabler-icons.min.css') }}">
     <link rel="stylesheet" href="{{ asset('assets/new/assets/fonts/feather.css') }}">
@@ -129,7 +130,7 @@
                             </div>
                         </li>
 
-                       
+
                         {{-- <li class="pc-h-item">
                             <a class="pc-head-link pct-c-btn" href="#" data-bs-toggle="offcanvas"
                                 data-bs-target="#offcanvas_pc_layout">
@@ -626,8 +627,7 @@
                             {{-- <li class="list-inline-item"><a href="../index.html">Home</a></li>
                             <li class="list-inline-item"><a href="https://pcoded.gitbook.io/light-able/"
                                     target="_blank">Documentation</a></li> --}}
-                            <li class="list-inline-item"><a href="tel:+998997906699"
-                                    target="_blank">Support</a></li>
+                            <li class="list-inline-item"><a href="tel:+998997906699" target="_blank">Support</a></li>
                         </ul>
                     </div>
                 </div>
@@ -962,5 +962,8 @@
         </script>
         @php(message_clear())
     @endif
+
+    
     @yield('scripts')
+
 </body>

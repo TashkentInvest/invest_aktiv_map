@@ -164,263 +164,334 @@
 
 @section('scripts')
     <!-- Include Google Maps JavaScript API with Places Library -->
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries&libraries=places&callback=initMap" async defer>
-    </script>
-
-{{-- <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries=geometry">
-</script> --}}
+    <script
+        src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries&libraries=places&callback=initMap"
+        async defer></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        let fileInputCount = 4;
-        let activeFileInput;
-        let videoStream;
+        // Wrap the entire script in an IIFE to avoid global scope pollution
+        (function() {
+            let fileInputCount = 4;
+            let activeFileInput = null;
+            let videoStream = null;
+            let map, marker, infoWindow;
 
-        function openCameraModal(fileInputId) {
-            activeFileInput = document.getElementById(fileInputId);
-            const cameraModal = new bootstrap.Modal(document.getElementById('cameraModal'), {});
-            cameraModal.show();
+            // Parse the aktivs data from the server-side variable
+            let aktivs = @json($aktivs ?? []);
 
-            // Check for camera support
-            if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
-                navigator.mediaDevices.getUserMedia({
-                        video: {
-                            facingMode: 'environment'
-                        }
-                    })
-                    .then(stream => {
-                        videoStream = stream;
-                        document.getElementById('cameraPreview').srcObject = stream;
-                        document.getElementById('captureButton').disabled = false;
-                        document.getElementById('cameraError').textContent = '';
-                    })
-                    .catch(error => {
-                        document.getElementById('cameraError').textContent = 'Камерага кириш мумкин эмас: ' + error.message;
-                        document.getElementById('captureButton').disabled = true;
-                    });
-            } else {
-                document.getElementById('cameraError').textContent = 'Браузерингиз камерадан фойдаланишни қўллаб-қувватламайди.';
-                document.getElementById('captureButton').disabled = true;
-            }
-        }
-
-        document.getElementById('captureButton').addEventListener('click', () => {
-            const video = document.getElementById('cameraPreview');
-            const canvas = document.getElementById('snapshotCanvas');
-            const context = canvas.getContext('2d');
-            canvas.width = video.videoWidth;
-            canvas.height = video.videoHeight;
-            context.drawImage(video, 0, 0, canvas.width, canvas.height);
-            videoStream.getTracks().forEach(track => track.stop());
-            document.getElementById('saveButton').disabled = false;
-        });
-
-        document.getElementById('saveButton').addEventListener('click', () => {
-            const canvas = document.getElementById('snapshotCanvas');
-            canvas.toBlob(blob => {
-                const file = new File([blob], `snapshot-${Date.now()}.jpg`, {
-                    type: 'image/jpeg'
-                });
-                const dataTransfer = new DataTransfer();
-                dataTransfer.items.add(file);
-                activeFileInput.files = dataTransfer.files;
+            // Wait for the DOM to be fully loaded
+            document.addEventListener('DOMContentLoaded', function() {
+                // Initialize event listeners and other setup tasks
+                initializeEventListeners();
+                initializeFileInputs();
                 validateFiles();
+                initMap();
             });
-            document.getElementById('cameraPreview').srcObject = null;
-            document.getElementById('saveButton').disabled = true;
-        });
 
-        document.getElementById('add-file-btn').addEventListener('click', () => {
-            fileInputCount++;
-            const container = document.getElementById('file-upload-container');
-            const newDiv = document.createElement('div');
-            newDiv.classList.add('mb-3');
-            const label = document.createElement('label');
-            label.textContent = `Қўшимча файл ${fileInputCount}`;
-            const inputGroup = document.createElement('div');
-            inputGroup.classList.add('input-group');
-            const input = document.createElement('input');
-            input.type = 'file';
-            input.name = 'files[]';
-            input.classList.add('form-control');
-            input.accept = 'image/*';
-            input.required = true;
-            input.id = 'file' + fileInputCount;
-            input.addEventListener('change', validateFiles);
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.classList.add('btn', 'btn-secondary');
-            button.textContent = '📷';
-            button.addEventListener('click', function() {
-                openCameraModal(input.id);
-            });
-            inputGroup.appendChild(input);
-            inputGroup.appendChild(button);
-            newDiv.appendChild(label);
-            newDiv.appendChild(inputGroup);
-            container.appendChild(newDiv);
-            validateFiles();
-        });
+            function initializeEventListeners() {
+                // Camera modal elements
+                const captureButton = document.getElementById('captureButton');
+                const saveButton = document.getElementById('saveButton');
+                const cameraPreview = document.getElementById('cameraPreview');
+                const cameraError = document.getElementById('cameraError');
 
-        function validateFiles() {
-            const submitBtn = document.getElementById('submit-btn');
-            const errorDiv = document.getElementById('file-error');
-            const fileInputs = document.querySelectorAll('input[type="file"][name="files[]"]');
-            let totalFiles = 0;
-            fileInputs.forEach(input => {
-                if (input.files.length > 0) {
-                    totalFiles += input.files.length;
+                // Form elements
+                const addFileBtn = document.getElementById('add-file-btn');
+                const submitBtn = document.getElementById('submit-btn');
+                const aktivForm = document.getElementById('aktiv-form');
+
+                // Map elements
+                const findMyLocationBtn = document.getElementById('find-my-location');
+
+                // Add event listeners if the elements exist
+                if (captureButton) {
+                    captureButton.addEventListener('click', capturePhoto);
                 }
-            });
-            if (totalFiles < 4) {
-                let filesNeeded = 4 - totalFiles;
-                errorDiv.textContent = filesNeeded === 4 ? 'Сиз ҳеч қандай файл юкламадингиз.' :
-                    `Сиз яна ${filesNeeded} та файл юклашингиз керак.`;
-                submitBtn.disabled = true;
-            } else {
-                errorDiv.textContent = '';
-                submitBtn.disabled = false;
+
+                if (saveButton) {
+                    saveButton.addEventListener('click', savePhoto);
+                }
+
+                if (addFileBtn) {
+                    addFileBtn.addEventListener('click', addFileInput);
+                }
+
+                if (aktivForm) {
+                    aktivForm.addEventListener('submit', handleFormSubmit);
+                }
+
+                if (findMyLocationBtn) {
+                    findMyLocationBtn.addEventListener('click', findMyLocation);
+                }
             }
-        }
 
-        validateFiles();
-        for (let i = 1; i <= fileInputCount; i++) {
-            document.getElementById('file' + i).addEventListener('change', validateFiles);
-        }
-
-        document.getElementById('aktiv-form').addEventListener('submit', function(event) {
-            validateFiles();
-            if (document.getElementById('submit-btn').disabled) {
-                event.preventDefault();
-            } else {
-                document.getElementById('submit-btn').disabled = true;
-                document.getElementById('submit-btn').innerText = 'Юкланмоқда...';
+            function initializeFileInputs() {
+                // Initialize existing file inputs
+                for (let i = 1; i <= fileInputCount; i++) {
+                    const fileInput = document.getElementById('file' + i);
+                    if (fileInput) {
+                        fileInput.addEventListener('change', validateFiles);
+                    }
+                }
             }
-        });
 
-        // Initialize map and add markers
-        let aktivs = @json($aktivs ?? []);
-        let map, marker, infoWindow;
+            function openCameraModal(fileInputId) {
+                activeFileInput = document.getElementById(fileInputId);
+                const cameraModal = new bootstrap.Modal(document.getElementById('cameraModal'), {});
+                cameraModal.show();
 
-        function initMap() {
-            const mapOptions = {
-                center: {
-                    lat: 41.2995,
-                    lng: 69.2401
-                },
-                zoom: 10
-            };
-            map = new google.maps.Map(document.getElementById('map'), mapOptions);
-            infoWindow = new google.maps.InfoWindow();
-
-            // Existing aktivs markers
-            if (aktivs && aktivs.length > 0) {
-                aktivs.forEach(aktiv => {
-                    if (aktiv.latitude && aktiv.longitude) {
-                        const position = {
-                            lat: parseFloat(aktiv.latitude),
-                            lng: parseFloat(aktiv.longitude)
-                        };
-
-                        const aktivMarker = new google.maps.Marker({
-                            position: position,
-                            map: map,
-                            title: aktiv.object_name,
-                            icon: 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png' // Updated to HTTPS
+                // Check for camera support
+                if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                    navigator.mediaDevices
+                        .getUserMedia({
+                            video: {
+                                facingMode: 'environment',
+                            },
+                        })
+                        .then((stream) => {
+                            videoStream = stream;
+                            document.getElementById('cameraPreview').srcObject = stream;
+                            document.getElementById('captureButton').disabled = false;
+                            document.getElementById('cameraError').textContent = '';
+                        })
+                        .catch((error) => {
+                            document.getElementById('cameraError').textContent =
+                                'Камерага кириш мумкин эмас: ' + error.message;
+                            document.getElementById('captureButton').disabled = true;
                         });
+                } else {
+                    document.getElementById('cameraError').textContent =
+                        'Браузерингиз камерадан фойдаланишни қўллаб-қувватламайди.';
+                    document.getElementById('captureButton').disabled = true;
+                }
+            }
 
-                        aktivMarker.addListener('click', function() {
-                            openInfoWindow(aktiv, aktivMarker);
-                        });
+            function capturePhoto() {
+                const video = document.getElementById('cameraPreview');
+                const canvas = document.getElementById('snapshotCanvas');
+                const context = canvas.getContext('2d');
+                canvas.width = video.videoWidth;
+                canvas.height = video.videoHeight;
+                context.drawImage(video, 0, 0, canvas.width, canvas.height);
+                if (videoStream) {
+                    videoStream.getTracks().forEach((track) => track.stop());
+                }
+                document.getElementById('saveButton').disabled = false;
+            }
+
+            function savePhoto() {
+                const canvas = document.getElementById('snapshotCanvas');
+                canvas.toBlob((blob) => {
+                    const file = new File([blob], `snapshot-${Date.now()}.jpg`, {
+                        type: 'image/jpeg',
+                    });
+                    const dataTransfer = new DataTransfer();
+                    dataTransfer.items.add(file);
+                    if (activeFileInput) {
+                        activeFileInput.files = dataTransfer.files;
+                        validateFiles();
                     }
                 });
+                document.getElementById('cameraPreview').srcObject = null;
+                document.getElementById('saveButton').disabled = true;
             }
 
-            // Add click event to place custom marker
-            map.addListener('click', function(event) {
-                placeMarker(event.latLng);
-            });
+            function addFileInput() {
+                fileInputCount++;
+                const container = document.getElementById('file-upload-container');
+                const newDiv = document.createElement('div');
+                newDiv.classList.add('mb-3');
 
-            // If latitude and longitude are already set, place a marker
-            const latInput = document.getElementById('latitude').value;
-            const lngInput = document.getElementById('longitude').value;
-            if (latInput && lngInput) {
-                const position = {
-                    lat: parseFloat(latInput),
-                    lng: parseFloat(lngInput)
+                const label = document.createElement('label');
+                label.textContent = `Қўшимча файл ${fileInputCount}`;
+
+                const inputGroup = document.createElement('div');
+                inputGroup.classList.add('input-group');
+
+                const input = document.createElement('input');
+                input.type = 'file';
+                input.name = 'files[]';
+                input.classList.add('form-control');
+                input.accept = 'image/*';
+                input.required = true;
+                input.id = 'file' + fileInputCount;
+                input.addEventListener('change', validateFiles);
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.classList.add('btn', 'btn-secondary');
+                button.textContent = '📷';
+                button.addEventListener('click', function() {
+                    openCameraModal(input.id);
+                });
+
+                inputGroup.appendChild(input);
+                inputGroup.appendChild(button);
+                newDiv.appendChild(label);
+                newDiv.appendChild(inputGroup);
+                container.appendChild(newDiv);
+                validateFiles();
+            }
+
+            function validateFiles() {
+                const submitBtn = document.getElementById('submit-btn');
+                const errorDiv = document.getElementById('file-error');
+                const fileInputs = document.querySelectorAll('input[type="file"][name="files[]"]');
+                let totalFiles = 0;
+
+                fileInputs.forEach((input) => {
+                    if (input.files.length > 0) {
+                        totalFiles += input.files.length;
+                    }
+                });
+
+                if (totalFiles < 4) {
+                    let filesNeeded = 4 - totalFiles;
+                    errorDiv.textContent =
+                        filesNeeded === 4 ?
+                        'Сиз ҳеч қандай файл юкламадингиз.' :
+                        `Сиз яна ${filesNeeded} та файл юклашингиз керак.`;
+                    submitBtn.disabled = true;
+                } else {
+                    errorDiv.textContent = '';
+                    submitBtn.disabled = false;
+                }
+            }
+
+            function handleFormSubmit(event) {
+                validateFiles();
+                const submitBtn = document.getElementById('submit-btn');
+                if (submitBtn.disabled) {
+                    event.preventDefault();
+                } else {
+                    submitBtn.disabled = true;
+                    submitBtn.innerText = 'Юкланмоқда...';
+                }
+            }
+
+            function findMyLocation() {
+                if (navigator.geolocation) {
+                    navigator.geolocation.getCurrentPosition(
+                        function(position) {
+                            const userLocation = {
+                                lat: position.coords.latitude,
+                                lng: position.coords.longitude,
+                            };
+
+                            map.setCenter(userLocation);
+                            map.setZoom(15);
+                            placeMarker(userLocation);
+                        },
+                        function(error) {
+                            alert('Жойлашувингиз аниқланмади: ' + error.message);
+                        }
+                    );
+                } else {
+                    alert('Жойлашувни аниқлаш браузерингиз томонидан қўлланилмайди.');
+                }
+            }
+
+            function initMap() {
+                const mapOptions = {
+                    center: {
+                        lat: 41.2995,
+                        lng: 69.2401,
+                    },
+                    zoom: 10,
                 };
-                placeMarker(position);
-                map.setCenter(position);
-                map.setZoom(15);
+                map = new google.maps.Map(document.getElementById('map'), mapOptions);
+                infoWindow = new google.maps.InfoWindow();
+
+                // Existing aktivs markers
+                if (aktivs && aktivs.length > 0) {
+                    aktivs.forEach((aktiv) => {
+                        if (aktiv.latitude && aktiv.longitude) {
+                            const position = {
+                                lat: parseFloat(aktiv.latitude),
+                                lng: parseFloat(aktiv.longitude),
+                            };
+
+                            const aktivMarker = new google.maps.Marker({
+                                position: position,
+                                map: map,
+                                title: aktiv.object_name,
+                                icon: 'https://maps.google.com/mapfiles/ms/icons/yellow-dot.png',
+                            });
+
+                            aktivMarker.addListener('click', function() {
+                                openInfoWindow(aktiv, aktivMarker);
+                            });
+                        }
+                    });
+                }
+
+                // Add click event to place custom marker
+                map.addListener('click', function(event) {
+                    placeMarker(event.latLng);
+                });
+
+                // If latitude and longitude are already set, place a marker
+                const latInput = document.getElementById('latitude').value;
+                const lngInput = document.getElementById('longitude').value;
+                if (latInput && lngInput) {
+                    const position = {
+                        lat: parseFloat(latInput),
+                        lng: parseFloat(lngInput),
+                    };
+                    placeMarker(position);
+                    map.setCenter(position);
+                    map.setZoom(15);
+                }
             }
-        }
 
-        function openInfoWindow(aktiv, marker) {
-            const mainImagePath = aktiv.files && aktiv.files.length > 0 ?
-                `/storage/${aktiv.files[0].path}` :
-                'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+            function openInfoWindow(aktiv, marker) {
+                const mainImagePath =
+                    aktiv.files && aktiv.files.length > 0 ?
+                    `/storage/${aktiv.files[0].path}` :
+                    'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
 
-            const contentString = `
-                <div style="width:250px;">
-                    <h5>${aktiv.object_name}</h5>
-                    <img src="${mainImagePath}" alt="Marker Image" style="width:100%;height:auto;"/>
-                    <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
-                    <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
-                    <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
-                    <p><strong>Бино майдони (кв.м):</strong> ${aktiv.building_area || 'N/A'}</p>
-                    <p><strong>Газ:</strong> ${aktiv.gas || 'N/A'}</p>
-                    <p><strong>Сув:</strong> ${aktiv.water || 'N/A'}</p>
-                    <p><strong>Электр:</strong> ${aktiv.electricity || 'N/A'}</p>
-                    <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
-                    <p><strong>Қарта:</strong> <a href="${aktiv.geolokatsiya || '#'}" target="_blank">${aktiv.geolokatsiya || 'N/A'}</a></p>
-                </div>
+                const contentString = `
+              <div style="width:250px;">
+                  <h5>${aktiv.object_name}</h5>
+                  <img src="${mainImagePath}" alt="Marker Image" style="width:100%;height:auto;"/>
+                  <p><strong>Балансда сақловчи:</strong> ${aktiv.balance_keeper || 'N/A'}</p>
+                  <p><strong>Мўлжал:</strong> ${aktiv.location || 'N/A'}</p>
+                  <p><strong>Ер майдони (кв.м):</strong> ${aktiv.land_area || 'N/A'}</p>
+                  <p><strong>Бино майдони (кв.м):</strong> ${aktiv.building_area || 'N/A'}</p>
+                  <p><strong>Газ:</strong> ${aktiv.gas || 'N/A'}</p>
+                  <p><strong>Сув:</strong> ${aktiv.water || 'N/A'}</p>
+                  <p><strong>Электр:</strong> ${aktiv.electricity || 'N/A'}</p>
+                  <p><strong>Қўшимча маълумот:</strong> ${aktiv.additional_info || 'N/A'}</p>
+                  <p><strong>Қарта:</strong> <a href="${aktiv.geolokatsiya || '#'}" target="_blank">${
+              aktiv.geolokatsiya || 'N/A'
+            }</a></p>
+              </div>
             `;
 
-            infoWindow.setContent(contentString);
-            infoWindow.open(map, marker);
-        }
-
-        document.getElementById('find-my-location').addEventListener('click', function() {
-            if (navigator.geolocation) {
-                navigator.geolocation.getCurrentPosition(
-                    function(position) {
-                        const userLocation = {
-                            lat: position.coords.latitude,
-                            lng: position.coords.longitude
-                        };
-
-                        map.setCenter(userLocation);
-                        map.setZoom(15);
-                        placeMarker(userLocation);
-                    },
-                    function(error) {
-                        alert('Жойлашувингиз аниқланмади: ' + error.message);
-                    }
-                );
-            } else {
-                alert('Жойлашувни аниқлаш браузерингиз томонидан қўлланилмайди.');
+                infoWindow.setContent(contentString);
+                infoWindow.open(map, marker);
             }
-        });
 
-        function placeMarker(location) {
-            if (marker) {
-                marker.setMap(null);
+            function placeMarker(location) {
+                if (marker) {
+                    marker.setMap(null);
+                }
+                marker = new google.maps.Marker({
+                    position: location,
+                    map: map,
+                });
+
+                const lat = typeof location.lat === 'function' ? location.lat() : location.lat;
+                const lng = typeof location.lng === 'function' ? location.lng() : location.lng;
+
+                document.getElementById('latitude').value = lat;
+                document.getElementById('longitude').value = lng;
+                document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
             }
-            marker = new google.maps.Marker({
-                position: location,
-                map: map
-            });
 
-            const lat = typeof location.lat === "function" ? location.lat() : location.lat;
-            const lng = typeof location.lng === "function" ? location.lng() : location.lng;
-
-            document.getElementById('latitude').value = lat;
-            document.getElementById('longitude').value = lng;
-            document.getElementById('geolokatsiya').value = `https://www.google.com/maps?q=${lat},${lng}`;
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            // Map initialization is now handled by the callback in the Google Maps API script tag
-        });
+            // Expose initMap to the global scope for Google Maps callback
+            window.initMap = initMap;
+        })();
     </script>
 @endsection
