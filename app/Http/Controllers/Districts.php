@@ -20,6 +20,11 @@ class Districts extends Model
         return $this->hasMany(Street::class, 'district_id', 'id'); 
     }
 
+    public function users()
+    {
+        return $this->hasMany(User::class);
+    }
+
 
 
 }

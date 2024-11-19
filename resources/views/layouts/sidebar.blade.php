@@ -30,6 +30,11 @@
                             Фойдаланувчилар Активлари
                         </a>
                     </li>
+                    <li class="pc-item">
+                        <a class="pc-link" href="{{ route('aktivs.userTumanlarCounts') }}">
+                            Туман Активлари
+                        </a>
+                    </li>
                 @endif
 
 

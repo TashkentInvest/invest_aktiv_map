@@ -97,6 +97,6 @@ class User extends Authenticatable
     }
     public function district()
     {
-        return $this->belongsTo(Districts::class);
+        return $this->belongsTo(Districts::class, 'district_id');
     }
 }

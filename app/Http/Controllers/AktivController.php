@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AktivsExport;
 use App\Models\Aktiv;
+use App\Models\Districts;
 use App\Models\Regions;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -284,6 +285,21 @@ class AktivController extends Controller
         // dd('dwq');
         return view('pages.aktiv.user_counts', compact('users'));
     }
+    public function userTumanlarCounts()
+    {
+        $userRole = auth()->user()->roles->first()->name;
+
+        // Only Super Admins and Managers can access this page
+        if ($userRole != 'Super Admin' && $userRole != 'Manager') {
+            abort(403, 'Unauthorized access.');
+        }
+
+        // Get districts along with the count of users in each district
+        $districts = Districts::withCount('users')->get();
+
+        return view('pages.aktiv.tuman_counts', compact('districts'));
+    }
+
 
     public function export()
     {
@@ -304,7 +320,7 @@ class AktivController extends Controller
 
     // map code with source data
 
-  
+
 
 
 

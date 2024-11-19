@@ -51,9 +51,8 @@ class Districts extends Model
 
     public function users()
     {
-        return $this->hasMany(User::class);
+        return $this->hasMany(User::class, 'district_id');
     }
-
     // Accessor for 'name' attribute
     public function getNameAttribute()
     {
