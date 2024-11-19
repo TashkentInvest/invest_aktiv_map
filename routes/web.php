@@ -73,7 +73,6 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::get('aktiv/users', [AktivController::class, 'userAktivCounts'])->name('aktivs.userAktivCounts');
     Route::get('aktiv/tumanlar', [AktivController::class, 'userTumanlarCounts'])->name('aktivs.userTumanlarCounts');
     Route::post('/aktivs/export', [AktivController::class, 'export'])->name('aktivs.export');
-    Route::get('district/{district_id}/users', [UserController::class, 'userTumanlarCounts'])->name('users.index');
 
 
     Route::get('/my-map', [AktivController::class, 'myMap'])->name('aktivs.myMap');

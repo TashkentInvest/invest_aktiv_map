@@ -16,34 +16,39 @@ class AktivController extends Controller
     public function index(Request $request)
     {
         $user_id = $request->input('user_id');
+        $district_id = $request->input('district_id');  // Fixed typo here
         $userRole = auth()->user()->roles->first()->name;
-
+    
+        // Initialize the query builder for Aktivs
+        $query = Aktiv::query();
+    
+        // Only Super Admins and Managers can filter by user_id
         if ($userRole == 'Super Admin' || $userRole == 'Manager') {
             if ($user_id) {
                 // Show aktivs for the specified user
-                $aktivs = Aktiv::where('user_id', $user_id)
-                    ->orderBy('created_at', 'desc')
-                    ->with('files')
-                    ->paginate(10)
-                    ->appends($request->query()); // Ensure query parameters are appended
-            } else {
-                // Show all aktivs
-                $aktivs = Aktiv::orderBy('created_at', 'desc')
-                    ->with('files')
-                    ->paginate(10)
-                    ->appends($request->query());
+                $query->where('user_id', $user_id);
+            }
+    
+            // Apply district filter if provided
+            if ($district_id) {
+                $query->whereHas('user', function ($q) use ($district_id) {
+                    $q->where('district_id', $district_id);
+                });
             }
         } else {
-            // Show only the user's own aktivs
-            $aktivs = Aktiv::where('user_id', auth()->id())
-                ->orderBy('created_at', 'desc')
-                ->with('files')
-                ->paginate(10)
-                ->appends($request->query());
+            // If not Super Admin or Manager, show only the logged-in user's aktivs
+            $query->where('user_id', auth()->id());
         }
-
+    
+        // Order the results by created_at and paginate
+        $aktivs = $query->orderBy('created_at', 'desc')
+            ->with('files') // eager load the files relationship
+            ->paginate(10)
+            ->appends($request->query()); // Keep query parameters in pagination links
+    
         return view('pages.aktiv.index', compact('aktivs'));
     }
+    
 
 
     // public function create()
