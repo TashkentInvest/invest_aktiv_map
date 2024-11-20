@@ -290,56 +290,52 @@ class AktivController extends Controller
         // dd('dwq');
         return view('pages.aktiv.user_counts', compact('users'));
     }
+ 
     public function userTumanlarCounts(Request $request)
-    {
-        $userRole = auth()->user()->roles->first()->name;
-        $district_id = $request->input('district_id');
-        $user_id = $request->input('user_id');
-    
-        // Only Super Admins and Managers can filter by user_id or district_id
-        if ($userRole != 'Super Admin' && $userRole != 'Manager') {
-            abort(403, 'Unauthorized access.');
-        }
-    
-        // Initialize the query builder for Districts
-        $districtsQuery = Districts::query();
-    
-        // Apply district filter if provided
-        if ($district_id) {
-            $districtsQuery->where('id', $district_id);
-        }
-    
-        // Get all districts (we will manually count the aktivs)
-        $districts = $districtsQuery->get();
-    
-        // Manually count aktivs for each district
-        foreach ($districts as $district) {
-            $aktivCount = 0;
-    
-            // Check if streets exist for this district and loop through them
-            $streets = $district->streets; // Fetch the related streets of the district
-    
-            // Only loop if streets are not null and are a collection
-            if ($streets && $streets->isNotEmpty()) {
-                foreach ($streets as $street) {
-                    // Count aktivs for each street, applying the user_id filter if needed
-                    $aktivCount += $street->aktivs()
-                        ->when($user_id, function ($query) use ($user_id) {
-                            // Apply user_id filter if provided
-                            return $query->where('user_id', $user_id);
-                        })
-                        ->count();
-                }
-            }
-    
-            // Add the count to the district object
-            $district->aktiv_count = $aktivCount;
-        }
-    
-        // Return the view with districts data
-        return view('pages.aktiv.tuman_counts', compact('districts'));
+{
+    $userRole = auth()->user()->roles->first()->name;
+    $district_id = $request->input('district_id');
+    $user_id = $request->input('user_id');
+
+    // Only Super Admins and Managers can filter by user_id or district_id
+    if ($userRole != 'Super Admin' && $userRole != 'Manager') {
+        abort(403, 'Unauthorized access.');
     }
-    
+
+    // Initialize the query builder for Districts
+    $districtsQuery = Districts::query(); // Assuming you have a District model
+
+    // Apply district filter if provided
+    if ($district_id) {
+        $districtsQuery->where('id', $district_id);
+    }
+
+    // Get distinct districts
+    $districts = $districtsQuery->distinct()->get();
+
+    // Manually count aktivs for each district
+    foreach ($districts as $district) {
+        // Apply the filters and count aktivs for the current district
+        $aktivCount = Aktiv::query()
+            ->whereHas('user', function ($query) use ($district, $user_id) {
+                // Apply the district filter if needed
+                $query->where('district_id', $district->id);
+
+                // Apply the user_id filter if provided
+                if ($user_id) {
+                    $query->where('user_id', $user_id);
+                }
+            })
+            ->count();
+
+        // Add the count to the district object
+        $district->aktiv_count = $aktivCount;
+    }
+
+    // Return the view with districts data
+    return view('pages.aktiv.tuman_counts', compact('districts'));
+}
+
 
 
     public function export()
