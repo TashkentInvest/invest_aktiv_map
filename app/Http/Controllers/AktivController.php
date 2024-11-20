@@ -51,25 +51,43 @@ class AktivController extends Controller
 
     public function userTumanlarCounts(Request $request)
     {
-        $userRole = auth()->user()->roles->first()->name;
-        $district_id = $request->input('district_id');
         $user_id = $request->input('user_id');
+        $district_id = $request->input('district_id');
+        $userRole = auth()->user()->roles->first()->name;
     
         // Only Super Admins and Managers can filter by user_id or district_id
         if ($userRole != 'Super Admin' && $userRole != 'Manager') {
             abort(403, 'Unauthorized access.');
         }
     
-        // Initialize the query builder for Districts
-        $query = Districts::query();
+        // Initialize the query builder for Aktivs
+        $query = Aktiv::query();
     
-        // Apply district filter if provided
-        if ($district_id) {
-            $query->where('id', $district_id);
+        // Only Super Admins and Managers can filter by user_id
+        if ($userRole == 'Super Admin' || $userRole == 'Manager') {
+            if ($user_id) {
+                // Filter aktivs by the specified user_id
+                $query->where('user_id', $user_id);
+            }
+    
+            // Apply district filter if provided
+            if ($district_id) {
+                $query->whereHas('user', function ($q) use ($district_id) {
+                    $q->where('district_id', $district_id);
+                });
+            }
+        } else {
+            // If not Super Admin or Manager, show only the logged-in user's aktivs
+            $query->where('user_id', auth()->id());
         }
     
-        // Get distinct districts
-        $districts = $query->distinct()->get();
+        // Get distinct districts by joining with users and selecting the distinct district_id
+        $districts = Districts::select('districts.id', 'districts.name_uz') // select relevant columns
+            ->distinct()
+            ->join('users', 'districts.id', '=', 'users.district_id') // join with users table
+            ->join('aktivs', 'users.id', '=', 'aktivs.user_id') // join with aktivs table
+            ->whereIn('aktivs.id', $query->pluck('id')) // filter the aktivs based on the query
+            ->get();
     
         // Manually count aktivs for each district
         foreach ($districts as $district) {
@@ -92,6 +110,7 @@ class AktivController extends Controller
         // Return the view with districts data
         return view('pages.aktiv.tuman_counts', compact('districts'));
     }
+    
     
     // public function create()
     // {
