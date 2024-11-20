@@ -41,13 +41,19 @@ class Districts extends Model
     ];
     public function region()
     {
-        return $this->hasOne(Regions::class,'id', 'region_id');
+        return $this->hasOne(Regions::class, 'id', 'region_id');
     }
 
     public function street()
     {
-        return $this->hasOne(Street::class,'district_id');
+        return $this->hasOne(Street::class, 'district_id');
     }
+    // District Model
+    public function streets()
+    {
+        return $this->hasMany(Street::class, 'district_id');
+    }
+
 
     public function users()
     {

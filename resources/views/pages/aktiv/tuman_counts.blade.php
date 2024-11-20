@@ -20,10 +20,10 @@
                         <tr>
                             <td>{{ $district->id }}</td>
                             <td>{{ $district->name_uz ?? 'Номи йўқ' }}</td>
-                            <td>{{ $district->users_count }}</td>
+                            <td>{{ $district->aktiv_count }}</td>
                             <td>
                                 <a href="{{ route('aktivs.index', ['district_id' => $district->id]) }}"
-                                   class="btn btn-primary btn-sm">
+                                    class="btn btn-primary btn-sm">
                                     Фойдаланувчиларни кўриш
                                 </a>
                             </td>

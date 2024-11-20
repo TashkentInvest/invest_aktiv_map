@@ -26,5 +26,10 @@ class Districts extends Model
     }
 
 
+    public function street()
+{
+    return $this->hasOne(Street::class, 'district_id');
+}
+
 
 }
