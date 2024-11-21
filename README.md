@@ -12,3 +12,5 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 <img src="./db_system.png"/>
 
 B-N_(5xonali)-yil
+
+composer require guzzlehttp/guzzle

@@ -8,6 +8,7 @@ use App\Models\Districts;
 use App\Models\Regions;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Log;
 
@@ -54,22 +55,22 @@ class AktivController extends Controller
         $user_id = $request->input('user_id');
         $district_id = $request->input('district_id');
         $userRole = auth()->user()->roles->first()->name;
-    
+
         // Only Super Admins and Managers can filter by user_id or district_id
         if ($userRole != 'Super Admin' && $userRole != 'Manager') {
             abort(403, 'Unauthorized access.');
         }
-    
+
         // Initialize the query builder for Aktivs
         $query = Aktiv::query();
-    
+
         // Only Super Admins and Managers can filter by user_id
         if ($userRole == 'Super Admin' || $userRole == 'Manager') {
             if ($user_id) {
                 // Filter aktivs by the specified user_id
                 $query->where('user_id', $user_id);
             }
-    
+
             // Apply district filter if provided
             if ($district_id) {
                 $query->whereHas('user', function ($q) use ($district_id) {
@@ -80,7 +81,7 @@ class AktivController extends Controller
             // If not Super Admin or Manager, show only the logged-in user's aktivs
             $query->where('user_id', auth()->id());
         }
-    
+
         // Get distinct districts by joining with users and selecting the distinct district_id
         $districts = Districts::select('districts.id', 'districts.name_uz') // select relevant columns
             ->distinct()
@@ -88,30 +89,30 @@ class AktivController extends Controller
             ->join('aktivs', 'users.id', '=', 'aktivs.user_id') // join with aktivs table
             ->whereIn('aktivs.id', $query->pluck('id')) // filter the aktivs based on the query
             ->get();
-    
+
         // Manually count aktivs for each district
         foreach ($districts as $district) {
             $aktivCount = Aktiv::query()
                 ->whereHas('user', function ($q) use ($district, $user_id) {
                     // Apply district filter if needed
                     $q->where('district_id', $district->id);
-    
+
                     // Apply user_id filter if provided
                     if ($user_id) {
                         $q->where('user_id', $user_id);
                     }
                 })
                 ->count(); // Get the count of aktivs for the current district
-    
+
             // Add the count to the district object
             $district->aktiv_count = $aktivCount;
         }
-    
+
         // Return the view with districts data
         return view('pages.aktiv.tuman_counts', compact('districts'));
     }
-    
-    
+
+
     // public function create()
     // {
     //     $regions = Regions::get();
@@ -146,8 +147,6 @@ class AktivController extends Controller
 
         return view('pages.aktiv.create', compact('aktivs', 'regions'));
     }
-
-
     public function store(Request $request)
     {
         $request->validate([
@@ -232,8 +231,6 @@ class AktivController extends Controller
 
         return view('pages.aktiv.show', compact('aktiv', 'aktivs'));
     }
-
-
     public function edit(Aktiv $aktiv)
     {
         $this->authorizeView($aktiv); // Check if the user can edit this Aktiv
@@ -419,9 +416,6 @@ class AktivController extends Controller
     // map code with source data
 
 
-
-
-
     public function getLots()
     {
         // Check if the authenticated user is the Super Admin (user_id = 1)
@@ -489,4 +483,76 @@ class AktivController extends Controller
 
         return response($qrCode, 200)->header('Content-Type', 'image/svg+xml');
     }
+
+    public function kadastr_index()
+    {
+        // dd('aktivs.kadastr_index');
+        return view('pages.aktiv.kadastr_index');
+    }
+
+    /**
+     * Handle the cadastral number submission and fetch data.
+     */
+    public function kadastr(Request $request)
+    {
+        $validated = $request->validate([
+            'cadastre_numbers' => 'required|string', // Expect multi-line input
+        ]);
+    
+        // Process input into an array
+        $cadastreNumbers = array_filter(array_map('trim', explode("\n", $validated['cadastre_numbers'])));
+    
+        $results = [];
+    
+        foreach ($cadastreNumbers as $number) {
+            // Updated regex to cover more formats, including `/` and extended segments
+            if (!preg_match('/^\d{2}:\d{2}:\d{2}:\d{2}(:\d+(:\d+)?|\/\d+)?(:\d+(:\d+)?)?$/', $number)) {
+                $results[] = [
+                    'cad_number' => $number,
+                    'error' => "Invalid format for cadastral number: $number",
+                ];
+                continue;
+            }
+    
+            try {
+                // Make API request
+                $response = Http::get("http://otchet.davbaho.uz/api/get_cadastre_second/1", [
+                    'num' => $number,
+                ]);
+    
+                if ($response->successful()) {
+                    $data = $response->json();
+                    Log::info($data);
+    
+                    $results[] = [
+                        'cad_number' => $data['cad_number'] ?? $number,
+                        'region' => $data['region'] ?? 'Unknown',
+                        'district' => $data['district'] ?? 'Unknown',
+                        'address' => $data['address'] ?? 'Unknown',
+                        'land_area' => ($data['land_area'] ?? '0') . ' m²',
+                        'bans' => $data['bans'] ?? [],
+                        'tipText' => $data['tipText'] ?? 'Unknown',
+                        'vidText' => $data['vidText'] ?? 'Unknown',
+                        'error' => null,
+                    ];
+                } else {
+                    // Handle unsuccessful HTTP responses
+                    $results[] = [
+                        'cad_number' => $number,
+                        'error' => "Failed to fetch data for cadastral number: $number (HTTP {$response->status()})",
+                    ];
+                }
+            } catch (\Exception $e) {
+                // Log and handle exceptions
+                \Log::error("Error fetching data for cadastral number $number: " . $e->getMessage());
+                $results[] = [
+                    'cad_number' => $number,
+                    'error' => "An error occurred: " . $e->getMessage(),
+                ];
+            }
+        }
+    
+        return view('pages.aktiv.kadastr_results', ['results' => $results]);
+    }
+    
 }

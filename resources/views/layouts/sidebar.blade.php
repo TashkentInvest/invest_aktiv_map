@@ -14,6 +14,11 @@
                     <i class="ph-duotone ph-gauge"></i>
                 </li>
                 <li class="pc-item">
+                    <a class="pc-link" href="{{ route('aktivs.kadastr_index') }}">
+                        Кадастр
+                    </a>
+                </li>
+                <li class="pc-item">
                     <a class="pc-link" href="{{ route('userIndex') }}">
                         Фойдаланучилар
                     </a>

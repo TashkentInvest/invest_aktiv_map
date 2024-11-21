@@ -74,6 +74,9 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::get('aktiv/tumanlar', [AktivController::class, 'userTumanlarCounts'])->name('aktivs.userTumanlarCounts');
     Route::post('/aktivs/export', [AktivController::class, 'export'])->name('aktivs.export');
 
+    Route::get('/kadastr', [AktivController::class, 'kadastr_index'])->name('aktivs.kadastr_index');
+    Route::post('/aktivs/kadastr', [AktivController::class, 'kadastr'])->name('aktivs.kadastr');
+    
 
     Route::get('/my-map', [AktivController::class, 'myMap'])->name('aktivs.myMap');
 
