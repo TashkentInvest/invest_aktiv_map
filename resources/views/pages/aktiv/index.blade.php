@@ -39,8 +39,6 @@
                                         word-break: break-word;
                                         white-space: normal;
                                     }
-
-                                 
                                 </style>
                             </td>
                             <td>{{ $aktiv->balance_keeper }}</td>
@@ -61,16 +59,18 @@
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Таҳрирлаш">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        <form action="{{ route('aktivs.destroy', $aktiv) }}" method="POST"
-                                            style="display:inline-block;">
-                                            @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Ўчириш"
-                                                onclick="return confirm('Сиз ростдан ҳам бу объектни ўчиришни истайсизми?');">
-                                                <i class="fas fa-trash-alt"></i>
-                                            </button>
-                                        </form>
+                                        @if (auth()->user()->roles[0]->name == 'Super Admin')
+                                            <form action="{{ route('aktivs.destroy', $aktiv) }}" method="POST"
+                                                style="display:inline-block;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-danger btn-sm"
+                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Ўчириш"
+                                                    onclick="return confirm('Сиз ростдан ҳам бу объектни ўчиришни истайсизми?');">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                        @endif
                                     @endif
 
                                 </div>
