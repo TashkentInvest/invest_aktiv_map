@@ -50,7 +50,8 @@ class Aktiv extends Model
         'longitude',
         'kadastr_raqami',
         'sub_street_id',
-        'street_id'
+        'street_id',
+        'building_type'
     ];
 
     public function files()

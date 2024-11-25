@@ -168,7 +168,8 @@ class AktivController extends Controller
 
             'sub_street_id'    => 'required',
             'street_id'    => 'required',
-            'user_id'          => 'nullable'
+            'user_id'          => 'nullable',
+            'building_type' => 'required|in:yer,TurarBino,NoturarBino',
         ]);
         // $request->validate([
         //     'files' => 'required|array|min:4', // Enforces at least 4 files
@@ -261,7 +262,8 @@ class AktivController extends Controller
             'sub_street_id'    => 'required',
             'street_id'    => 'required',
 
-            'user_id'          => 'nullable'
+            'user_id'          => 'nullable',
+            'building_type' => 'required|in:yer,TurarBino,NoturarBino',
         ]);
 
         // $totalFiles = $aktiv->files()->count() - count($request->delete_files ?? []) + count($request->file('files') ?? []);
@@ -498,12 +500,12 @@ class AktivController extends Controller
         $validated = $request->validate([
             'cadastre_numbers' => 'required|string', // Expect multi-line input
         ]);
-    
+
         // Process input into an array
         $cadastreNumbers = array_filter(array_map('trim', explode("\n", $validated['cadastre_numbers'])));
-    
+
         $results = [];
-    
+
         foreach ($cadastreNumbers as $number) {
             // Updated regex to cover more formats, including `/` and extended segments
             if (!preg_match('/^\d{2}:\d{2}:\d{2}:\d{2}(:\d+(:\d+)?|\/\d+)?(:\d+(:\d+)?)?$/', $number)) {
@@ -513,17 +515,17 @@ class AktivController extends Controller
                 ];
                 continue;
             }
-    
+
             try {
                 // Make API request
                 $response = Http::get("http://otchet.davbaho.uz/api/get_cadastre_second/1", [
                     'num' => $number,
                 ]);
-    
+
                 if ($response->successful()) {
                     $data = $response->json();
                     Log::info($data);
-    
+
                     $results[] = [
                         'cad_number' => $data['cad_number'] ?? $number,
                         'region' => $data['region'] ?? 'Unknown',
@@ -551,8 +553,7 @@ class AktivController extends Controller
                 ];
             }
         }
-    
+
         return view('pages.aktiv.kadastr_results', ['results' => $results]);
     }
-    
 }

@@ -99,6 +99,20 @@
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
 
+                <label for="building_type">Мулк Тури</label>
+                <select name="building_type" id="building_type" class="form-control" required>
+                    <option value="" disabled selected>Выберите тип недвижимости</option>
+                    <option value="yer" {{ old('building_type') == 'yer' ? 'selected' : '' }}>Yer</option>
+                    <option value="TurarBino" {{ old('building_type') == 'TurarBino' ? 'selected' : '' }}>TurarBino
+                    </option>
+                    <option value="NoturarBino" {{ old('building_type') == 'NoturarBino' ? 'selected' : '' }}>NoturarBino
+                    </option>
+                </select>
+
+                @error('building_type')
+                    <div class="text-danger">{{ $message }}</div>
+                @enderror
+
                 <div class="mb-3">
                     <label for="additional_info">Қўшимча маълумот</label>
                     <input class="form-control" type="text" name="additional_info" id="additional_info"

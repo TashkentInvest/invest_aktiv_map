@@ -29,7 +29,6 @@ class ProductController extends Controller
             ->orderByDesc('id')
             ->paginate(25);
             
-
         return view('pages.products.index', compact('clients'));
     }
     

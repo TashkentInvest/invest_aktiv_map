@@ -7,9 +7,15 @@
     <div class="card shadow-sm p-4 mb-4">
         <h5 class="card-title text-primary">Общая информация</h5>
         <div class="card-body">
+
+            <div class="mb-3">
+                <strong>Мулк Тури :</strong> {{ $aktiv->building_type ?? 'Мавжуд Эмас' }}
+            </div>
+
             <div class="mb-3">
                 <strong>Объект номи (Название объекта):</strong> {{ $aktiv->object_name }}
             </div>
+
             <div class="mb-3">
                 <strong>Балансда сақловчи (Балансодержатель):</strong> {{ $aktiv->balance_keeper }}
             </div>
