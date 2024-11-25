@@ -20,6 +20,10 @@ class AktivController extends Controller
         $district_id = $request->input('district_id');  // Fixed typo here
         $userRole = auth()->user()->roles->first()->name;
 
+        $yerCount = Aktiv::where('building_type', 'yer')->count();
+        $noturarBinoCount = Aktiv::where('building_type', 'NoturarBino')->count();
+        $turarBinoCount = Aktiv::where('building_type', 'TurarBino')->count();
+
         // Initialize the query builder for Aktivs
         $query = Aktiv::query();
 
@@ -47,7 +51,7 @@ class AktivController extends Controller
             ->paginate(10)
             ->appends($request->query()); // Keep query parameters in pagination links
 
-        return view('pages.aktiv.index', compact('aktivs'));
+        return view('pages.aktiv.index', compact('aktivs','yerCount', 'noturarBinoCount', 'turarBinoCount'));
     }
 
     public function userTumanlarCounts(Request $request)
