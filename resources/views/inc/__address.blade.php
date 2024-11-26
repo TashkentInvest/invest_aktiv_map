@@ -74,7 +74,7 @@
 
             <div class="mb-3">
                 <label for="kadastr_raqami">Кадастр рақами</label>
-                <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami"
+                <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami" required
                     value="{{ old('kadastr_raqami') }}" pattern="(\d{2}:\d{2}:\d{2}:\d{2}:\d{2}:\d{4})"
                     title="Format: 11:04:42:01:03:0136" placeholder="11:04:42:01:03:0136">
                 <small id="kadastrHelp" class="form-text text-muted">
