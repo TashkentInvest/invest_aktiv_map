@@ -103,51 +103,69 @@
                 <select name="building_type" id="building_type" class="form-control" required>
                     <option value="" disabled selected>Выберите тип недвижимости</option>
                     <option value="yer" {{ old('building_type') == 'yer' ? 'selected' : '' }}>Yer</option>
-                    <option value="TurarBino" {{ old('building_type') == 'TurarBino' ? 'selected' : '' }}>TurarBino
-                    </option>
-                    <option value="NoturarBino" {{ old('building_type') == 'NoturarBino' ? 'selected' : '' }}>NoturarBino
-                    </option>
+                    <option value="TurarBino" {{ old('building_type') == 'TurarBino' ? 'selected' : '' }}>TurarBino</option>
+                    <option value="NoturarBino" {{ old('building_type') == 'NoturarBino' ? 'selected' : '' }}>NoturarBino</option>
                 </select>
-
+                
                 @error('building_type')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
-
+                
                 <div class="mb-3">
                     <label for="additional_info">Қўшимча маълумот</label>
-                    <input class="form-control" type="text" name="additional_info" id="additional_info"
-                        value="{{ old('additional_info') }}">
+                    <input class="form-control" type="text" name="additional_info" id="additional_info" value="{{ old('additional_info') }}">
                     @error('additional_info')
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-
+                
                 <div class="mb-3">
                     <label for="kadastr_raqami">Кадастр рақами</label>
-                    <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami" required
-                        value="{{ old('kadastr_raqami') }}" pattern="(\d{2}:\d{2}:\d{2}:\d{2}:\d{2}:\d{4})"
+                    <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami" 
+                        value="{{ old('kadastr_raqami') }}" 
+                        pattern="(\d{2}:\d{2}:\d{2}:\d{2}:\d{2}:\d{4})"
                         title="Format: 11:04:42:01:03:0136" placeholder="11:04:42:01:03:0136">
                     <small id="kadastrHelp" class="form-text text-muted">
                         Please enter the cadastral number in the format: 11:04:42:01:03:0136
                     </small>
                 </div>
-
+                
                 <script>
+                    // Function to toggle the required attribute on the kadastr_raqami input
+                    function toggleKadastrRequired() {
+                        var buildingType = document.getElementById('building_type').value;
+                        var kadastrInput = document.getElementById('kadastr_raqami');
+                
+                        if (buildingType !== 'yer') {
+                            kadastrInput.setAttribute('required', 'required');
+                        } else {
+                            kadastrInput.removeAttribute('required');
+                        }
+                    }
+                
+                    // Listen for changes in the building_type dropdown
+                    document.getElementById('building_type').addEventListener('change', toggleKadastrRequired);
+                
+                    // Call the function once to set the initial state based on the current selection
+                    toggleKadastrRequired();
+                
+                    // Kadastr formatting script
                     document.getElementById('kadastr_raqami').addEventListener('input', function(e) {
                         let value = e.target.value.replace(/[^0-9]/g, '');
                         let formattedValue = '';
-
+                
                         if (value.length > 0) formattedValue += value.substring(0, 2);
                         if (value.length > 2) formattedValue += ':' + value.substring(2, 4);
                         if (value.length > 4) formattedValue += ':' + value.substring(4, 6);
                         if (value.length > 6) formattedValue += ':' + value.substring(6, 8);
                         if (value.length > 8) formattedValue += ':' + value.substring(8, 10);
                         if (value.length > 10) formattedValue += ':' + value.substring(10, 14);
-
+                
                         e.target.value = formattedValue;
                     });
                 </script>
                 
+
                 @include('inc.__address')
             </div>
             <!-- Right Column -->
