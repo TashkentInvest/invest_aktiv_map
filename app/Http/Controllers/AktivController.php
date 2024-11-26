@@ -326,8 +326,8 @@ class AktivController extends Controller
     {
         $userRole = auth()->user()->roles->first()->name;
 
-        if ($userRole == 'Super Admin') {
-            // if ($userRole == 'Super Admin' || $userRole == 'Manager') {
+        // if ($userRole == 'Super Admin') {
+        if ($userRole == 'Super Admin' || $userRole == 'Manager') {
             // Super Admins and Managers can access any Aktiv
             return;
         }
