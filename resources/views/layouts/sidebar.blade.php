@@ -13,11 +13,13 @@
                     <label>Меню</label>
                     <i class="ph-duotone ph-gauge"></i>
                 </li>
-                <li class="pc-item">
-                    <a class="pc-link" href="{{ route('aktivs.kadastr_index') }}">
-                        Кадастр
-                    </a>
-                </li>
+                @if (auth()->user()->roles[0]->name == 'Super Admin')
+                    <li class="pc-item">
+                        <a class="pc-link" href="{{ route('aktivs.kadastr_index') }}">
+                            Кадастр
+                        </a>
+                    </li>
+                @endif
                 <li class="pc-item">
                     <a class="pc-link" href="{{ route('userIndex') }}">
                         Фойдаланучилар
