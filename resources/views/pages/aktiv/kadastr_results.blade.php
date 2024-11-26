@@ -37,7 +37,7 @@
                             <hr>
                         @endforeach
                     @else
-                        <span class="text-muted">Ta'qiq mavjud emas.</span>
+                        <span class="text-muted">Qaror mavjud emas.</span>
                     @endif
                 </td>
                 <td>
