@@ -51,7 +51,7 @@ class AktivController extends Controller
             ->paginate(10)
             ->appends($request->query()); // Keep query parameters in pagination links
 
-        return view('pages.aktiv.index', compact('aktivs','yerCount', 'noturarBinoCount', 'turarBinoCount'));
+        return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
     }
 
     public function userTumanlarCounts(Request $request)
@@ -528,7 +528,16 @@ class AktivController extends Controller
 
                 if ($response->successful()) {
                     $data = $response->json();
-                    Log::info($data);
+                    // Log::info($data);
+                    if (isset($data['documents'])) {
+                        Log::info($data['documents']);
+
+                        $documents = $data['documents'];
+                    } else {
+                        Log::warning("No documents found for cadastral number: $number");
+                        $documents = [];
+                    }
+
 
                     $results[] = [
                         'cad_number' => $data['cad_number'] ?? $number,
@@ -537,6 +546,7 @@ class AktivController extends Controller
                         'address' => $data['address'] ?? 'Unknown',
                         'land_area' => ($data['land_area'] ?? '0') . ' m²',
                         'bans' => $data['bans'] ?? [],
+                        'documents' => $data['documents'] ?? [],
                         'tipText' => $data['tipText'] ?? 'Unknown',
                         'vidText' => $data['vidText'] ?? 'Unknown',
                         'error' => null,

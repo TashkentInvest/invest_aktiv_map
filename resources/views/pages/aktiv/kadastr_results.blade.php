@@ -9,6 +9,7 @@
             <th>Yer maydoni</th>
             <th>Tip ma'lumot</th>
             <th>Vid ma'lumot</th>
+            <th>Xujjatlar</th>
             <th>Detallar</th>
         </tr>
     </thead>
@@ -23,6 +24,22 @@
                 <td>{{ $result['land_area'] ?? 'Ma\'lumot yo\'q' }} m²</td>
                 <td>{{ $result['tipText'] ?? 'Ma\'lumot yo\'q' }} m²</td>
                 <td>{{ $result['vidText'] ?? 'Ma\'lumot yo\'q' }} m²</td>
+                <td>
+                    @if(isset($result['documents']) && is_array($result['documents']) && count($result['documents']) > 0)
+                    {{-- @dump($result['documents']) --}}
+                        @foreach($result['documents'] as $ban)
+                            <div class="ban-detail">
+                                <strong>Tur:</strong> {{ $ban['type'] ?? 'Ma\'lumot yo\'q' }}<br>
+                                <strong>Ta'qiq raqami:</strong> {{ $ban['num'] ?? 'Noma\'lum' }}<br>
+                                <strong>Egasi:</strong> {{ $ban['owner'] ?? 'Ma\'lumot yo\'q' }}<br>
+                                <strong>Sana:</strong> {{ $ban['date'] ?? 'Noma\'lum' }}
+                            </div>
+                            <hr>
+                        @endforeach
+                    @else
+                        <span class="text-muted">Ta'qiq mavjud emas.</span>
+                    @endif
+                </td>
                 <td>
                     @if(isset($result['bans']) && is_array($result['bans']) && count($result['bans']) > 0)
                         @foreach($result['bans'] as $ban)
@@ -39,6 +56,7 @@
                         <span class="text-muted">Ta'qiq mavjud emas.</span>
                     @endif
                 </td>
+              
             </tr>
         @empty
             <tr>
