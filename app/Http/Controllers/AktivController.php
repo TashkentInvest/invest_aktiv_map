@@ -173,7 +173,7 @@ class AktivController extends Controller
             'sub_street_id'    => 'required',
             'street_id'    => 'required',
             'user_id'          => 'nullable',
-            'building_type' => 'required|in:yer,TurarBino,NoturarBino',
+            'building_type' => 'nullable|in:yer,TurarBino,NoturarBino',
         ]);
         // $request->validate([
         //     'files' => 'required|array|min:4', // Enforces at least 4 files
@@ -267,7 +267,7 @@ class AktivController extends Controller
             'street_id'    => 'required',
 
             'user_id'          => 'nullable',
-            'building_type' => 'required|in:yer,TurarBino,NoturarBino',
+            'building_type' => 'nullable|in:yer,TurarBino,NoturarBino',
         ]);
 
         // $totalFiles = $aktiv->files()->count() - count($request->delete_files ?? []) + count($request->file('files') ?? []);
