@@ -72,31 +72,7 @@
             </div>
 
 
-            <div class="mb-3">
-                <label for="kadastr_raqami">Кадастр рақами</label>
-                <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami" required
-                    value="{{ old('kadastr_raqami') }}" pattern="(\d{2}:\d{2}:\d{2}:\d{2}:\d{2}:\d{4})"
-                    title="Format: 11:04:42:01:03:0136" placeholder="11:04:42:01:03:0136">
-                <small id="kadastrHelp" class="form-text text-muted">
-                    Please enter the cadastral number in the format: 11:04:42:01:03:0136
-                </small>
-            </div>
-
-            <script>
-                document.getElementById('kadastr_raqami').addEventListener('input', function(e) {
-                    let value = e.target.value.replace(/[^0-9]/g, '');
-                    let formattedValue = '';
-
-                    if (value.length > 0) formattedValue += value.substring(0, 2);
-                    if (value.length > 2) formattedValue += ':' + value.substring(2, 4);
-                    if (value.length > 4) formattedValue += ':' + value.substring(4, 6);
-                    if (value.length > 6) formattedValue += ':' + value.substring(6, 8);
-                    if (value.length > 8) formattedValue += ':' + value.substring(8, 10);
-                    if (value.length > 10) formattedValue += ':' + value.substring(10, 14);
-
-                    e.target.value = formattedValue;
-                });
-            </script>
+          
 
         </div>
     </div>
