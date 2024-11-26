@@ -30,7 +30,7 @@
                         @foreach($result['documents'] as $ban)
                             <div class="ban-detail">
                                 <strong>Tur:</strong> {{ $ban['type'] ?? 'Ma\'lumot yo\'q' }}<br>
-                                <strong>Ta'qiq raqami:</strong> {{ $ban['num'] ?? 'Noma\'lum' }}<br>
+                                <strong>Qaror raqami:</strong> {{ $ban['num'] ?? 'Noma\'lum' }}<br>
                                 <strong>Egasi:</strong> {{ $ban['owner'] ?? 'Ma\'lumot yo\'q' }}<br>
                                 <strong>Sana:</strong> {{ $ban['date'] ?? 'Noma\'lum' }}
                             </div>
