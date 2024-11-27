@@ -2,8 +2,14 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Активлар сони: {{ $aktivs->total() ?? '' }} | Yer: {{ $yerCount ?? ''}} | Noturar Bino: {{ $noturarBinoCount ?? '' }} | Turar Bino: {{ $turarBinoCount ?? ''}}</h1>
-  
+        <h1>Активлар сони: {{ $aktivs->total() ?? '' }}
+
+            @if (auth()->user()->roles[0]->name == 'Super Admin')
+                | Yer: {{ $yerCount ?? '' }} | Noturar Bino: {{ $noturarBinoCount ?? '' }} | Turar Bino:
+                {{ $turarBinoCount ?? '' }}
+            @endif
+        </h1>
+
         <a href="{{ route('aktivs.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Янги актив яратиш
         </a>
@@ -42,7 +48,8 @@
                                     }
                                 </style>
                             </td>
-                            <td style="max-width: 200px" class="text-truncate" title="{{ $aktiv->balance_keeper }}">{{ $aktiv->balance_keeper }}</td>
+                            <td style="max-width: 200px" class="text-truncate" title="{{ $aktiv->balance_keeper }}">
+                                {{ $aktiv->balance_keeper }}</td>
                             <td style="width: 100px" class="text-truncate"
                                 title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">
                                 {{ $aktiv->street->name ?? 'Маълумот йўқ' }},
