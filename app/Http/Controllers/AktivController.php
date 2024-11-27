@@ -20,6 +20,13 @@ class AktivController extends Controller
         $district_id = $request->input('district_id');  // Fixed typo here
         $userRole = auth()->user()->roles->first()->name;
 
+        // Check if the user is a Manager and district_id is not already in the query string
+        if ($userRole == 'Manager' && !$request->has('district_id')) {
+            return redirect()->route('aktivs.index', [
+                'district_id' => auth()->user()->district_id, // Appends district_id as query parameter
+            ]);
+        }
+
         $yerCount = Aktiv::where('building_type', 'yer')->count();
         $noturarBinoCount = Aktiv::where('building_type', 'NoturarBino')->count();
         $turarBinoCount = Aktiv::where('building_type', 'TurarBino')->count();
@@ -41,18 +48,14 @@ class AktivController extends Controller
                 });
             }
         } elseif ($userRole == 'Manager') {
-
-   
             $user_district_id = auth()->user()->district_id;
             if ($district_id == $user_district_id) {
                 $query->whereHas('user', function ($q) use ($district_id) {
                     $q->where('district_id', $district_id);
                 });
-            }else{
-            $query->where('user_id', auth()->id());
-
+            } else {
+                $query->where('user_id', auth()->id());
             }
-
         } else {
             $query->where('user_id', auth()->id());
         }
@@ -65,6 +68,7 @@ class AktivController extends Controller
 
         return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
     }
+
 
     public function userTumanlarCounts(Request $request)
     {

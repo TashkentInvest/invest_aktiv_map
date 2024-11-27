@@ -26,11 +26,26 @@
                         </a>
                     </li>
                 @endif
-                <li class="pc-item">
+                {{-- <li class="pc-item">
                     <a class="pc-link" href="{{ route('aktivs.index') }}">
                         Активлар ҳақида маълумот
                     </a>
-                </li>
+                </li> --}}
+
+                @if (auth()->user()->roles->first()->name == 'Manager')
+                    <li class="pc-item">
+
+                        <a class="pc-link" href="{{ route('aktivs.index', ['district_id' => auth()->user()->district_id]) }}">Активлар
+                            ҳақида маълумот</a>
+                    </li>
+                @else
+                    <li class="pc-item">
+                        <a class="pc-link" href="{{ route('aktivs.index') }}">
+                            Активлар ҳақида маълумот
+                        </a>
+                    </li>
+                @endif
+
 
                 @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')
                     <li class="pc-item">
