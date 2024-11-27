@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AddNewUsersController;
 use App\Http\Controllers\AktivController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -507,3 +508,6 @@ Route::get('excel/export', [ExcelController::class, 'export'])->name('excel.expo
 // Import the controller at the top
 
 // Define routes individually
+
+
+Route::post('/import-users', [AddNewUsersController::class, 'importUsers'])->name('import.users');

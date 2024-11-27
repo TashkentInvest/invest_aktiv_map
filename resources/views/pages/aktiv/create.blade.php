@@ -121,12 +121,14 @@
                 
                 <div class="mb-3">
                     <label for="kadastr_raqami">Кадастр рақами</label>
-                    <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami" 
-                        value="{{ old('kadastr_raqami') }}" 
-                        pattern="(\d{2}:\d{2}:\d{2}:\d{2}:\d{2}:\d{4})"
-                        title="Format: 11:04:42:01:03:0136" placeholder="11:04:42:01:03:0136">
+                    <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami"
+                    value="{{ old('kadastr_raqami') }}"
+                    pattern="\d{2}:\d{2}:\d{2}:\d{2}:\d{2}:\d{4}:\d{4}:\d{3}"
+                    title="Format: 11:04:42:01:03:0136:0001:045"
+                    placeholder="10:06:03:01:02:5038:0001:045">
+                
                     <small id="kadastrHelp" class="form-text text-muted">
-                        Please enter the cadastral number in the format: 11:04:42:01:03:0136
+                        Please enter the cadastral number in the format: 10:06:03:01:02:5038:0001:045
                     </small>
                 </div>
                 
@@ -226,7 +228,7 @@
     <script
         src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY&libraries&libraries=places&callback=initMap"
         async defer></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script> --}}
 
     <script>
         // Wrap the entire script in an IIFE to avoid global scope pollution
