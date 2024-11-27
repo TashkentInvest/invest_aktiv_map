@@ -42,7 +42,7 @@
                                     }
                                 </style>
                             </td>
-                            <td>{{ $aktiv->balance_keeper }}</td>
+                            <td style="max-width: 200px" class="text-truncate" title="...">{{ $aktiv->balance_keeper }}</td>
                             <td style="width: 100px" class="text-truncate"
                                 title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">
                                 {{ $aktiv->street->name ?? 'Маълумот йўқ' }},
