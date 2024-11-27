@@ -14,3 +14,7 @@ Laravel is accessible, powerful, and provides tools required for large, robust a
 B-N_(5xonali)-yil
 
 composer require guzzlehttp/guzzle
+
+1) manager ozini tumandigilani ko'rolishi kere 
+2) tepadigi count lani ozini tumanidigla uchun bo;lishi kere
+3) address lani edit qganda olding addressi chqshi kere
