@@ -19,12 +19,13 @@
                             Кадастр
                         </a>
                     </li>
+
+                    <li class="pc-item">
+                        <a class="pc-link" href="{{ route('userIndex') }}">
+                            Фойдаланучилар
+                        </a>
+                    </li>
                 @endif
-                <li class="pc-item">
-                    <a class="pc-link" href="{{ route('userIndex') }}">
-                        Фойдаланучилар
-                    </a>
-                </li>
                 <li class="pc-item">
                     <a class="pc-link" href="{{ route('aktivs.index') }}">
                         Активлар ҳақида маълумот
