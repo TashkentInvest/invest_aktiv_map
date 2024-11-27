@@ -28,7 +28,7 @@ class AktivController extends Controller
         $query = Aktiv::query();
 
         // Only Super Admins and Managers can filter by user_id
-        if ($userRole == 'Super Admin' || $userRole == 'Manager') {
+        if ($userRole == 'Super Admin') {
             if ($user_id) {
                 // Show aktivs for the specified user
                 $query->where('user_id', $user_id);
@@ -115,14 +115,6 @@ class AktivController extends Controller
         // Return the view with districts data
         return view('pages.aktiv.tuman_counts', compact('districts'));
     }
-
-
-    // public function create()
-    // {
-    //     $regions = Regions::get();
-    //     return view('pages.aktiv.create', compact('regions'));
-    // }
-
     public function create()
     {
         $regions = Regions::get();  // Assuming this needs no filtering
@@ -198,7 +190,6 @@ class AktivController extends Controller
 
         return redirect()->route('aktivs.index')->with('success', 'Aktiv created successfully.');
     }
-
     public function show(Aktiv $aktiv)
     {
         // Check if the user can view this Aktiv (for authorization)
@@ -301,7 +292,6 @@ class AktivController extends Controller
 
         return redirect()->route('aktivs.index')->with('success', 'Aktiv updated successfully.');
     }
-
     public function destroy(Aktiv $aktiv)
     {
         $this->authorizeView($aktiv); // Check if the user can delete this Aktiv
@@ -341,21 +331,41 @@ class AktivController extends Controller
         abort(403, 'Unauthorized access.');
     }
 
-    public function userAktivCounts()
-    {
-        $userRole = auth()->user()->roles->first()->name;
 
+    public function userAktivCounts(Request $request)
+    {
+        // Get the user's role and district from the authenticated user
+        $userRole = auth()->user()->roles->first()->name;
+        $user_id = auth()->user()->id;
+        $district_id = auth()->user()->district_id; // Assuming district_id is a property on the user model
+    
         // Only Super Admins and Managers can access this page
         if ($userRole != 'Super Admin' && $userRole != 'Manager') {
             abort(403, 'Unauthorized access.');
         }
-
-        // Get users and their Aktiv counts
-        $users = User::withCount('aktivs')->get();
-        // dd('dwq');
+    
+        // Initialize the query with the User model
+        $query = User::query();
+    
+        // If a district_id is provided in the request, use it, otherwise use the authenticated user's district_id
+        $requestDistrictId = $request->input('district_id');
+        if ($requestDistrictId) {
+            // Apply the district filter from the request
+            $query->whereHas('user', function ($q) use ($requestDistrictId) {
+                $q->where('district_id', $requestDistrictId);
+            });
+        } else {
+            // Otherwise, filter by the district_id of the authenticated user
+            $query->where('district_id', $district_id);
+        }
+    
+        // Get users with their associated aktiv counts
+        $users = $query->withCount('aktivs')->get();
+    
+        // Return the view with the users data
         return view('pages.aktiv.user_counts', compact('users'));
     }
-
+    
 
     public function export()
     {

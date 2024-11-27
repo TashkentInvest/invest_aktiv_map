@@ -30,7 +30,7 @@
                                 {{ $aktiv->user->name ?? 'No Name' }}<br>
                                 <small class="text-muted">{{ $aktiv->user->email ?? 'No Email' }}</small>
                             </td>
-                            <td style="max-width: 200px" class="text-truncate" title="...">
+                            <td style="max-width: 200px" class="text-truncate" title="{{ $aktiv->object_name }}">
 
                                 {{ $aktiv->object_name }}
 
@@ -42,7 +42,7 @@
                                     }
                                 </style>
                             </td>
-                            <td style="max-width: 200px" class="text-truncate" title="...">{{ $aktiv->balance_keeper }}</td>
+                            <td style="max-width: 200px" class="text-truncate" title="{{ $aktiv->balance_keeper }}">{{ $aktiv->balance_keeper }}</td>
                             <td style="width: 100px" class="text-truncate"
                                 title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">
                                 {{ $aktiv->street->name ?? 'Маълумот йўқ' }},
