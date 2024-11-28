@@ -132,7 +132,7 @@
                     </small>
                 </div>
 
-                <div class="form-group">
+                <div class="form-group" >
                     <label for="kadastr_pdf">Kadastr File</label>
                     <input type="file" id="kadastr_pdf" name="kadastr_pdf" class="form-control">
                 </div>
@@ -142,7 +142,7 @@
                     <input type="file" id="hokim_qarori_pdf" name="hokim_qarori_pdf" class="form-control">
                 </div>
             
-                <div class="form-group">
+                <div class="form-group mb-4">
                     <label for="transfer_basis_pdf">Transfer Basis File</label>
                     <input type="file" id="transfer_basis_pdf" name="transfer_basis_pdf" class="form-control">
                 </div>

@@ -146,32 +146,77 @@
     </div>
     
 
-      {{-- Comments Section --}}
-    <div class="comments mt-4">
-        <h3>Comments</h3>
+  {{-- Comments Section --}}
+<div class="comments mt-4">
+    <h3 class="text-primary">Comments</h3>
 
-        {{-- Display comments --}}
+    {{-- Display comments --}}
+    <div class="comments-container">
         @foreach ($aktiv->comments as $comment)
-            <div class="mb-3">
-                <strong>{{ $comment->user->name }}</strong> <small>{{ $comment->created_at->diffForHumans() }}</small>
-                <p>{{ $comment->content }}</p>
+            <div class="comment-item mb-3 {{ $comment->user_id === auth()->id() ? 'my-comment' : '' }}">
+                <div class="d-flex justify-content-between align-items-center">
+                    <strong class="comment-author">{{ $comment->user->name }}</strong>
+                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                </div>
+                <div class="comment-content bg-light p-3 rounded mt-2">
+                    <p>{{ $comment->content }}</p>
+                </div>
             </div>
         @endforeach
+    </div>
 
-        {{-- Add comment --}}
-        @auth
-        <form action="{{ route('comments.store', $aktiv->id) }}" method="POST">
-            @csrf
-            <div class="form-group">
-                <label for="content">Add Comment</label>
-                <textarea id="content" name="content" class="form-control" rows="3" required></textarea>
-            </div>
-            <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
-        </form>
-        @endauth
+    {{-- Add comment --}}
+    @auth
+    <form action="{{ route('comments.store', $aktiv->id) }}" method="POST" class="mt-4">
+        @csrf
+        <div class="form-group">
+            <label for="content">Add Comment</label>
+            <textarea id="content" name="content" class="form-control" rows="3" placeholder="Write your comment..." required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+    </form>
+    @endauth
+</div>
+
+{{-- Add some styling --}}
+<style>
+    .comments-container {
+        max-height: 400px;
+        overflow-y: auto;
+    }
+    .comment-item {
+        padding: 10px;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        border: 1px solid #ddd;
+    }
+    .comment-item.my-comment {
+        background-color: #f1f8ff;
+    }
+    .comment-author {
+        font-weight: bold;
+        color: #007bff;
+    }
+    .comment-content {
+        background-color: #f9f9f9;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+    .comment-content p {
+        margin: 0;
+    }
+    .comment-item .text-muted {
+        font-size: 0.85rem;
+    }
+    .comment-item .comment-author {
+        color: #333;
+    }
+</style>
+
 
     <!-- Map Section -->
-    <div class="card shadow-sm p-4 mb-4">
+    <div class="card shadow-sm p-4 mb-4 mt-4">
         <h5 class="card-title text-primary">Геолокация на карте</h5>
         <div id="map" style="height: 500px; width: 100%;"></div>
     </div>
