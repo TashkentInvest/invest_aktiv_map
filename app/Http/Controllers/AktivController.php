@@ -18,7 +18,7 @@ class AktivController extends Controller
     {
         $user_id = $request->input('user_id');
         $district_id = $request->input('district_id');  // Fixed typo here
-        $userRole = auth()->user()->roles->first()->name;
+        $userRole = auth()->user()->roles[0]->name ?? '';
 
         // Check if the user is a Manager and district_id is not already in the query string
         if ($userRole == 'Manager' && !$request->has('district_id')) {
@@ -390,7 +390,7 @@ class AktivController extends Controller
         // Get users with their associated aktiv counts
         $users = $query->withCount('aktivs')->get();
     
-     
+      
     
         // Return the view with the users data
         return view('pages.aktiv.user_counts', compact('users'));
