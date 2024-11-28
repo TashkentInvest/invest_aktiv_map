@@ -113,6 +113,63 @@
         </div>
     </div>
 
+    <div class="card shadow-sm p-4 mb-4">
+        <h5 class="card-title text-primary">Юкланган ҳужжатлар (Загруженные документы)</h5>
+        <div class="card-body">
+            @if ($aktiv->kadastr_pdf)
+                <p>
+                    <strong>Кадастр файл:</strong>
+                    <a href="{{ asset($aktiv->kadastr_pdf) }}" target="_blank">Просмотреть файл</a>
+                </p>
+            @else
+                <p>Кадастр файл мавжуд эмас (Файл отсутствует).</p>
+            @endif
+    
+            @if ($aktiv->hokim_qarori_pdf)
+                <p>
+                    <strong>Ҳоким қарори файл:</strong>
+                    <a href="{{ asset($aktiv->hokim_qarori_pdf) }}" target="_blank">Просмотреть файл</a>
+                </p>
+            @else
+                <p>Ҳоким қарори файл мавжуд эмас (Файл отсутствует).</p>
+            @endif
+    
+            @if ($aktiv->transfer_basis_pdf)
+                <p>
+                    <strong>Трансфер асоси файл:</strong>
+                    <a href="{{ asset($aktiv->transfer_basis_pdf) }}" target="_blank">Просмотреть файл</a>
+                </p>
+            @else
+                <p>Трансфер асоси файл мавжуд эмас (Файл отсутствует).</p>
+            @endif
+        </div>
+    </div>
+    
+
+      {{-- Comments Section --}}
+    <div class="comments mt-4">
+        <h3>Comments</h3>
+
+        {{-- Display comments --}}
+        @foreach ($aktiv->comments as $comment)
+            <div class="mb-3">
+                <strong>{{ $comment->user->name }}</strong> <small>{{ $comment->created_at->diffForHumans() }}</small>
+                <p>{{ $comment->content }}</p>
+            </div>
+        @endforeach
+
+        {{-- Add comment --}}
+        @auth
+        <form action="{{ route('comments.store', $aktiv->id) }}" method="POST">
+            @csrf
+            <div class="form-group">
+                <label for="content">Add Comment</label>
+                <textarea id="content" name="content" class="form-control" rows="3" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+        </form>
+        @endauth
+
     <!-- Map Section -->
     <div class="card shadow-sm p-4 mb-4">
         <h5 class="card-title text-primary">Геолокация на карте</h5>

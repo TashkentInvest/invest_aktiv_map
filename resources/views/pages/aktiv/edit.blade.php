@@ -144,6 +144,21 @@
                     </small>
                 </div>
                 
+                <div class="form-group">
+                    <label for="kadastr_pdf">Kadastr File</label>
+                    <input type="file" id="kadastr_pdf" name="kadastr_pdf" class="form-control">
+                </div>
+            
+                <div class="form-group">
+                    <label for="hokim_qarori_pdf">Hokim Qarori File</label>
+                    <input type="file" id="hokim_qarori_pdf" name="hokim_qarori_pdf" class="form-control">
+                </div>
+            
+                <div class="form-group">
+                    <label for="transfer_basis_pdf">Transfer Basis File</label>
+                    <input type="file" id="transfer_basis_pdf" name="transfer_basis_pdf" class="form-control">
+                </div>
+                
                 <script>
                     // Function to toggle the required attribute on the kadastr_raqami input
                     function toggleKadastrRequired() {

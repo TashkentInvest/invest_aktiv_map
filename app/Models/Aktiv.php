@@ -51,7 +51,10 @@ class Aktiv extends Model
         'kadastr_raqami',
         'sub_street_id',
         'street_id',
-        'building_type'
+        'building_type',
+        'kadastr_pdf',
+        'hokim_qarori_pdf',
+        'transfer_basis_pdf'
     ];
 
     public function files()
@@ -72,5 +75,10 @@ class Aktiv extends Model
     public function street()
     {
         return $this->belongsTo(Street::class, 'street_id', 'id');
+    }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
     }
 }

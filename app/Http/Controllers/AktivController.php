@@ -182,6 +182,10 @@ class AktivController extends Controller
             'street_id'    => 'required',
             'user_id'          => 'nullable',
             'building_type' => 'nullable|in:yer,TurarBino,NoturarBino',
+
+            'kadastr_pdf'      => 'nullable|file',
+            'hokim_qarori_pdf' => 'nullable|file',
+            'transfer_basis_pdf' => 'nullable|file',
         ]);
         // $request->validate([
         //     'files' => 'required|array|min:4', // Enforces at least 4 files
@@ -189,7 +193,7 @@ class AktivController extends Controller
         //     // other validations
         // ]);
 
-        $data = $request->except('files');
+        $data = $request->except('files', 'kadastr_pdf', 'hokim_qarori_pdf', 'transfer_basis_pdf');
         $data['user_id'] = auth()->id(); // Automatically set the authenticated user's ID
 
         $aktiv = Aktiv::create($data);
@@ -204,6 +208,24 @@ class AktivController extends Controller
             }
         }
 
+        if ($request->hasFile('kadastr_pdf')) {
+            $kadastrPath = $request->file('kadastr_pdf')->move(public_path('uploads/aktivs'), 'kadastr_' . time() . '.' . $request->file('kadastr_pdf')->getClientOriginalExtension());
+            $aktiv->kadastr_pdf = 'uploads/aktivs/' . basename($kadastrPath); // Store the file path in the 'kadastr_pdf' column
+        }
+        
+        if ($request->hasFile('hokim_qarori_pdf')) {
+            $hokimPath = $request->file('hokim_qarori_pdf')->move(public_path('uploads/aktivs'), 'hokim_' . time() . '.' . $request->file('hokim_qarori_pdf')->getClientOriginalExtension());
+            $aktiv->hokim_qarori_pdf = 'uploads/aktivs/' . basename($hokimPath); // Store the file path in the 'hokim_qarori_pdf' column
+        }
+        
+        if ($request->hasFile('transfer_basis_pdf')) {
+            $transferPath = $request->file('transfer_basis_pdf')->move(public_path('uploads/aktivs'), 'transfer_' . time() . '.' . $request->file('transfer_basis_pdf')->getClientOriginalExtension());
+            $aktiv->transfer_basis_pdf = 'uploads/aktivs/' . basename($transferPath); // Store the file path in the 'transfer_basis_pdf' column
+        }
+        
+        // Save the 'aktiv' model after all file paths are set
+        $aktiv->save();
+        
         return redirect()->route('aktivs.index')->with('success', 'Aktiv created successfully.');
     }
     public function show(Aktiv $aktiv)
@@ -275,6 +297,10 @@ class AktivController extends Controller
 
             'user_id'          => 'nullable',
             'building_type' => 'nullable|in:yer,TurarBino,NoturarBino',
+
+            'kadastr_pdf'      => 'nullable|file',
+            'hokim_qarori_pdf' => 'nullable|file',
+            'transfer_basis_pdf' => 'nullable|file',
         ]);
 
         // $totalFiles = $aktiv->files()->count() - count($request->delete_files ?? []) + count($request->file('files') ?? []);
@@ -294,7 +320,7 @@ class AktivController extends Controller
 
 
 
-        $data = $request->except('files');
+        $data = $request->except('files', 'kadastr_pdf', 'hokim_qarori_pdf', 'transfer_basis_pdf');
         $aktiv->update($data);
 
         if ($request->hasFile('files')) {
@@ -305,6 +331,25 @@ class AktivController extends Controller
                 ]);
             }
         }
+
+        if ($request->hasFile('kadastr_pdf')) {
+            $kadastrPath = $request->file('kadastr_pdf')->move(public_path('uploads/aktivs'), 'kadastr_' . time() . '.' . $request->file('kadastr_pdf')->getClientOriginalExtension());
+            $aktiv->kadastr_pdf = 'uploads/aktivs/' . basename($kadastrPath);
+        }
+        
+        if ($request->hasFile('hokim_qarori_pdf')) {
+            $hokimPath = $request->file('hokim_qarori_pdf')->move(public_path('uploads/aktivs'), 'hokim_' . time() . '.' . $request->file('hokim_qarori_pdf')->getClientOriginalExtension());
+            $aktiv->hokim_qarori_pdf = 'uploads/aktivs/' . basename($hokimPath);
+        }
+        
+        if ($request->hasFile('transfer_basis_pdf')) {
+            $transferPath = $request->file('transfer_basis_pdf')->move(public_path('uploads/aktivs'), 'transfer_' . time() . '.' . $request->file('transfer_basis_pdf')->getClientOriginalExtension());
+            $aktiv->transfer_basis_pdf = 'uploads/aktivs/' . basename($transferPath);
+        }
+        
+        // Save the updated model
+        $aktiv->save();
+        
 
         return redirect()->route('aktivs.index')->with('success', 'Aktiv updated successfully.');
     }
@@ -354,15 +399,15 @@ class AktivController extends Controller
         $userRole = auth()->user()->roles->first()->name;
         $user_id = auth()->user()->id;
         $district_id = auth()->user()->district_id; // Assuming district_id is a property on the user model
-    
+
         // Only Super Admins and Managers can access this page
         if ($userRole != 'Super Admin' && $userRole != 'Manager') {
             abort(403, 'Unauthorized access.');
         }
-    
+
         // Initialize the query with the User model
         $query = User::query();
-    
+
         // If a district_id is provided in the request, use it, otherwise use the authenticated user's district_id
         $requestDistrictId = $request->input('district_id');
         if ($requestDistrictId) {
@@ -386,16 +431,16 @@ class AktivController extends Controller
                 });
             }
         }
-    
+
         // Get users with their associated aktiv counts
         $users = $query->withCount('aktivs')->get();
-    
-      
-    
+
+
+
         // Return the view with the users data
         return view('pages.aktiv.user_counts', compact('users'));
     }
-    
+
 
     public function export()
     {

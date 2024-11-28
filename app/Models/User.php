@@ -99,4 +99,9 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Districts::class, 'district_id');
     }
+
+    public function comments()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

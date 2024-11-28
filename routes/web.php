@@ -35,6 +35,7 @@ use App\Http\Controllers\SubyektShakliController;
 use App\Http\Controllers\Blade\DistrictController;
 use App\Http\Controllers\RuxsatnomaTuriController;
 use App\Http\Controllers\Blade\PermissionController;
+use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ExcelController;
 use App\Http\Controllers\FactPaymentController;
 use App\Http\Controllers\MonitoringController;
@@ -77,6 +78,8 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
 
     Route::get('/kadastr', [AktivController::class, 'kadastr_index'])->name('aktivs.kadastr_index');
     Route::post('/aktivs/kadastr', [AktivController::class, 'kadastr'])->name('aktivs.kadastr');
+    Route::post('/aktivs/{id}/comments', [CommentController::class, 'store'])->name('comments.store');
+
     
 
     Route::get('/my-map', [AktivController::class, 'myMap'])->name('aktivs.myMap');
