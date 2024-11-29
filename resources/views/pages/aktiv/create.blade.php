@@ -133,17 +133,17 @@
                 </div>
 
                 <div class="form-group" >
-                    <label for="kadastr_pdf">Kadastr File</label>
+                    <label for="kadastr_pdf">Кадастр файл</label>
                     <input type="file" id="kadastr_pdf" name="kadastr_pdf" class="form-control">
                 </div>
             
                 <div class="form-group">
-                    <label for="hokim_qarori_pdf">Hokim Qarori File</label>
+                    <label for="hokim_qarori_pdf">Балансга қабул қилиш учун асос болган хужжат</label>
                     <input type="file" id="hokim_qarori_pdf" name="hokim_qarori_pdf" class="form-control">
                 </div>
             
                 <div class="form-group mb-4">
-                    <label for="transfer_basis_pdf">Transfer Basis File</label>
+                    <label for="transfer_basis_pdf">3-шахсга йоки бошқа шахсга бериш учун асос болган хужжат</label>
                     <input type="file" id="transfer_basis_pdf" name="transfer_basis_pdf" class="form-control">
                 </div>
                 
