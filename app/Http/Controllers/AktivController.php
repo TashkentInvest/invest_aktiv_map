@@ -447,7 +447,9 @@ class AktivController extends Controller
                     }
                 })
                 ->whereNotNull('kadastr_raqami')
+                ->where('kadastr_raqami', '!=', '')
                 ->where('kadastr_raqami', '!=', '00:00:00:00:00:0000')
+
                 ->where('kadastr_raqami', 'not like', '00%') // exclude invalid kadastr_raqami
                 ->count(); // Get the count of aktivs with valid kadastr_raqami for the current district
 
@@ -463,6 +465,7 @@ class AktivController extends Controller
     {
         // Fetch Aktiv records that have a valid Kadastr number
         $aktiv_kadastr = Aktiv::whereNotNull('kadastr_raqami')
+            ->where('kadastr_raqami', '!=', '')
             ->where('kadastr_raqami', '!=', '00:00:00:00:00:0000')
             ->where('kadastr_raqami', 'not like', '00%')
             ->with('user') // Include user data
@@ -474,15 +477,18 @@ class AktivController extends Controller
 
     public function kadastrByDistrict($district_id)
     {
-        // dd('dw');
         // Fetch the district along with its associated Aktiv records (through Street)
-        $district = Districts::with('aktives')->findOrFail($district_id);
+        $district = Districts::with(['aktives' => function ($query) {
+            $query->where('kadastr_raqami', '!=', '')
+                ->where('kadastr_raqami', '!=', '00:00:00:00:00:0000')
+                ->where('kadastr_raqami', 'not like', '00%')
+                ->with('user'); // Include user data
+        }])->findOrFail($district_id);
     
         // Return to the view with the district's Kadastr records
         return view('pages.aktiv.kadastr_by_district', compact('district'));
     }
     
-
 
     public function userAktivCounts(Request $request)
     {

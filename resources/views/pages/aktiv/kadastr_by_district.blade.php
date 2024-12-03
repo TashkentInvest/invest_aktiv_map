@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1>Кадастр Маълумотлари: Туман - {{ $district->name_uz ?? '' }}</h1>
+    <h1>Кадастр Маълумотлари: Туман - {{ $district->name_uz ?? '' }} / {{$district->aktives->count()}}</h1>
 
     @if ($district->aktives->count())
         <div class="table-responsive rounded shadow-sm">
