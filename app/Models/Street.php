@@ -37,4 +37,9 @@ class Street extends Model
     {
         return $this->hasMany(Aktiv::class, 'street_id');
     }
+
+    public function aktives()
+    {
+        return $this->hasMany(Aktiv::class, 'street_id');
+    }
 }

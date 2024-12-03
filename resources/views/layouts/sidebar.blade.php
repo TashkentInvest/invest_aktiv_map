@@ -34,12 +34,12 @@
 
                     <li class="pc-item">
                         <a class="pc-link" href="{{ route('aktivs.kadastrTumanlarCounts') }}">
-                            Кадастр свотник
+                            Кадастр (Свотник)
                         </a>
                     </li>
                     <li class="pc-item">
                         <a class="pc-link" href="{{ route('aktivs.kadastrBorlar') }}">
-                            Муниципиал активлар туманлар кесимида
+                            Муниципиал активлар туманлар кесимида (Перечень)
                         </a>
                     </li>
 

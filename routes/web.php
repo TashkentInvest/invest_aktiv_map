@@ -74,15 +74,22 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::delete('aktivs/{aktiv}', [AktivController::class, 'destroy'])->name('aktivs.destroy');
     Route::get('aktiv/users', [AktivController::class, 'userAktivCounts'])->name('aktivs.userAktivCounts');
     Route::get('aktiv/tumanlar', [AktivController::class, 'userTumanlarCounts'])->name('aktivs.userTumanlarCounts');
+
+
     Route::get('aktiv/kadastr/tumanlar', [AktivController::class, 'kadastrTumanlarCounts'])->name('aktivs.kadastrTumanlarCounts');
-    Route::get('aktiv/kadastr/borlar', [AktivController::class, 'kadastrBorlar'])->name('aktivs.kadastrBorlar');
+    Route::get('/aktiv/kadastr_borlar', [AktivController::class, 'kadastrBorlar'])->name('aktivs.kadastrBorlar');
+    Route::get('/aktiv/kadastr/{district_id}', [AktivController::class, 'kadastrByDistrict'])->name('aktivs.kadastrByDistrict');
+    Route::get('/aktiv/get_kadastr_by_district', [AktivController::class, 'getKadastrByDistrict']);
+
+
+
     Route::post('/aktivs/export', [AktivController::class, 'export'])->name('aktivs.export');
 
     Route::get('/kadastr', [AktivController::class, 'kadastr_index'])->name('aktivs.kadastr_index');
     Route::post('/aktivs/kadastr', [AktivController::class, 'kadastr'])->name('aktivs.kadastr');
     Route::post('/aktivs/{id}/comments', [CommentController::class, 'store'])->name('comments.store');
 
-    
+
 
     Route::get('/my-map', [AktivController::class, 'myMap'])->name('aktivs.myMap');
 

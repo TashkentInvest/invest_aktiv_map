@@ -131,7 +131,7 @@ class AktivController extends Controller
         // Return the view with districts data
         return view('pages.aktiv.tuman_counts', compact('districts'));
     }
-  
+
     public function create()
     {
         $regions = Regions::get();  // Assuming this needs no filtering
@@ -213,20 +213,20 @@ class AktivController extends Controller
             $kadastrPath = $request->file('kadastr_pdf')->move(public_path('uploads/aktivs'), 'kadastr_' . time() . '.' . $request->file('kadastr_pdf')->getClientOriginalExtension());
             $aktiv->kadastr_pdf = 'uploads/aktivs/' . basename($kadastrPath); // Store the file path in the 'kadastr_pdf' column
         }
-        
+
         if ($request->hasFile('hokim_qarori_pdf')) {
             $hokimPath = $request->file('hokim_qarori_pdf')->move(public_path('uploads/aktivs'), 'hokim_' . time() . '.' . $request->file('hokim_qarori_pdf')->getClientOriginalExtension());
             $aktiv->hokim_qarori_pdf = 'uploads/aktivs/' . basename($hokimPath); // Store the file path in the 'hokim_qarori_pdf' column
         }
-        
+
         if ($request->hasFile('transfer_basis_pdf')) {
             $transferPath = $request->file('transfer_basis_pdf')->move(public_path('uploads/aktivs'), 'transfer_' . time() . '.' . $request->file('transfer_basis_pdf')->getClientOriginalExtension());
             $aktiv->transfer_basis_pdf = 'uploads/aktivs/' . basename($transferPath); // Store the file path in the 'transfer_basis_pdf' column
         }
-        
+
         // Save the 'aktiv' model after all file paths are set
         $aktiv->save();
-        
+
         return redirect()->route('aktivs.index')->with('success', 'Aktiv created successfully.');
     }
     public function show(Aktiv $aktiv)
@@ -337,20 +337,20 @@ class AktivController extends Controller
             $kadastrPath = $request->file('kadastr_pdf')->move(public_path('uploads/aktivs'), 'kadastr_' . time() . '.' . $request->file('kadastr_pdf')->getClientOriginalExtension());
             $aktiv->kadastr_pdf = 'uploads/aktivs/' . basename($kadastrPath);
         }
-        
+
         if ($request->hasFile('hokim_qarori_pdf')) {
             $hokimPath = $request->file('hokim_qarori_pdf')->move(public_path('uploads/aktivs'), 'hokim_' . time() . '.' . $request->file('hokim_qarori_pdf')->getClientOriginalExtension());
             $aktiv->hokim_qarori_pdf = 'uploads/aktivs/' . basename($hokimPath);
         }
-        
+
         if ($request->hasFile('transfer_basis_pdf')) {
             $transferPath = $request->file('transfer_basis_pdf')->move(public_path('uploads/aktivs'), 'transfer_' . time() . '.' . $request->file('transfer_basis_pdf')->getClientOriginalExtension());
             $aktiv->transfer_basis_pdf = 'uploads/aktivs/' . basename($transferPath);
         }
-        
+
         // Save the updated model
         $aktiv->save();
-        
+
 
         return redirect()->route('aktivs.index')->with('success', 'Aktiv updated successfully.');
     }
@@ -393,7 +393,7 @@ class AktivController extends Controller
         abort(403, 'Unauthorized access.');
     }
 
-    
+
     public function kadastrTumanlarCounts(Request $request)
     {
         $user_id = $request->input('user_id');
@@ -434,7 +434,7 @@ class AktivController extends Controller
             ->whereIn('aktivs.id', $query->pluck('id')) // filter the aktivs based on the query
             ->get();
 
-        // Manually count aktivs for each district
+        // Manually count aktivs for each district and filter based on kadastr_raqami
         foreach ($districts as $district) {
             $aktivCount = Aktiv::query()
                 ->whereHas('user', function ($q) use ($district, $user_id) {
@@ -446,7 +446,10 @@ class AktivController extends Controller
                         $q->where('user_id', $user_id);
                     }
                 })
-                ->count(); // Get the count of aktivs for the current district
+                ->whereNotNull('kadastr_raqami')
+                ->where('kadastr_raqami', '!=', '00:00:00:00:00:0000')
+                ->where('kadastr_raqami', 'not like', '00%') // exclude invalid kadastr_raqami
+                ->count(); // Get the count of aktivs with valid kadastr_raqami for the current district
 
             // Add the count to the district object
             $district->aktiv_count = $aktivCount;
@@ -458,16 +461,29 @@ class AktivController extends Controller
 
     public function kadastrBorlar(Request $request)
     {
+        // Fetch Aktiv records that have a valid Kadastr number
         $aktiv_kadastr = Aktiv::whereNotNull('kadastr_raqami')
-                              ->where('kadastr_raqami', '!=', '00:00:00:00:00:0000') 
-                              ->where('kadastr_raqami', 'not like', '00%')  
-                              ->with('user')  
-                              ->get();
-    
+            ->where('kadastr_raqami', '!=', '00:00:00:00:00:0000')
+            ->where('kadastr_raqami', 'not like', '00%')
+            ->with('user') // Include user data
+            ->get();
+
+        // Return to the view with the Kadastr records
         return view('pages.aktiv.kadastr_borlar', compact('aktiv_kadastr'));
     }
+
+    public function kadastrByDistrict($district_id)
+    {
+        // dd('dw');
+        // Fetch the district along with its associated Aktiv records (through Street)
+        $district = Districts::with('aktives')->findOrFail($district_id);
     
+        // Return to the view with the district's Kadastr records
+        return view('pages.aktiv.kadastr_by_district', compact('district'));
+    }
     
+
+
     public function userAktivCounts(Request $request)
     {
         // Get the user's role and district from the authenticated user
