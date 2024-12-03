@@ -33,6 +33,11 @@
                     </li>
 
                     <li class="pc-item">
+                        <a class="pc-link" href="{{ route('aktivs.kadastrTumanlarCounts') }}">
+                            Кадастр свотник
+                        </a>
+                    </li>
+                    <li class="pc-item">
                         <a class="pc-link" href="{{ route('aktivs.kadastrBorlar') }}">
                             Муниципиал активлар туманлар кесимида
                         </a>
@@ -101,7 +106,7 @@
                 <form action="{{ route('import.users') }}" method="POST" enctype="multipart/form-data">
                     @csrf
                     <input type="file" name="file" accept=".xlsx, .xls">
-                    <button type="submit">Import Users</button>
+                    <button type="submit">Import Users</button> 
                 </form> --}}
                 
 

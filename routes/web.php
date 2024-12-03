@@ -74,6 +74,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::delete('aktivs/{aktiv}', [AktivController::class, 'destroy'])->name('aktivs.destroy');
     Route::get('aktiv/users', [AktivController::class, 'userAktivCounts'])->name('aktivs.userAktivCounts');
     Route::get('aktiv/tumanlar', [AktivController::class, 'userTumanlarCounts'])->name('aktivs.userTumanlarCounts');
+    Route::get('aktiv/kadastr/tumanlar', [AktivController::class, 'kadastrTumanlarCounts'])->name('aktivs.kadastrTumanlarCounts');
     Route::get('aktiv/kadastr/borlar', [AktivController::class, 'kadastrBorlar'])->name('aktivs.kadastrBorlar');
     Route::post('/aktivs/export', [AktivController::class, 'export'])->name('aktivs.export');
 
