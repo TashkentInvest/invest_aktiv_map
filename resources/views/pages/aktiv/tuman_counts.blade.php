@@ -1,7 +1,7 @@
 @extends('layouts.admin')
 
 @section('content')
-    <h1 class="mb-4">Туманлар ва Фойдаланувчилар сони</h1>
+    <h1 class="mb-4">Хатловда аниқланган активлар туманлар кесимида</h1>
 
     @if ($districts->count())
         <div class="table-responsive rounded shadow-sm">

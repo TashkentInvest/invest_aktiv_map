@@ -28,9 +28,16 @@
 
                     <li class="pc-item">
                         <a class="pc-link" href="{{ route('aktivs.userTumanlarCounts') }}">
-                            Туман Активлари
+                            Хатловда аниқланган активлар туманлар кесимида
                         </a>
                     </li>
+
+                    <li class="pc-item">
+                        <a class="pc-link" href="{{ route('aktivs.kadastrBorlar') }}">
+                            Муниципиал активлар туманлар кесимида
+                        </a>
+                    </li>
+
                 @endif
 
                 @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')

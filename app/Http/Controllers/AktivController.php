@@ -392,7 +392,20 @@ class AktivController extends Controller
         abort(403, 'Unauthorized access.');
     }
 
+    
 
+    public function kadastrBorlar(Request $request)
+    {
+        $aktiv_kadastr = Aktiv::whereNotNull('kadastr_raqami')
+                              ->where('kadastr_raqami', '!=', '00:00:00:00:00:0000') 
+                              ->where('kadastr_raqami', 'not like', '00%')  
+                              ->with('user')  
+                              ->get();
+    
+        return view('pages.aktiv.kadastr_borlar', compact('aktiv_kadastr'));
+    }
+    
+    
     public function userAktivCounts(Request $request)
     {
         // Get the user's role and district from the authenticated user
