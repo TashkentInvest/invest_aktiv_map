@@ -635,9 +635,6 @@ class AktivController extends Controller
         return view('pages.aktiv.kadastr_index');
     }
 
-    /**
-     * Handle the cadastral number submission and fetch data.
-     */
     public function kadastr(Request $request)
     {
         $validated = $request->validate([
@@ -647,26 +644,37 @@ class AktivController extends Controller
         // Process input into an array
         $cadastreNumbers = array_filter(array_map('trim', explode("\n", $validated['cadastre_numbers'])));
 
+        // dump($cadastreNumbers);
+        Log::info($cadastreNumbers);
         $results = [];
-
         foreach ($cadastreNumbers as $number) {
-            // Updated regex to cover more formats, including `/` and extended segments
-            if (!preg_match('/^\d{2}:\d{2}:\d{2}:\d{2}(:\d+(:\d+)?|\/\d+)?(:\d+(:\d+)?)?$/', $number)) {
-                $results[] = [
-                    'cad_number' => $number,
-                    'error' => "Invalid format for cadastral number: $number",
-                ];
-                continue;
-            }
+            // dump($number);
+
+            // if (!preg_match('/^\d{2}:\d{2}:\d{2}:\d{2}(:\d+(:\d+)?|\/\d+)?(:\d+(:\d+)?)?$/', $number)) {
+
+            //     $results[] = [
+            //         'cad_number' => $number,
+            //         'error' => "Invalid format for cadastral number: $number",
+            //     ];
+            //     continue;
+            // }
 
             try {
                 // Make API request
-                $response = Http::get("http://otchet.davbaho.uz/api/get_cadastre_second/1", [
-                    'num' => $number,
-                ]);
+
+                $response = Http::get("http://otchet.davbaho.uz/api/get_cadastre_second/1?num=" . $number);
+
+                // $response = Http::get("http://otchet.davbaho.uz/api/get_cadastre_second/1", [
+                //     Log::info($response),
+
+                //     'num' => $number,
+                // ]);
+
 
                 if ($response->successful()) {
                     $data = $response->json();
+                    Log::info($data);
+
                     // Log::info($data);
                     if (isset($data['documents'])) {
                         Log::info($data['documents']);
@@ -691,6 +699,8 @@ class AktivController extends Controller
                         'error' => null,
                     ];
                 } else {
+                    // dd('not');
+
                     // Handle unsuccessful HTTP responses
                     $results[] = [
                         'cad_number' => $number,
@@ -698,6 +708,8 @@ class AktivController extends Controller
                     ];
                 }
             } catch (\Exception $e) {
+                // dd('zzz');
+
                 // Log and handle exceptions
                 \Log::error("Error fetching data for cadastral number $number: " . $e->getMessage());
                 $results[] = [
@@ -709,4 +721,79 @@ class AktivController extends Controller
 
         return view('pages.aktiv.kadastr_results', ['results' => $results]);
     }
+
+    /**
+     * Handle the cadastral number submission and fetch data.
+     */
+    // public function kadastr(Request $request)
+    // {
+    //     $validated = $request->validate([
+    //         'cadastre_numbers' => 'required|string', // Expect multi-line input
+    //     ]);
+
+    //     // Process input into an array
+    //     $cadastreNumbers = array_filter(array_map('trim', explode("\n", $validated['cadastre_numbers'])));
+
+    //     $results = [];
+
+    //     foreach ($cadastreNumbers as $number) {
+    //         // Updated regex to cover more formats, including `/` and extended segments
+    //         if (!preg_match('/^\d{2}:\d{2}:\d{2}:\d{2}(:\d+(:\d+)?|\/\d+)?(:\d+(:\d+)?)?$/', $number)) {
+    //             $results[] = [
+    //                 'cad_number' => $number,
+    //                 'error' => "Invalid format for cadastral number: $number",
+    //             ];
+    //             continue;
+    //         }
+
+    //         try {
+    //             // Make API request
+    //             $response = Http::get("http://otchet.davbaho.uz/api/get_cadastre_second/1", [
+    //                 'num' => $number,
+    //             ]);
+
+    //             if ($response->successful()) {
+    //                 $data = $response->json();
+    //                 // Log::info($data);
+    //                 if (isset($data['documents'])) {
+    //                     Log::info($data['documents']);
+
+    //                     $documents = $data['documents'];
+    //                 } else {
+    //                     Log::warning("No documents found for cadastral number: $number");
+    //                     $documents = [];
+    //                 }
+
+
+    //                 $results[] = [
+    //                     'cad_number' => $data['cad_number'] ?? $number,
+    //                     'region' => $data['region'] ?? 'Unknown',
+    //                     'district' => $data['district'] ?? 'Unknown',
+    //                     'address' => $data['address'] ?? 'Unknown',
+    //                     'land_area' => ($data['land_area'] ?? '0') . ' m²',
+    //                     'bans' => $data['bans'] ?? [],
+    //                     'documents' => $data['documents'] ?? [],
+    //                     'tipText' => $data['tipText'] ?? 'Unknown',
+    //                     'vidText' => $data['vidText'] ?? 'Unknown',
+    //                     'error' => null,
+    //                 ];
+    //             } else {
+    //                 // Handle unsuccessful HTTP responses
+    //                 $results[] = [
+    //                     'cad_number' => $number,
+    //                     'error' => "Failed to fetch data for cadastral number: $number (HTTP {$response->status()})",
+    //                 ];
+    //             }
+    //         } catch (\Exception $e) {
+    //             // Log and handle exceptions
+    //             \Log::error("Error fetching data for cadastral number $number: " . $e->getMessage());
+    //             $results[] = [
+    //                 'cad_number' => $number,
+    //                 'error' => "An error occurred: " . $e->getMessage(),
+    //             ];
+    //         }
+    //     }
+
+    //     return view('pages.aktiv.kadastr_results', ['results' => $results]);
+    // }
 }

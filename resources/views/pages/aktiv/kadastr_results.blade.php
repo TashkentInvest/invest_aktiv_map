@@ -22,8 +22,8 @@
                 <td>{{ $result['district'] ?? 'Ma\'lumot yo\'q' }}</td>
                 <td>{{ $result['address'] ?? 'Ma\'lumot yo\'q' }}</td>
                 <td>{{ $result['land_area'] ?? 'Ma\'lumot yo\'q' }} m²</td>
-                <td>{{ $result['tipText'] ?? 'Ma\'lumot yo\'q' }} m²</td>
-                <td>{{ $result['vidText'] ?? 'Ma\'lumot yo\'q' }} m²</td>
+                <td>{{ $result['tipText'] ?? 'Ma\'lumot yo\'q' }}</td>
+                <td>{{ $result['vidText'] ?? 'Ma\'lumot yo\'q' }}</td>
                 <td>
                     @if(isset($result['documents']) && is_array($result['documents']) && count($result['documents']) > 0)
                     {{-- @dump($result['documents']) --}}
