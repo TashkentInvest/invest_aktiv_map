@@ -49,6 +49,9 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
+
+                @include('inc.__address')
+                
                 <div class="mb-3">
                     <label for="location">Мўлжал</label>
                     <input class="form-control" type="text" name="location" id="location" value="{{ old('location') }}">
@@ -183,7 +186,7 @@
                 </script>
                 
 
-                @include('inc.__address')
+                
             </div>
             <!-- Right Column -->
             <div class="col-md-6">

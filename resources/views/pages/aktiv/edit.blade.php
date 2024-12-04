@@ -30,6 +30,8 @@
                     @enderror
                 </div>
 
+                @include('inc.__address')
+
                 <div class="mb-3">
                     <label for="location">Мўлжал</label>
                     <input class="form-control" type="text" name="location" id="location"
@@ -195,7 +197,7 @@
                 </script>
                 
                 <!-- Include Address Partial -->
-                @include('inc.__address')
+                {{-- @include('inc.__address') --}}
 
             </div>
             <!-- Right Column -->
