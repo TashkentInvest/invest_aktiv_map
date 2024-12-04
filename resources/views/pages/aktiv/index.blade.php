@@ -20,6 +20,7 @@
             <table class="table table-hover table-bordered align-middle">
                 <thead class="table-primary">
                     <tr>
+                        <th scope="col"><i class="fas fa-user"></i> №</th>
                         <th scope="col"><i class="fas fa-user"></i> Фойдаланувчи</th>
                         <th scope="col" width="50"><i class="fas fa-building"></i> Объект номи</th>
                         <th scope="col"><i class="fas fa-balance-scale"></i> Балансда сақловчи</th>
@@ -32,6 +33,9 @@
                 <tbody>
                     @foreach ($aktivs as $aktiv)
                         <tr>
+                            <td class="fw-bold">
+                                {{ $aktiv->id ?? 'No Name' }}<br>
+                            </td>
                             <td class="fw-bold">
                                 {{ $aktiv->user->name ?? 'No Name' }}<br>
                                 <small class="text-muted">{{ $aktiv->user->email ?? 'No Email' }}</small>
