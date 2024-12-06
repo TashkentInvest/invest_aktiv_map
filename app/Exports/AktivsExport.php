@@ -14,6 +14,7 @@ class AktivsExport implements FromCollection, WithHeadings
             return [
                 // 'id' => $aktiv->id,
                 'object_name' => $aktiv->object_name,
+                'building_type' => $aktiv->building_type,
                 'balance_keeper' => $aktiv->balance_keeper,
                 'location' => $aktiv->location,
                 'land_area' => $aktiv->land_area,
@@ -25,7 +26,7 @@ class AktivsExport implements FromCollection, WithHeadings
                 'geolokatsiya' => $aktiv->geolokatsiya,
                 'latitude' => $aktiv->latitude,
                 'longitude' => $aktiv->longitude,
-                'kadastr_raqami' => $aktiv->kadastr_raqami,
+                'kadastr_raqami' => $aktiv->kadastr_raqami ?? '',
                 'user_id' => $aktiv->user->email,
                 'district_name' => $aktiv->street->district->name_uz ?? '',  // New district name column
                 'street_id' => $aktiv->street->name ?? '',
@@ -41,6 +42,7 @@ class AktivsExport implements FromCollection, WithHeadings
     {
         return [
             'Object Name',
+            'Bino Turi',
             'Balance Keeper',
             'Location',
             'Land Area',
