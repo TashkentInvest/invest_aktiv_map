@@ -278,7 +278,7 @@
         <div class="navbar-wrapper">
             <div class="m-header">
                 <a href="{{ route('aktivs.index') }}" class="b-brand text-primary">
-                    <img src="{{ asset('assets/projects-map/logo.png') }}" class="img-fluid logo-lg custom_logo"
+                    <img src="{{ asset('assets/projects-map/images/logo.png') }}" class="img-fluid logo-lg custom_logo"
                         alt="logo" />
                 </a>
             </div>
