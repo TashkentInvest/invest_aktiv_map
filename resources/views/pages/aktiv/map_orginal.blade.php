@@ -607,11 +607,8 @@
                     <td>${markerData.user_email || 'N/A'}</td>
                 </tr>
             </table>
-            <div id="qr-code-container">
-                <img src="${qrCodeUrl}" alt="QR Code" type="image/svg+xml" />
-                <a href="${qrCodeUrl}" download="qr_code.svg">QR Kodni yuklab olish</a>
-            </div>
-            <a target="_blank" href="${markerData.lot_link || '#'}" class="btn-link">Lotni ko'rish</a>
+        
+            <a target="_blank" href="${markerData.lot_link || '#'}" class="btn-link">Aktivni ko'rish</a>
         </div>
     `;
         }
