@@ -10,7 +10,7 @@
                     <tr>
                         <th scope="col">Туман ID</th>
                         <th scope="col">Туман номи</th>
-                        <th scope="col">Туманлар сони</th>
+                        <th scope="col">Активлар сони</th>
                         <th scope="col">Ҳаракатлар</th>
                     </tr>
                 </thead>
