@@ -570,7 +570,7 @@ class AktivController extends Controller
         } else {
             // Other users should not see aktivs created by the Super Admin (user_id = 1)
             $aktivs = Aktiv::with(['files', 'user'])
-                ->where('user_id', '!=', 1)  // Exclude records created by the Super Admin
+                // ->where('user_id', '!=', 1)  // Exclude records created by the Super Admin
                 ->get();
         }
 
