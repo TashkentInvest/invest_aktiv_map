@@ -96,7 +96,7 @@
                                     <a href="{{ asset('storage/' . $file->path) }}" class="glightbox"
                                         data-gallery="aktiv-gallery" data-title="{{ $aktiv->object_name }}"
                                         data-description="{{ $aktiv->additional_info }}" style="height: 300px !important;">
-                                        <img style="height: 100vh !important" src="{{ asset('storage/' . $file->path) }}" alt="Image">
+                                        <img style="height: 100% !important" src="{{ asset('storage/' . $file->path) }}" alt="Image">
                                     </a>
                                 @endif
                             </div>
