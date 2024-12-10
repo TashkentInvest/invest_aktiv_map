@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Активлар сони: {{ $aktivs->total() ?? '' }}
 
-            @if (auth()->user()->roles[0]->name == 'Super Admin')
+            @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager'  )
                 | Yer: {{ $yerCount ?? '' }} | Noturar Bino: {{ $noturarBinoCount ?? '' }} | Turar Bino:
                 {{ $turarBinoCount ?? '' }}
             @endif
