@@ -5,7 +5,7 @@
         <h1>Активлар сони: {{ $aktivs->total() ?? '' }}
 
             @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager'  )
-                ( Ер: {{ $yerCount ?? '' }} | Нотурар Бино: {{ $noturarBinoCount ?? '' }} | Турар Бино:
+                (Ер: {{ $yerCount ?? '' }} | Нотурар Бино: {{ $noturarBinoCount ?? '' }} | Турар Бино:
                 {{ $turarBinoCount ?? '' }})
             @endif
         </h1>
