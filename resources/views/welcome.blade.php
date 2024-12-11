@@ -129,11 +129,11 @@
 </head>
 <body>
     <!-- Video Section -->
-    <div class="video-container">
+    {{-- <div class="video-container">
         <a href="https://t.me/az_etc" target="_blank">
             <img src="{{ asset('assets/reklama/reklamaTeamdev.gif') }}" alt="Teamdev GIF" />
         </a>
-    </div>
+    </div> --}}
     <div class="full-height">
         <div class="content">
              <h3 class="panel_site_title">

@@ -14,11 +14,11 @@
                     <i class="ph-duotone ph-gauge"></i>
                 </li>
                 @if (auth()->user()->roles[0]->name == 'Super Admin')
-                    <li class="pc-item">
+                    {{-- <li class="pc-item">
                         <a class="pc-link" href="{{ route('aktivs.kadastr_index') }}">
                             Кадастр
                         </a>
-                    </li>
+                    </li> --}}
 
                     <li class="pc-item">
                         <a class="pc-link" href="{{ route('userIndex') }}">
