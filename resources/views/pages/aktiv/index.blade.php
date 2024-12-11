@@ -2,13 +2,13 @@
 
 @section('content')
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Активлар сони: {{ $aktivs->total() ?? '' }}
+        <h2>Активлар сони: {{ $aktivs->total() ?? '' }}
 
             @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager'  )
                 (Ер: {{ $yerCount ?? '' }} | Нотурар Бино: {{ $noturarBinoCount ?? '' }} | Турар Бино:
                 {{ $turarBinoCount ?? '' }})
             @endif
-        </h1>
+        </h2>
 
         <a href="{{ route('aktivs.create') }}" class="btn btn-primary">
             <i class="fas fa-plus"></i> Янги актив яратиш
