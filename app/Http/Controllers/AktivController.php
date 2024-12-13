@@ -346,8 +346,8 @@ class AktivController extends Controller
             'longitude'        => 'required|numeric',
             'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'required',
-            'sub_street_id'    => 'required',
-            'street_id'    => 'required',
+            // 'sub_street_id'    => 'required',
+            // 'street_id'    => 'required',
 
             'user_id'          => 'nullable',
             'building_type' => 'nullable|in:yer,TurarBino,NoturarBino',

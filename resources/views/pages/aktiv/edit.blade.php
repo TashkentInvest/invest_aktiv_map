@@ -30,7 +30,7 @@
                     @enderror
                 </div>
 
-                @include('inc.__address')
+                {{-- @include('inc.__address') --}}
 
                 <div class="mb-3">
                     <label for="location">Мўлжал</label>
