@@ -321,6 +321,64 @@
                         </tbody>
                     </table>
                 </div>
+
+                <ul class="pc-navbar">
+                    <li class="pc-item pc-caption"><label>Marker Types</label></li>
+                    <li class="pc-item">
+                        <div class="legend-item" style="display: flex; align-items: center; gap: 8px;">
+                            <!-- Marker Icon -->
+                            <span 
+                                class="legend-icon" 
+                                style="
+                                    display: inline-block; 
+                                    width: 12px; 
+                                    height: 12px; 
+                                    background-color: #FF0000; 
+                                    border-radius: 50%;
+                                    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+                                "
+                                title="Yer"
+                            ></span>
+                            <!-- Marker Text -->
+                            <span class="legend-text" style="font-size: 14px; color: #333;">Yer (Red Marker)</span>
+                        </div>
+                    </li>
+                    <li class="pc-item">
+                        <div class="legend-item" style="display: flex; align-items: center; gap: 8px;">
+                            <span 
+                                class="legend-icon" 
+                                style="
+                                    display: inline-block; 
+                                    width: 12px; 
+                                    height: 12px; 
+                                    background-color: #FFFF00; 
+                                    border-radius: 50%;
+                                    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+                                "
+                                title="TurarBino"
+                            ></span>
+                            <span class="legend-text" style="font-size: 14px; color: #333;">TurarBino (Yellow Marker)</span>
+                        </div>
+                    </li>
+                    <li class="pc-item">
+                        <div class="legend-item" style="display: flex; align-items: center; gap: 8px;">
+                            <span 
+                                class="legend-icon" 
+                                style="
+                                    display: inline-block; 
+                                    width: 12px; 
+                                    height: 12px; 
+                                    background-color: #00FF00; 
+                                    border-radius: 50%;
+                                    box-shadow: 0 0 3px rgba(0,0,0,0.3);
+                                "
+                                title="NoturarBino"
+                            ></span>
+                            <span class="legend-text" style="font-size: 14px; color: #333;">NoturarBino (Green Marker)</span>
+                        </div>
+                    </li>
+                </ul>
+                
             </div>
         </div>
     </nav>
@@ -357,6 +415,8 @@
                         </select>
                     </li>
                 </ul>
+
+                
             </div>
         </div>
     </header>
@@ -488,11 +548,37 @@
                             };
                             const title = markerData.property_name || 'No Title';
 
+
+                            // Determine icon color based on building_type
+                            let iconUrl;
+                            console.log(markerData.building_type);
+                            if (markerData.building_type == 'yer') {
+                                // Red icon
+                                iconUrl = 'http://maps.google.com/mapfiles/ms/icons/red-dot.png';
+                            } else if (markerData.building_type == 'TurarBino') {
+                                // Yellow icon
+                                iconUrl = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
+                            } else if (markerData.building_type == 'NoturarBino') {
+                                // Green icon
+                                iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+                            } else {
+                                // Default (blue)
+                                iconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+                            }
+
+
                             const marker = new google.maps.Marker({
                                 position: position,
                                 map: map,
-                                title: title
+                                title: title,
+                                icon: iconUrl
                             });
+
+                            // const marker = new google.maps.Marker({
+                            //     position: position,
+                            //     map: map,
+                            //     title: title
+                            // });
 
                             marker.addListener('click', function() {
                                 const sidebar = document.getElementById('info-sidebar');
@@ -590,14 +676,14 @@
                     <td>${markerData.land_area || 'N/A'}</td>
                 </tr>
                 ${priceUZS > 0 ? `
-                    <tr>
-                        <th class="sidebar_key">Boshlang'ich narxi</th>
-                        <td id="price-td">${lotPriceFormatted}</td>
-                    </tr>
-                    <tr>
-                        <th class="sidebar_key">1 sotix uchun narx</th>
-                        <td>${lotPricePerSotixFormatted}</td>
-                    </tr>` : ''}
+                            <tr>
+                                <th class="sidebar_key">Boshlang'ich narxi</th>
+                                <td id="price-td">${lotPriceFormatted}</td>
+                            </tr>
+                            <tr>
+                                <th class="sidebar_key">1 sotix uchun narx</th>
+                                <td>${lotPricePerSotixFormatted}</td>
+                            </tr>` : ''}
                 <tr>
                     <th class="sidebar_key">Yaratilgan foydalanuvchi</th>
                     <td>${markerData.user_name || 'N/A'}</td>

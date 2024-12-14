@@ -651,6 +651,8 @@ class AktivController extends Controller
                 'address' => $aktiv->location,
                 'user_name' => $aktiv->user ? $aktiv->user->name : 'N/A',
                 'user_email' => $aktiv->user ? $aktiv->user->email : 'N/A',
+                'building_type' => $aktiv->building_type // Include building_type
+
             ];
         });
 

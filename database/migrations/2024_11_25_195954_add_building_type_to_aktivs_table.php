@@ -17,7 +17,7 @@ class AddBuildingTypeToAktivsTable extends Migration
             $table->enum('building_type', ['yer', 'TurarBino', 'NoturarBino'])->nullable();
         });
     }
-
+    //if building_type yer
     /**
      * Reverse the migrations.
      *
