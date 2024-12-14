@@ -368,7 +368,7 @@
                                     display: inline-block; 
                                     width: 12px; 
                                     height: 12px; 
-                                    background-color: #00FF00; 
+                                    background-color: #1a81bd; 
                                     border-radius: 50%;
                                     box-shadow: 0 0 3px rgba(0,0,0,0.3);
                                 "
@@ -559,11 +559,11 @@
                                 // Yellow icon
                                 iconUrl = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
                             } else if (markerData.building_type == 'NoturarBino') {
-                                // Green icon
-                                iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
-                            } else {
-                                // Default (blue)
                                 iconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
+                                
+                            } else {
+                                iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
+
                             }
 
 
