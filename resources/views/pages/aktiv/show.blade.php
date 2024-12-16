@@ -303,6 +303,11 @@
                 width: 50%;
                 /* Show 2 slides per view on smaller screens */
             }
+
+            .card-img-top {
+            height: auto !important;
+            object-fit: cover;
+        }
         }
 
         @media (max-width: 576px) {
