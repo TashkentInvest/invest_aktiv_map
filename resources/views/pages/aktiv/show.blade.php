@@ -96,7 +96,8 @@
                                     <a href="{{ asset('storage/' . $file->path) }}" class="glightbox"
                                         data-gallery="aktiv-gallery" data-title="{{ $aktiv->object_name }}"
                                         data-description="{{ $aktiv->additional_info }}" style="height: 500px !important;">
-                                        <img style="height: 100% !important" src="{{ asset('storage/' . $file->path) }}" alt="Image">
+                                        <img style="height: 100% !important" src="{{ asset('storage/' . $file->path) }}"
+                                            alt="Image">
                                     </a>
                                 @endif
                             </div>
@@ -124,7 +125,7 @@
             @else
                 <p>Кадастр файл мавжуд эмас (Файл отсутствует).</p>
             @endif
-    
+
             @if ($aktiv->hokim_qarori_pdf)
                 <p>
                     <strong>Ҳоким қарори файл:</strong>
@@ -133,7 +134,7 @@
             @else
                 <p>Ҳоким қарори файл мавжуд эмас (Файл отсутствует).</p>
             @endif
-    
+
             @if ($aktiv->transfer_basis_pdf)
                 <p>
                     <strong>Трансфер асоси файл:</strong>
@@ -144,75 +145,83 @@
             @endif
         </div>
     </div>
-    
 
-  {{-- Comments Section --}}
-<div class="comments mt-4">
-    <h3 class="text-primary">Comments</h3>
 
-    {{-- Display comments --}}
-    <div class="comments-container">
-        @foreach ($aktiv->comments as $comment)
-            <div class="comment-item mb-3 {{ $comment->user_id === auth()->id() ? 'my-comment' : '' }}">
-                <div class="d-flex justify-content-between align-items-center">
-                    <strong class="comment-author">{{ $comment->user->name }}</strong>
-                    <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+    {{-- Comments Section --}}
+    <div class="comments mt-4">
+        <h3 class="text-primary">Comments</h3>
+
+        {{-- Display comments --}}
+        <div class="comments-container">
+            @foreach ($aktiv->comments as $comment)
+                <div class="comment-item mb-3 {{ $comment->user_id === auth()->id() ? 'my-comment' : '' }}">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <strong class="comment-author">{{ $comment->user->name }}</strong>
+                        <small class="text-muted">{{ $comment->created_at->diffForHumans() }}</small>
+                    </div>
+                    <div class="comment-content bg-light p-3 rounded mt-2">
+                        <p>{{ $comment->content }}</p>
+                    </div>
                 </div>
-                <div class="comment-content bg-light p-3 rounded mt-2">
-                    <p>{{ $comment->content }}</p>
+            @endforeach
+        </div>
+
+        {{-- Add comment --}}
+        @auth
+            <form action="{{ route('comments.store', $aktiv->id) }}" method="POST" class="mt-4">
+                @csrf
+                <div class="form-group">
+                    <label for="content">Add Comment</label>
+                    <textarea id="content" name="content" class="form-control" rows="3" placeholder="Write your comment..."
+                        required></textarea>
                 </div>
-            </div>
-        @endforeach
+                <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
+            </form>
+        @endauth
     </div>
 
-    {{-- Add comment --}}
-    @auth
-    <form action="{{ route('comments.store', $aktiv->id) }}" method="POST" class="mt-4">
-        @csrf
-        <div class="form-group">
-            <label for="content">Add Comment</label>
-            <textarea id="content" name="content" class="form-control" rows="3" placeholder="Write your comment..." required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary mt-2">Post Comment</button>
-    </form>
-    @endauth
-</div>
+    {{-- Add some styling --}}
+    <style>
+        .comments-container {
+            max-height: 400px;
+            overflow-y: auto;
+        }
 
-{{-- Add some styling --}}
-<style>
-    .comments-container {
-        max-height: 400px;
-        overflow-y: auto;
-    }
-    .comment-item {
-        padding: 10px;
-        border-radius: 5px;
-        margin-bottom: 10px;
-        border: 1px solid #ddd;
-    }
-    .comment-item.my-comment {
-        background-color: #f1f8ff;
-    }
-    .comment-author {
-        font-weight: bold;
-        color: #007bff;
-    }
-    .comment-content {
-        background-color: #f9f9f9;
-        padding: 10px;
-        border-radius: 5px;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    }
-    .comment-content p {
-        margin: 0;
-    }
-    .comment-item .text-muted {
-        font-size: 0.85rem;
-    }
-    .comment-item .comment-author {
-        color: #333;
-    }
-</style>
+        .comment-item {
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            border: 1px solid #ddd;
+        }
+
+        .comment-item.my-comment {
+            background-color: #f1f8ff;
+        }
+
+        .comment-author {
+            font-weight: bold;
+            color: #007bff;
+        }
+
+        .comment-content {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .comment-content p {
+            margin: 0;
+        }
+
+        .comment-item .text-muted {
+            font-size: 0.85rem;
+        }
+
+        .comment-item .comment-author {
+            color: #333;
+        }
+    </style>
 
 
     <!-- Map Section -->
@@ -305,9 +314,9 @@
             }
 
             .card-img-top {
-            height: auto !important;
-            object-fit: cover;
-        }
+                height: auto !important;
+                object-fit: cover;
+            }
         }
 
         @media (max-width: 576px) {
