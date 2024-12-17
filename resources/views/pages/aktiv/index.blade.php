@@ -66,12 +66,12 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
 
-                                    @if (auth()->user()->roles[0]->name != 'Manager')
+                                    @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')
                                         <a href="{{ route('aktivs.edit', $aktiv) }}" class="btn btn-warning btn-sm"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Таҳрирлаш">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        @if (auth()->user()->roles[0]->name == 'Super Admin')
+                                        
                                             <form action="{{ route('aktivs.destroy', $aktiv) }}" method="POST"
                                                 style="display:inline-block;">
                                                 @csrf
@@ -82,7 +82,6 @@
                                                     <i class="fas fa-trash-alt"></i>
                                                 </button>
                                             </form>
-                                        @endif
                                     @endif
                                 </div>
                             </td>
