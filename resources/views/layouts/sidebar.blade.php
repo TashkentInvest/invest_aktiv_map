@@ -81,7 +81,7 @@
                 </li>
 
 
-                @if (auth()->user()->roles[0]->name == 'Super Admin')
+                @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')
                     <li class="pc-item">
                         <form action="{{ route('aktivs.export') }}" method="POST">
                             @csrf
@@ -90,6 +90,7 @@
                     </li>
 
 
+                    @if(auth()->user()->roles[0]->name == 'Super Admin')
                     <li class="pc-item">
                         <form action="{{ route('userUpdateNames') }}" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -101,6 +102,7 @@
                             <button type="submit" class="btn btn-primary">Update User Names</button>
                         </form>
                     </li>
+                    @endif
 
                    
                 @endif

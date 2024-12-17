@@ -3,6 +3,7 @@
 namespace App\Exports;
 
 use App\Models\Aktiv;
+use Illuminate\Support\Facades\Auth;
 use Maatwebsite\Excel\Concerns\FromCollection;
 use Maatwebsite\Excel\Concerns\WithHeadings;
 
@@ -10,9 +11,27 @@ class AktivsExport implements FromCollection, WithHeadings
 {
     public function collection()
     {
-        return Aktiv::with('files')->get()->map(function ($aktiv) {
+        // Get the authenticated user ID
+        $userId = Auth::id();
+        $userDistrictId = Auth::user()->district_id; // Assuming the user has a `district_id` property
+
+        // Apply the logic for filtering aktivs based on user role
+        if ($userId === 1) {
+            // Super Admin: Get all aktivs
+            $aktivs = Aktiv::with(['files', 'street.district', 'substreet'])->get();
+        } else {
+            // Regular users: Filter aktivs by district and exclude those created by Super Admin
+            $aktivs = Aktiv::with(['files', 'street.district', 'substreet'])
+                ->join('streets', 'aktivs.street_id', '=', 'streets.id') // Ensure street is joined correctly
+                ->where('streets.district_id', $userDistrictId) // Filter by user's district
+                ->where('user_id', '!=', 1) // Exclude aktivs created by Super Admin
+                ->select('aktivs.*') // Avoid conflicts with joined tables
+                ->get();
+        }
+
+        // Map the aktivs to the desired format for export
+        return $aktivs->map(function ($aktiv) {
             return [
-                // 'id' => $aktiv->id,
                 'object_name' => $aktiv->object_name,
                 'building_type' => $aktiv->building_type,
                 'balance_keeper' => $aktiv->balance_keeper,
@@ -27,13 +46,11 @@ class AktivsExport implements FromCollection, WithHeadings
                 'latitude' => $aktiv->latitude,
                 'longitude' => $aktiv->longitude,
                 'kadastr_raqami' => $aktiv->kadastr_raqami ?? '',
-                'user_id' => $aktiv->user->email,
-                'district_name' => $aktiv->street->district->name_uz ?? '',  // New district name column
-                'street_id' => $aktiv->street->name ?? '',
-                'sub_street_id' => $aktiv->substreet->name ?? '',
-                'id' => "https://aktiv.toshkentinvest.uz/aktivs/" .$aktiv->id,
-
-                // Add other fields as needed
+                'user_id' => $aktiv->user->email ?? '',
+                'district_name' => $aktiv->street->district->name_uz ?? '', // District name
+                'street_id' => $aktiv->street->name ?? '', // Street name
+                'sub_street_id' => $aktiv->substreet->name ?? '', // Substreet name
+                'id' => "https://aktiv.toshkentinvest.uz/aktivs/" . $aktiv->id,
             ];
         });
     }
@@ -56,12 +73,10 @@ class AktivsExport implements FromCollection, WithHeadings
             'Longitude',
             'Kadastr Raqami',
             'User ID',
-            'Tuman', 
+            'Tuman',
             'MFY',
             'Kocha',
             'ID',
-
-            // Match the order of fields above
         ];
     }
 }
