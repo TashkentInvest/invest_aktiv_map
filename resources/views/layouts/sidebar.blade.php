@@ -90,7 +90,7 @@
                     </li>
 
 
-                    @if(auth()->user()->roles[0]->name == 'Super Admin')
+                    {{-- @if(auth()->user()->roles[0]->name == 'Super Admin')
                     <li class="pc-item">
                         <form action="{{ route('userUpdateNames') }}" method="POST" enctype="multipart/form-data">
                             @csrf
@@ -102,7 +102,7 @@
                             <button type="submit" class="btn btn-primary">Update User Names</button>
                         </form>
                     </li>
-                    @endif
+                    @endif --}}
 
                    
                 @endif

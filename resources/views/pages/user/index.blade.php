@@ -63,7 +63,7 @@
                                             <span class="badge text-secondary">{{ $permission }} </span>
                                         @endforeach
                                     </td> --}}
-                                    <td class="text-center">
+                                    {{-- <td class="text-center">
                                         @can('user.delete')
                                             <form action="{{ route('userDestroy', $user->id) }}" method="post">
                                                 @csrf
@@ -81,7 +81,7 @@
                                                 </div>
                                             </form>
                                         @endcan
-                                    </td>
+                                    </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>

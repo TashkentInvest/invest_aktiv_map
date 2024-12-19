@@ -4,7 +4,7 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <h2>Активлар сони: {{ $aktivs->total() ?? '' }}
 
-            @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager'  )
+            @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')
                 (Ер: {{ $yerCount ?? '' }} | Нотурар Бино: {{ $noturarBinoCount ?? '' }} | Турар Бино:
                 {{ $turarBinoCount ?? '' }})
             @endif
@@ -15,6 +15,142 @@
         </a>
     </div>
 
+    <div class="btn-group float-right" role="group" aria-label="Filter">
+        <button type="button" class="btn btn-sm btn-success waves-effect waves-light" data-bs-toggle="modal"
+            data-bs-target="#exampleModal_filter">
+            <i class="fas fa-filter"></i> @lang('global.filter')
+        </button>
+        <form action="{{ route('aktivs.index') }}" method="get">
+            <div class="modal fade" id="exampleModal_filter" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">@lang('global.filter')</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Общая информация -->
+                            <h6 class="text-primary mb-3">Общая информация</h6>
+                            @foreach ([
+            'object_name' => 'Объект номи (Название объекта)',
+            'balance_keeper' => 'Балансда сақловчи (Балансодержатель)',
+            'location' => 'Мўлжал (Местоположение)',
+        ] as $field => $label)
+                                <div class="form-group row align-items-center my-2">
+                                    <div class="col-3">
+                                        <label for="{{ $field }}">{{ $label }}</label>
+                                    </div>
+                                    <div class="col-2">
+                                        <select class="form-control form-control-sm" name="{{ $field }}_operator">
+                                            <option value="like"
+                                                {{ request()->input("{$field}_operator") == 'like' ? 'selected' : '' }}>
+                                                O‘xshash</option>
+                                            <option value="="
+                                                {{ request()->input("{$field}_operator") == '=' ? 'selected' : '' }}>=
+                                            </option>
+                                            <option value=">"
+                                                {{ request()->input("{$field}_operator") == '>' ? 'selected' : '' }}>&gt;
+                                            </option>
+                                            <option value="<"
+                                                {{ request()->input("{$field}_operator") == '<' ? 'selected' : '' }}>&lt;
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="{{ $field }}" id="{{ $field }}"
+                                            value="{{ request()->input($field) }}">
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            <!-- Расположение -->
+                            <h6 class="text-primary my-3">Расположение</h6>
+                            @foreach ([
+            'sub_street_id' => 'Кўча номи (Sub Street Name)',
+            'latitude' => 'Кенглик (Latitude)',
+            'longitude' => 'Узунлик (Longitude)',
+        ] as $field => $label)
+                                <div class="form-group row align-items-center my-2">
+                                    <div class="col-3">
+                                        <label for="{{ $field }}">{{ $label }}</label>
+                                    </div>
+                                    <div class="col-2">
+                                        <select class="form-control form-control-sm" name="{{ $field }}_operator">
+                                            <option value="like"
+                                                {{ request()->input("{$field}_operator") == 'like' ? 'selected' : '' }}>
+                                                O‘xshash</option>
+                                            <option value="="
+                                                {{ request()->input("{$field}_operator") == '=' ? 'selected' : '' }}>=
+                                            </option>
+                                            <option value=">"
+                                                {{ request()->input("{$field}_operator") == '>' ? 'selected' : '' }}>&gt;
+                                            </option>
+                                            <option value="<"
+                                                {{ request()->input("{$field}_operator") == '<' ? 'selected' : '' }}>&lt;
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="{{ $field }}" id="{{ $field }}"
+                                            value="{{ request()->input($field) }}">
+                                    </div>
+                                </div>
+                            @endforeach
+
+                            <!-- Техническая информация -->
+                            <h6 class="text-primary my-3">Техническая информация</h6>
+                            @foreach ([
+            'land_area' => 'Ер майдони (Площадь земли) (кв.м)',
+            'building_area' => 'Бино майдони (Площадь здания) (кв.м)',
+            'gas' => 'Газ (Газ)',
+            'water' => 'Сув (Вода)',
+            'electricity' => 'Электр (Электричество)',
+            'additional_info' => 'Қўшимча маълумот (Дополнительная информация)',
+            'kadastr_raqami' => 'Кадастр рақами (Кадастровый номер)',
+        ] as $field => $label)
+                                <div class="form-group row align-items-center my-2">
+                                    <div class="col-3">
+                                        <label for="{{ $field }}">{{ $label }}</label>
+                                    </div>
+                                    <div class="col-2">
+                                        <select class="form-control form-control-sm" name="{{ $field }}_operator">
+                                            <option value="like"
+                                                {{ request()->input("{$field}_operator") == 'like' ? 'selected' : '' }}>
+                                                O‘xshash</option>
+                                            <option value="="
+                                                {{ request()->input("{$field}_operator") == '=' ? 'selected' : '' }}>=
+                                            </option>
+                                            <option value=">"
+                                                {{ request()->input("{$field}_operator") == '>' ? 'selected' : '' }}>&gt;
+                                            </option>
+                                            <option value="<"
+                                                {{ request()->input("{$field}_operator") == '<' ? 'selected' : '' }}>&lt;
+                                            </option>
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <input type="text" class="form-control form-control-sm"
+                                            name="{{ $field }}" id="{{ $field }}"
+                                            value="{{ request()->input($field) }}">
+                                    </div>
+                                </div>
+                            @endforeach
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="filter" class="btn btn-primary">@lang('global.filter')</button>
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">@lang('global.close')</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
     @if ($aktivs->count())
         <div class="table-responsive rounded shadow-sm">
             <table class="table table-hover table-bordered align-middle">
@@ -24,7 +160,8 @@
                         <th scope="col"><i class="fas fa-user"></i> Фойдаланувчи</th>
                         <th scope="col" width="50"><i class="fas fa-building"></i> Объект номи</th>
                         <th scope="col"><i class="fas fa-balance-scale"></i> Балансда сақловчи</th>
-                        <th scope="col" width="100" style="width: 100px"><i class="fas fa-map-marker-alt"></i> Мфй /
+                        <th scope="col" width="100" style="width: 100px"><i class="fas fa-map-marker-alt"></i> Мфй
+                            /
                             Коча</th>
                         <th scope="col"><i class="fas fa-calendar-alt"></i> Сана</th>
                         <th scope="col" class="text-center"><i class="fas fa-cogs"></i> Ҳаракатлар</th>
@@ -66,22 +203,23 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
 
-                                    @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')
+                                    @if (auth()->user()->roles[0]->name == 'Super Admin')
                                         <a href="{{ route('aktivs.edit', $aktiv) }}" class="btn btn-warning btn-sm"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Таҳрирлаш">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                        
-                                            <form action="{{ route('aktivs.destroy', $aktiv) }}" method="POST"
-                                                style="display:inline-block;">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button type="submit" class="btn btn-danger btn-sm"
-                                                    data-bs-toggle="tooltip" data-bs-placement="top" title="Ўчириш"
-                                                    onclick="return confirm('Сиз ростдан ҳам бу объектни ўчиришни истайсизми?');">
-                                                    <i class="fas fa-trash-alt"></i>
-                                                </button>
-                                            </form>
+                                    @endif
+                                    @if (auth()->user()->roles[0]->name == 'Manager')
+                                        <form action="{{ route('aktivs.destroy', $aktiv) }}" method="POST"
+                                            style="display:inline-block;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip"
+                                                data-bs-placement="top" title="Ўчириш"
+                                                onclick="return confirm('Сиз ростдан ҳам бу объектни ўчиришни истайсизми?');">
+                                                <i class="fas fa-trash-alt"></i>
+                                            </button>
+                                        </form>
                                     @endif
                                 </div>
                             </td>
