@@ -15,7 +15,7 @@
         </a>
     </div>
 
-    <div class="btn-group float-right" role="group" aria-label="Filter">
+    {{-- <div class="btn-group float-right" role="group" aria-label="Filter">
         <button type="button" class="btn btn-sm btn-success waves-effect waves-light" data-bs-toggle="modal"
             data-bs-target="#exampleModal_filter">
             <i class="fas fa-filter"></i> @lang('global.filter')
@@ -148,7 +148,7 @@
                 </div>
             </div>
         </form>
-    </div>
+    </div> --}}
 
 
     @if ($aktivs->count())
