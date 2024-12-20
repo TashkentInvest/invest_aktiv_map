@@ -151,6 +151,8 @@
     </div> --}}
 
 
+    
+
     @if ($aktivs->count())
         <div class="table-responsive rounded shadow-sm">
             <table class="table table-hover table-bordered align-middle">
@@ -203,12 +205,12 @@
                                         <i class="fas fa-eye"></i>
                                     </a>
 
-                                    @if (auth()->user()->roles[0]->name == 'Super Admin')
+                                    {{-- @if (auth()->user()->roles[0]->name == 'Super Admin') --}}
                                         <a href="{{ route('aktivs.edit', $aktiv) }}" class="btn btn-warning btn-sm"
                                             data-bs-toggle="tooltip" data-bs-placement="top" title="Таҳрирлаш">
                                             <i class="fas fa-edit"></i>
                                         </a>
-                                    @endif
+                                    {{-- @endif --}}
                                     @if (auth()->user()->roles[0]->name == 'Manager')
                                         <form action="{{ route('aktivs.destroy', $aktiv) }}" method="POST"
                                             style="display:inline-block;">
