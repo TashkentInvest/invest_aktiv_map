@@ -672,7 +672,7 @@
                     <td>${markerData.address || 'N/A'}</td>
                 </tr>
                 <tr>
-                    <th class="sidebar_key">Yer maydoni (ga)</th>
+                    <th class="sidebar_key">Yer maydoni (kv)</th>
                     <td>${markerData.land_area || 'N/A'}</td>
                 </tr>
                 ${priceUZS > 0 ? `
