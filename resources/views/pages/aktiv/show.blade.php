@@ -83,7 +83,7 @@
         <div class="card-body">
             @if ($aktiv->files->count())
                 <!-- Swiper Container -->
-                <div class="swiper-container">
+                <div class="swiper-container" style="overflow: hidden !important">
                     <div class="swiper-wrapper">
                         @foreach ($aktiv->files as $file)
                             <div class="swiper-slide">
@@ -96,8 +96,7 @@
                                     <a href="{{ asset('storage/' . $file->path) }}" class="glightbox"
                                         data-gallery="aktiv-gallery" data-title="{{ $aktiv->object_name }}"
                                         data-description="{{ $aktiv->additional_info }}">
-                                        <img src="{{ asset('storage/' . $file->path) }}"
-                                            alt="Image">
+                                        <img src="{{ asset('storage/' . $file->path) }}" alt="Image">
                                     </a>
                                 @endif
                             </div>
