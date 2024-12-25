@@ -148,7 +148,7 @@ function updateSidebarContent(markerData, isInUSD, usdRate) {
                     <td id="price-td">${lotPriceFormatted}</td>
                 </tr>
                 <tr>
-                    <th class="sidebar_key">Yer maydoni (ga)</th>
+                    <th class="sidebar_key">Yer maydoni (kvm²)</th>
                     <td>${markerData.land_area || 'N/A'}</td>
                 </tr>
                  <tr>

@@ -560,7 +560,7 @@
                         @endif
                         <div class="dropdown-divider"></div>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST"
-                            style="display: none;">
+                            style="display: none;"> 
                             @csrf
                         </form>
                         <a class="dropdown-item text-danger" href="#" role="button"
