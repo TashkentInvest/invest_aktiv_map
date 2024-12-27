@@ -50,6 +50,9 @@ class AktivsExport implements FromCollection, WithHeadings
                 'district_name' => $aktiv->street->district->name_uz ?? '', // District name
                 'street_id' => $aktiv->street->name ?? '', // Street name
                 'sub_street_id' => $aktiv->substreet->name ?? '', // Substreet name
+                'kadastr_pdf_exists' => $aktiv->kadastr_pdf ? 1 : 0,
+                'hokim_qarori_pdf_exists' => $aktiv->hokim_qarori_pdf ? 1 : 0,
+                'transfer_basis_pdf_exists' => $aktiv->transfer_basis_pdf ? 1 : 0,
                 'id' => "https://aktiv.toshkentinvest.uz/aktivs/" . $aktiv->id,
             ];
         });
@@ -76,6 +79,9 @@ class AktivsExport implements FromCollection, WithHeadings
             'Tuman',
             'MFY',
             'Kocha',
+            'Kadastr PDF Exists',
+            'Hokim Qarori PDF Exists',
+            'Transfer Basis PDF Exists',
             'ID',
         ];
     }
