@@ -8,6 +8,12 @@
         <h5 class="card-title text-primary">Общая информация</h5>
         <div class="card-body">
 
+
+            <div class="mb-3">
+                {{ $aktiv->user->name ?? 'No Name' }}<br>
+                <small class="text-muted">{{ $aktiv->user->email ?? 'No Email' }}</small>
+            </div>
+
             <div class="mb-3">
                 <strong>Мулк Тури :</strong> {{ $aktiv->building_type ?? 'Мавжуд Эмас' }}
             </div>
