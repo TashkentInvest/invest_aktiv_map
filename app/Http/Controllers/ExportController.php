@@ -89,7 +89,7 @@ class ExportController extends Controller
         // Generate a map image using latitude and longitude
         if (!empty($aktiv->latitude) && !empty($aktiv->longitude)) {
             $mapImagePath = $this->generateMapImage($aktiv->latitude, $aktiv->longitude);
-            if (file_exists($mapImagePath)) {
+            if ($mapImagePath && file_exists($mapImagePath)) {
                 $slide1->createDrawingShape()
                     ->setName('Map')
                     ->setPath($mapImagePath)
@@ -144,12 +144,31 @@ class ExportController extends Controller
     private function generateMapImage($latitude, $longitude)
     {
         $apiKey = 'AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY'; // Replace with your API key
-        $mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$latitude},{$longitude}&zoom=14&size=400x300&maptype=roadmap&markers=color:red%7Clabel:%7C{$latitude},{$longitude}&key={$apiKey}";
+        $mapUrl = "https://maps.googleapis.com/maps/api/staticmap"
+            . "?center={$latitude},{$longitude}"
+            . "&zoom=14"
+            . "&size=400x300"
+            . "&maptype=roadmap"
+            . "&markers=color:red%7Clabel:%7C{$latitude},{$longitude}"
+            . "&key={$apiKey}";
     
-        // Generate a temporary map image
-        $mapImagePath = storage_path('app/public/map_' . uniqid() . '.png');
-        file_put_contents($mapImagePath, file_get_contents($mapUrl));
+        try {
+            // Fetch the map image
+            $response = file_get_contents($mapUrl);
     
-        return $mapImagePath;
+            if ($response === false) {
+                throw new \Exception('Failed to fetch map image');
+            }
+    
+            // Save the image locally
+            $mapImagePath = storage_path('app/public/map_' . uniqid() . '.png');
+            file_put_contents($mapImagePath, $response);
+    
+            return $mapImagePath;
+        } catch (\Exception $e) {
+            \Log::error('Error generating map image: ' . $e->getMessage());
+            return null; // Return null if map generation fails
+        }
     }
+    
 }
