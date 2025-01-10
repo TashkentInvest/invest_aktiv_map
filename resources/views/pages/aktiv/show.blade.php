@@ -185,6 +185,11 @@
         @endauth
     </div>
 
+
+    @if (auth()->user()->roles->first()->name == 'Super Admin')
+        <a href="{{ route('export.pptx_id', $aktiv->id) }}" class="btn btn-primary btn-sm mt-2">Export to PPTX</a>
+    @endif
+
     {{-- Add some styling --}}
     <style>
         .comments-container {

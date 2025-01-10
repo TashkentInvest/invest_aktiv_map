@@ -19,3 +19,12 @@ composer require guzzlehttp/guzzle
 2) tepadigi count lani ozini tumanidigla uchun bo;lishi kere  +++
 3) address lani edit qganda olding addressi chqshi kere
 working with ob
+
+
+
+## PPTX
+```
+composer require phpoffice/phppresentation
+
+php artisan make:controller ExportController
+```

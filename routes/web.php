@@ -37,6 +37,7 @@ use App\Http\Controllers\RuxsatnomaTuriController;
 use App\Http\Controllers\Blade\PermissionController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ExcelController;
+use App\Http\Controllers\ExportController;
 use App\Http\Controllers\FactPaymentController;
 use App\Http\Controllers\MonitoringController;
 use App\Http\Controllers\OrderAtkazController;
@@ -84,6 +85,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
 
 
     Route::post('/aktivs/export', [AktivController::class, 'export'])->name('aktivs.export');
+    
 
     Route::get('/kadastr', [AktivController::class, 'kadastr_index'])->name('aktivs.kadastr_index');
     Route::post('/aktivs/kadastr', [AktivController::class, 'kadastr'])->name('aktivs.kadastr');
@@ -509,6 +511,10 @@ Route::get('excel/index', [ExcelController::class, 'index'])->name('excel.excel_
 Route::get('excel/import-export', [ExcelController::class, 'index_imp_exp'])->name('excel.import-export');
 Route::post('excel/import', [ExcelController::class, 'import'])->name('excel.import');
 Route::get('excel/export', [ExcelController::class, 'export'])->name('excel.export');
+
+Route::get('/export-pptx', [ExportController::class, 'exportToPptx'])->name('export.pptx');
+Route::get('/export-pptx/{id}', [ExportController::class, 'exportToPptx_id'])->name('export.pptx_id');
+
 
 
 // custom routes
