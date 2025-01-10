@@ -60,11 +60,13 @@ class ExportController extends Controller
     
         // Add the image on the left (col-6)
         if ($aktiv->files->isNotEmpty()) {
-            $imagePath = storage_path('app/public/' . $aktiv->files->first()->path); // Take the first image
-            if (file_exists($imagePath)) {
+            // $imagePath = storage_path('app/public/' . $aktiv->files->first()->path); // Take the first image
+            $imageUrl = asset('storage/' . $aktiv->files->first()->path); // This assumes a symbolic link is created with php artisan storage:link
+
+            if (file_exists($imageUrl)) {
                 $slide1->createDrawingShape()
                     ->setName('Image')
-                    ->setPath($imagePath)
+                    ->setPath($imageUrl)
                     ->setWidth(400) // Half width of the slide
                     ->setHeight(300)
                     ->setOffsetX(50) // Left side
