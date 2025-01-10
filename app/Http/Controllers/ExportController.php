@@ -7,6 +7,8 @@ use PhpOffice\PhpPresentation\PhpPresentation;
 use PhpOffice\PhpPresentation\IOFactory;
 use PhpOffice\PhpPresentation\Style\Alignment;
 use PhpOffice\PhpPresentation\Style\Color;
+use Illuminate\Support\Facades\Storage;
+
 
 
 class ExportController extends Controller
@@ -45,17 +47,17 @@ class ExportController extends Controller
     {
         // Fetch the Aktiv record with associated files
         $aktiv = \App\Models\Aktiv::where('id', $id)->with('files')->first();
-
+    
         if (!$aktiv) {
             return response()->json(['error' => 'Aktiv not found'], 404);
         }
-
+    
         // Initialize a new PowerPoint presentation
         $ppt = new PhpPresentation();
-
+    
         // ===== SLIDE 1: General Information with Image =====
         $slide1 = $ppt->getActiveSlide();
-
+    
         // Add the image on the left (col-6)
         if ($aktiv->files->isNotEmpty()) {
             $imagePath = storage_path('app/public/' . $aktiv->files->first()->path); // Take the first image
@@ -69,7 +71,7 @@ class ExportController extends Controller
                     ->setOffsetY(100); // Centered vertically
             }
         }
-
+    
         // Add the text on the right (col-6)
         $details = $slide1->createRichTextShape()
             ->setHeight(300)
@@ -83,14 +85,28 @@ class ExportController extends Controller
         $details->createTextRun("Широта: " . $aktiv->latitude . "\n");
         $details->createTextRun("Долгота: " . $aktiv->longitude . "\n");
         $details->createTextRun("Кадастр рақами: " . $aktiv->kadastr_raqami . "\n");
-
+    
+        // Generate a map image using latitude and longitude
+        if (!empty($aktiv->latitude) && !empty($aktiv->longitude)) {
+            $mapImagePath = $this->generateMapImage($aktiv->latitude, $aktiv->longitude);
+            if (file_exists($mapImagePath)) {
+                $slide1->createDrawingShape()
+                    ->setName('Map')
+                    ->setPath($mapImagePath)
+                    ->setWidth(400)
+                    ->setHeight(300)
+                    ->setOffsetX(500) // Place next to text
+                    ->setOffsetY(450);
+            }
+        }
+    
         // ===== SLIDE 2+: Images with Text =====
         foreach ($aktiv->files as $index => $file) {
             // Skip the first file since it's already on Slide 1
             if ($index === 0) continue;
-
+    
             $slide = $ppt->createSlide();
-
+    
             $imagePath = storage_path('app/public/' . $file->path);
             if (file_exists($imagePath)) {
                 // Image on the left (col-6)
@@ -102,7 +118,7 @@ class ExportController extends Controller
                     ->setOffsetX(50)
                     ->setOffsetY(100);
             }
-
+    
             // Text on the right (col-6)
             $textBox = $slide->createRichTextShape()
                 ->setHeight(300)
@@ -114,14 +130,26 @@ class ExportController extends Controller
                 ->getFont()->setBold(true)->setSize(18)->setColor(new Color('FF000000'));
             $textBox->createTextRun("Локация: " . $aktiv->location . "\n");
         }
-
+    
         // ===== Save and Return the File =====
         $oWriterPPTX = IOFactory::createWriter($ppt, 'PowerPoint2007');
         $fileName = 'aktiv_' . $id . '.pptx';
-
+    
         $tempFile = tempnam(sys_get_temp_dir(), $fileName);
         $oWriterPPTX->save($tempFile);
-
+    
         return response()->download($tempFile, $fileName)->deleteFileAfterSend(true);
+    }
+    
+    private function generateMapImage($latitude, $longitude)
+    {
+        $apiKey = 'AIzaSyAAnUwWTguBMsDU8UrQ7Re-caVeYCmcHQY'; // Replace with your API key
+        $mapUrl = "https://maps.googleapis.com/maps/api/staticmap?center={$latitude},{$longitude}&zoom=14&size=400x300&maptype=roadmap&markers=color:red%7Clabel:%7C{$latitude},{$longitude}&key={$apiKey}";
+    
+        // Generate a temporary map image
+        $mapImagePath = storage_path('app/public/map_' . uniqid() . '.png');
+        file_put_contents($mapImagePath, file_get_contents($mapUrl));
+    
+        return $mapImagePath;
     }
 }
