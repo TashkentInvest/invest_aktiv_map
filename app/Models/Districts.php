@@ -54,6 +54,10 @@ class Districts extends Model
         return $this->hasMany(Street::class, 'district_id');
     }
 
+    public function substreet()
+    {
+        return $this->hasMany(SubStreet::class, 'district_id');
+    }
     // Define the relationship to Aktivs via Street
     public function aktives()
     {

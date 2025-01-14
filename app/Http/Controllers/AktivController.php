@@ -324,23 +324,23 @@ class AktivController extends Controller
     public function edit(Aktiv $aktiv)
     {
         $this->authorizeView($aktiv); // Check if the user can edit this Aktiv
-    
+
         try {
             // Eager load relationships
             $aktiv->load('subStreet.district.region');
-    
+
             // Log the Aktiv and related data for debugging
             \Log::info('Aktiv: ' . $aktiv->toJson());
             \Log::info('SubStreet: ' . optional($aktiv->subStreet)->toJson());
             \Log::info('District: ' . optional($aktiv->subStreet->district)->toJson());
             \Log::info('Region: ' . optional($aktiv->subStreet->district->region)->toJson());
-    
+
             // Get regions, districts, streets, and substreets
             $regions = Regions::get();
             $districts = optional($aktiv->subStreet->district->region)->districts ?? collect();
             $streets = optional($aktiv->subStreet->district)->streets ?? collect();
-            $substreets = optional($aktiv->subStreet->district)->substreets ?? collect();
-    
+            $substreets = optional($aktiv->subStreet->district)->subStreets ?? collect();
+
             return view('pages.aktiv.edit', compact('aktiv', 'regions', 'districts', 'streets', 'substreets'));
         } catch (\Exception $e) {
             // Log the error for debugging
@@ -348,7 +348,6 @@ class AktivController extends Controller
             return redirect()->back()->with('error', 'Error loading Aktiv data. Please try again.');
         }
     }
-    
 
     public function getDistricts(Request $request)
     {
@@ -370,7 +369,7 @@ class AktivController extends Controller
     {
         $districtId = $request->input('district_id');
         if ($districtId) {
-            $substreets = SubStreet::where('district_id', $districtId)->pluck('name', 'id');
+            $substreets = SubStreet::where('district_id', $districtId)->pluck('name', 'id')->toArray();
             return response()->json($substreets);
         }
         return response()->json([]);

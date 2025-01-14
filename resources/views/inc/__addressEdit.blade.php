@@ -4,9 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Address Form</title>
-    <!-- Include your CSS and other assets here -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/css/select2.min.css" rel="stylesheet" />
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7-beta.0/jquery.inputmask.min.css" rel="stylesheet" />
     <style>
         .select2-container {
             width: 100% !important;
@@ -43,64 +41,60 @@
             <h5>Манзилни озгартириш (Edit Address)</h5>
         </div>
         <div class="card-body">
-     
-                <div class="mb-3">
-                    <label for="region_id">Худуд</label>
-                    <select class="form-control region_id select2" name="region_id" id="region_id">
-                        <option value="">Худудни танланг</option>
-                        @foreach ($regions as $region)
-                            <option value="{{ $region->id }}" {{ $region->id == old('region_id', optional($aktiv->subStreet->district->region)->id) ? 'selected' : '' }}>
-                                {{ $region->name_uz }}
-                            </option>
-                        @endforeach
+            <div class="mb-3">
+                <label for="region_id">Худуд</label>
+                <select class="form-control region_id select2" name="region_id" id="region_id">
+                    <option value="">Худудни танланг</option>
+                    @foreach ($regions as $region)
+                        <option value="{{ $region->id }}" {{ $region->id == old('region_id', optional($aktiv->subStreet->district->region)->id) ? 'selected' : '' }}>
+                            {{ $region->name_uz }}
+                        </option>
+                    @endforeach
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="district_id">Район</label>
+                <select class="form-control district_id select2" name="district_id" id="district_id">
+                    <option value="">Туманни танланг</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label for="street_id" class="me-2">Мфй <span style="color: red;font-weight: bold;"> MAJBURIY</span></label>
+                <div class="d-flex align-items-end">
+                    <select class="form-control street_id select2" name="street_id" id="street_id" required>
+                        <option value="">Мфй ни танланг</option>
                     </select>
+                    <button type="button" class="btn btn-primary ms-2" id="add_street_btn" title="Мфй қошиш">+</button>
                 </div>
-                <div class="mb-3">
-                    <label for="district_id">Район</label>
-                    <select class="form-control district_id select2" name="district_id" id="district_id">
-                        <option value="">Туманни танланг</option>
+            </div>
+
+            <div class="mb-3">
+                <label for="substreet_id" class="me-2">Кўча <span style="color: red;font-weight: bold;"> MAJBURIY</span></label>
+                <div class="d-flex align-items-end">
+                    <select class="form-control sub_street_id select2" name="sub_street_id" id="substreet_id" required>
+                        <option value="">Кўчани танланг</option>
                     </select>
+                    <button type="button" class="btn btn-primary ms-2" id="add_substreet_btn" title="Кўча қошиш">+</button>
                 </div>
-                <div class="mb-3">
-                    <label for="street_id" class="me-2">Мфй<span style="color: red;font-weight: bold;"> MAJBURIY</span></label> 
-                    <div class="d-flex align-items-end">
-                        <select class="form-control street_id select2" name="street_id" id="street_id" required>
-                            <option value="">Мфй ни танланг</option>
-                        </select>
-                        <button type="button" class="btn btn-primary ms-2" id="add_street_btn" title="Мфй қошиш">+</button>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label for="substreet_id" class="me-2">Кўча<span style="color: red;font-weight: bold;"> MAJBURIY</span></label>
-                    <div class="d-flex align-items-end">
-                        <select class="form-control sub_street_id select2" name="sub_street_id" id="substreet_id" required>
-                            <option value="">Кўчани танланг</option>
-                        </select>
-                        <button type="button" class="btn btn-primary ms-2" id="add_substreet_btn" title="Кўча қошиш">+</button>
-                    </div>
-                </div>
-               
+            </div>
         </div>
     </div>
 
-    <!-- Include jQuery and Select2 JavaScript -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0/js/select2.min.js"></script>
-    <!-- Include Inputmask JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.inputmask/5.0.7-beta.0/jquery.inputmask.min.js"></script>
 
     <script>
         $(document).ready(function() {
             $('.select2').select2();
 
             function fetchDistricts(regionId, selectedDistrictId = null) {
-                console.log('Fetching districts for region ID:', regionId);
                 $.ajax({
                     url: "{{ route('getDistricts') }}",
                     type: "GET",
                     data: { region_id: regionId },
                     success: function(data) {
-                        console.log('Districts fetched:', data);
                         $('.district_id').empty().append('<option value="">Туманни танланг</option>');
                         $.each(data, function(key, value) {
                             $('.district_id').append('<option value="' + key + '">' + value + '</option>');
@@ -116,13 +110,11 @@
             }
 
             function fetchStreets(districtId, selectedStreetId = null) {
-                console.log('Fetching streets for district ID:', districtId);
                 $.ajax({
                     url: "{{ route('getStreets') }}",
                     type: "GET",
                     data: { district_id: districtId },
                     success: function(data) {
-                        console.log('Streets fetched:', data);
                         $('.street_id').empty().append('<option value="">Мфй ни танланг</option>');
                         $.each(data, function(key, value) {
                             $('.street_id').append('<option value="' + key + '">' + value + '</option>');
@@ -138,21 +130,15 @@
             }
 
             function fetchSubStreets(districtId, selectedSubStreetId = null) {
-                console.log('Fetching substreets for district ID:', districtId);
                 $.ajax({
                     url: "{{ route('getSubStreets') }}",
                     type: "GET",
                     data: { district_id: districtId },
                     success: function(data) {
-                        console.log('Substreets fetched:', data);
                         $('.sub_street_id').empty().append('<option value="">Кўчани танланг</option>');
-                        if (data.length > 0) {
-                            $.each(data, function(key, value) {
-                                $('.sub_street_id').append('<option value="' + key + '">' + value + '</option>');
-                            });
-                        } else {
-                            $('.sub_street_id').append('<option value="">Маълумот йўқ</option>');
-                        }
+                        $.each(data, function(key, value) {
+                            $('.sub_street_id').append('<option value="' + key + '">' + value + '</option>');
+                        });
                         if (selectedSubStreetId) {
                             $('.sub_street_id').val(selectedSubStreetId);
                         }
@@ -163,28 +149,33 @@
                 });
             }
 
-            // Update Districts based on selected Region
+            // Initialize selections if data exists
+            var selectedRegionId = "{{ old('region_id', optional($aktiv->subStreet->district->region)->id) }}";
+            var selectedDistrictId = "{{ old('district_id', optional($aktiv->subStreet->district)->id) }}";
+            var selectedStreetId = "{{ old('street_id', $aktiv->street_id) }}";
+            var selectedSubStreetId = "{{ old('sub_street_id', $aktiv->sub_street_id) }}";
+
+            if (selectedRegionId) {
+                fetchDistricts(selectedRegionId, selectedDistrictId);
+            }
+            if (selectedDistrictId) {
+                fetchStreets(selectedDistrictId, selectedStreetId);
+            }
+            if (selectedDistrictId) {
+                fetchSubStreets(selectedDistrictId, selectedSubStreetId);
+            }
+
+            // Update Districts based on Region change
             $('.region_id').change(function() {
                 var regionId = $(this).val();
-                if (regionId) {
-                    fetchDistricts(regionId);
-                } else {
-                    $('.district_id').empty().append('<option value="">Туманни танланг</option>');
-                    $('.street_id').empty().append('<option value="">Мфй ни танланг</option>');
-                    $('.sub_street_id').empty().append('<option value="">Кўчани танланг</option>');
-                }
+                fetchDistricts(regionId);
             });
 
-            // Update Streets based on selected District
+            // Update Streets based on District change
             $('.district_id').change(function() {
                 var districtId = $(this).val();
-                if (districtId) {
-                    fetchStreets(districtId);
-                    fetchSubStreets(districtId);
-                } else {
-                    $('.street_id').empty().append('<option value="">Мфй ни танланг</option>');
-                    $('.sub_street_id').empty().append('<option value="">Кўчани танланг</option>');
-                }
+                fetchStreets(districtId);
+                fetchSubStreets(districtId);  // Fetch substreets based on district change
             });
 
             // Add Street Button Click Event
@@ -248,22 +239,6 @@
                     });
                 }
             });
-
-            // Pre-populate fields if region and district are already selected
-            var selectedRegionId = "{{ old('region_id', optional($aktiv->subStreet->district->region)->id) }}";
-            var selectedDistrictId = "{{ old('district_id', optional($aktiv->subStreet->district)->id) }}";
-            var selectedStreetId = "{{ old('street_id', $aktiv->street_id) }}";
-            var selectedSubStreetId = "{{ old('sub_street_id', $aktiv->sub_street_id) }}";
-
-            if (selectedRegionId) {
-                fetchDistricts(selectedRegionId, selectedDistrictId);
-            }
-            if (selectedDistrictId) {
-                fetchStreets(selectedDistrictId, selectedStreetId);
-            }
-            if (selectedStreetId) {
-                fetchSubStreets(selectedStreetId, selectedSubStreetId);
-            }
         });
     </script>
 </body>
