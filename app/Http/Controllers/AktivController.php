@@ -6,6 +6,8 @@ use App\Exports\AktivsExport;
 use App\Models\Aktiv;
 use App\Models\Districts;
 use App\Models\Regions;
+use App\Models\Street;
+use App\Models\SubStreet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -323,10 +325,55 @@ class AktivController extends Controller
     {
         $this->authorizeView($aktiv); // Check if the user can edit this Aktiv
 
-        $regions = Regions::get();
-        return view('pages.aktiv.edit', compact('aktiv', 'regions'));
+        try {
+            // Eager load relationships
+            $aktiv->load('subStreet.district.region');
+
+            // Debugging statements
+            \Log::info('Aktiv: ' . $aktiv->toJson());
+            \Log::info('SubStreet: ' . optional($aktiv->subStreet)->toJson());
+            \Log::info('District: ' . optional($aktiv->subStreet->district)->toJson());
+            \Log::info('Region: ' . optional($aktiv->subStreet->district->region)->toJson());
+
+            $regions = Regions::get();
+            $districts = optional($aktiv->subStreet->district->region)->districts ?? collect();
+            $streets = optional($aktiv->subStreet->district)->streets ?? collect();
+            $substreets = optional($aktiv->subStreet->district)->substreets ?? collect();
+
+            return view('pages.aktiv.edit', compact('aktiv', 'regions', 'districts', 'streets', 'substreets'));
+        } catch (\Exception $e) {
+            // Log the error for debugging
+            \Log::error('Error loading Aktiv data: ' . $e->getMessage());
+
+            return redirect()->back()->with('error', 'Error loading Aktiv data. Please try again.');
+        }
     }
 
+    public function getDistricts(Request $request)
+    {
+        $regionId = $request->region_id;
+        $districts = Districts::where('region_id', $regionId)->pluck('name_uz', 'id')->toArray();
+
+        return response()->json($districts);
+    }
+
+    public function getStreets(Request $request)
+    {
+        $districtId = $request->district_id;
+        $streets = Street::where('district_id', $districtId)->pluck('name', 'id')->toArray();
+
+        return response()->json($streets);
+    }
+
+    public function getSubStreets(Request $request)
+    {
+        $districtId = $request->input('district_id');
+        if ($districtId) {
+            $substreets = SubStreet::where('district_id', $districtId)->pluck('name', 'id');
+            return response()->json($substreets);
+        }
+        return response()->json([]);
+    }
     public function update(Request $request, Aktiv $aktiv)
     {
         $this->authorizeView($aktiv); // Check if the user can update this Aktiv

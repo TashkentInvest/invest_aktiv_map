@@ -85,7 +85,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
 
 
     Route::post('/aktivs/export', [AktivController::class, 'export'])->name('aktivs.export');
-    
+
 
     Route::get('/kadastr', [AktivController::class, 'kadastr_index'])->name('aktivs.kadastr_index');
     Route::post('/aktivs/kadastr', [AktivController::class, 'kadastr'])->name('aktivs.kadastr');
@@ -94,6 +94,13 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
 
 
     Route::get('/my-map', [AktivController::class, 'myMap'])->name('aktivs.myMap');
+
+
+    Route::get('/getDistricts', [AktivController::class, 'getDistricts'])->name('getDistricts');
+    Route::get('/getStreets', [AktivController::class, 'getStreets'])->name('getStreets');
+    Route::get('/getSubStreets', [AktivController::class, 'getSubStreets'])->name('getSubStreets');
+    Route::post('/create/streets', [AktivController::class, 'createStreet'])->name('create.streets');
+    Route::post('/create/substreets', [AktivController::class, 'createSubStreet'])->name('create.substreets');
 
     // Route::get('maps/aktivs', [AktivController::class, 'getLots']);
 

@@ -2,44 +2,28 @@
 
 namespace App\Models;
 
-
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-
 
 class Street extends Model
 {
     use HasFactory;
 
     protected $table = 'streets';
-    protected $fillable = ['name', 'name_ru', 'type', 'comment', 'code', 'district_id'];
-
-
+    protected $fillable = ['name', 'yer_maydoni', 'latitude', 'longitude', 'district_id'];
 
     public function district()
     {
         return $this->belongsTo(Districts::class, 'district_id');
     }
 
-
-    public function substreets()
-    {
-        return $this->hasMany(SubStreet::class);
-    }
-
-    public function branches()
-    {
-        return $this->hasMany(Branch::class);
-    }
-
-    // In Street model
     public function aktivs()
     {
         return $this->hasMany(Aktiv::class, 'street_id');
     }
 
-    public function aktives()
+    public function substreets()
     {
-        return $this->hasMany(Aktiv::class, 'street_id');
+        return $this->hasMany(SubStreet::class, 'street_id');
     }
 }
