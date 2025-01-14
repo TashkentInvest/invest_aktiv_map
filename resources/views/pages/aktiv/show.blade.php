@@ -28,6 +28,14 @@
             <div class="mb-3">
                 <strong>Мўлжал (Местоположение):</strong> {{ $aktiv->location }}
             </div>
+
+            <div class="mb-3">
+                <strong>Яратилган сана:</strong> {{ $aktiv->created_at }}
+            </div>
+
+            <div class="mb-3">
+                <strong>Тахрирланган сана:</strong> {{ $aktiv->updated_at }}
+            </div>
         </div>
     </div>
 
