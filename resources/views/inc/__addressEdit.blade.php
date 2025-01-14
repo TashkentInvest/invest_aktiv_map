@@ -62,18 +62,18 @@
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label for="street_id" class="me-2">Мфй</label>
+                    <label for="street_id" class="me-2">Мфй<span style="color: red;font-weight: bold;"> MAJBURIY</span></label> 
                     <div class="d-flex align-items-end">
-                        <select class="form-control street_id select2" name="street_id" id="street_id">
+                        <select class="form-control street_id select2" name="street_id" id="street_id" required>
                             <option value="">Мфй ни танланг</option>
                         </select>
                         <button type="button" class="btn btn-primary ms-2" id="add_street_btn" title="Мфй қошиш">+</button>
                     </div>
                 </div>
                 <div class="mb-3">
-                    <label for="substreet_id" class="me-2">Кўча</label>
+                    <label for="substreet_id" class="me-2">Кўча<span style="color: red;font-weight: bold;"> MAJBURIY</span></label>
                     <div class="d-flex align-items-end">
-                        <select class="form-control sub_street_id select2" name="sub_street_id" id="substreet_id">
+                        <select class="form-control sub_street_id select2" name="sub_street_id" id="substreet_id" required>
                             <option value="">Кўчани танланг</option>
                         </select>
                         <button type="button" class="btn btn-primary ms-2" id="add_substreet_btn" title="Кўча қошиш">+</button>

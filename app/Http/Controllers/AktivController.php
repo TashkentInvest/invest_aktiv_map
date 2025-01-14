@@ -324,30 +324,31 @@ class AktivController extends Controller
     public function edit(Aktiv $aktiv)
     {
         $this->authorizeView($aktiv); // Check if the user can edit this Aktiv
-
+    
         try {
             // Eager load relationships
             $aktiv->load('subStreet.district.region');
-
-            // Debugging statements
+    
+            // Log the Aktiv and related data for debugging
             \Log::info('Aktiv: ' . $aktiv->toJson());
             \Log::info('SubStreet: ' . optional($aktiv->subStreet)->toJson());
             \Log::info('District: ' . optional($aktiv->subStreet->district)->toJson());
             \Log::info('Region: ' . optional($aktiv->subStreet->district->region)->toJson());
-
+    
+            // Get regions, districts, streets, and substreets
             $regions = Regions::get();
             $districts = optional($aktiv->subStreet->district->region)->districts ?? collect();
             $streets = optional($aktiv->subStreet->district)->streets ?? collect();
             $substreets = optional($aktiv->subStreet->district)->substreets ?? collect();
-
+    
             return view('pages.aktiv.edit', compact('aktiv', 'regions', 'districts', 'streets', 'substreets'));
         } catch (\Exception $e) {
             // Log the error for debugging
             \Log::error('Error loading Aktiv data: ' . $e->getMessage());
-
             return redirect()->back()->with('error', 'Error loading Aktiv data. Please try again.');
         }
     }
+    
 
     public function getDistricts(Request $request)
     {
@@ -393,8 +394,8 @@ class AktivController extends Controller
             'longitude'        => 'required|numeric',
             'kadastr_raqami'   => 'nullable|string|max:255',
             'files.*'          => 'required',
-            // 'sub_street_id'    => 'required',
-            // 'street_id'    => 'required',
+            'sub_street_id'    => 'required',
+            'street_id'    => 'required',
 
             'user_id'          => 'nullable',
             'building_type' => 'nullable|in:yer,TurarBino,NoturarBino',
