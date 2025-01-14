@@ -236,6 +236,9 @@ class AktivController extends Controller
 
             'sub_street_id'    => 'required',
             'street_id'    => 'required',
+            'home_number'          => 'nullable',
+            'apartment_number'          => 'nullable',
+
             'user_id'          => 'nullable',
             'building_type' => 'nullable|in:yer,TurarBino,NoturarBino',
 
@@ -395,6 +398,9 @@ class AktivController extends Controller
             'files.*'          => 'required',
             'sub_street_id'    => 'required',
             'street_id'    => 'required',
+
+            'home_number'          => 'nullable',
+            'apartment_number'          => 'nullable',
 
             'user_id'          => 'nullable',
             'building_type' => 'nullable|in:yer,TurarBino,NoturarBino',
