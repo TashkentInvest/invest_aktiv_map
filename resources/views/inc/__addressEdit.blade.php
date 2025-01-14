@@ -90,16 +90,19 @@
             $('.select2').select2();
 
             function fetchDistricts(regionId, selectedDistrictId = null) {
+                console.log('Fetching districts for region ID:', regionId);
                 $.ajax({
                     url: "{{ route('getDistricts') }}",
                     type: "GET",
                     data: { region_id: regionId },
                     success: function(data) {
+                        console.log('Districts fetched:', data);
                         $('.district_id').empty().append('<option value="">Туманни танланг</option>');
                         $.each(data, function(key, value) {
                             $('.district_id').append('<option value="' + key + '">' + value + '</option>');
                         });
                         if (selectedDistrictId) {
+                            console.log('Setting selected district:', selectedDistrictId);
                             $('.district_id').val(selectedDistrictId).trigger('change');
                         }
                     },
@@ -110,17 +113,22 @@
             }
 
             function fetchStreets(districtId, selectedStreetId = null) {
+                console.log('Fetching streets for district ID:', districtId);
                 $.ajax({
                     url: "{{ route('getStreets') }}",
                     type: "GET",
                     data: { district_id: districtId },
                     success: function(data) {
+                        console.log('Streets fetched:', data);
                         $('.street_id').empty().append('<option value="">Мфй ни танланг</option>');
                         $.each(data, function(key, value) {
                             $('.street_id').append('<option value="' + key + '">' + value + '</option>');
                         });
                         if (selectedStreetId) {
-                            $('.street_id').val(selectedStreetId).trigger('change');
+                            console.log('Setting selected street:', selectedStreetId);
+                            setTimeout(function() {
+                                $('.street_id').val(selectedStreetId).trigger('change');
+                            }, 500); // Adding a delay to ensure the data is fully loaded
                         }
                     },
                     error: function(xhr, status, error) {
@@ -130,17 +138,22 @@
             }
 
             function fetchSubStreets(districtId, selectedSubStreetId = null) {
+                console.log('Fetching substreets for district ID:', districtId);
                 $.ajax({
                     url: "{{ route('getSubStreets') }}",
                     type: "GET",
                     data: { district_id: districtId },
                     success: function(data) {
+                        console.log('Substreets fetched:', data);
                         $('.sub_street_id').empty().append('<option value="">Кўчани танланг</option>');
                         $.each(data, function(key, value) {
                             $('.sub_street_id').append('<option value="' + key + '">' + value + '</option>');
                         });
                         if (selectedSubStreetId) {
-                            $('.sub_street_id').val(selectedSubStreetId);
+                            console.log('Setting selected substreet:', selectedSubStreetId);
+                            setTimeout(function() {
+                                $('.sub_street_id').val(selectedSubStreetId).trigger('change');
+                            }, 500); // Adding a delay to ensure the data is fully loaded
                         }
                     },
                     error: function(xhr, status, error) {
@@ -171,11 +184,11 @@
                 fetchDistricts(regionId);
             });
 
-            // Update Streets based on District change
+            // Update Streets and SubStreets based on District change
             $('.district_id').change(function() {
                 var districtId = $(this).val();
                 fetchStreets(districtId);
-                fetchSubStreets(districtId);  // Fetch substreets based on district change
+                fetchSubStreets(districtId);
             });
 
             // Add Street Button Click Event
