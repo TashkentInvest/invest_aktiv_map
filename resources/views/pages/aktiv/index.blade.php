@@ -15,8 +15,54 @@
         </a>
     </div>
 
+    <div class="btn-group float-right" role="group" aria-label="Filter">
+        <button type="button" class="btn btn-sm btn-success waves-effect waves-light" data-bs-toggle="modal"
+            data-bs-target="#exampleModal_filter">
+            <i class="fas fa-filter"></i> @lang('global.filter')
+        </button>
+        <form action="{{ route('aktivs.index') }}" method="get">
+            <div class="modal fade" id="exampleModal_filter" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-lg">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">@lang('global.filter')</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <!-- Общая информация -->
+                            <h6 class="text-primary mb-3">Общая информация</h6>
 
-    
+
+                            <!-- Техническая информация -->
+                            <h6 class="text-primary my-3">Техническая информация</h6>
+                            <div class="col-3">
+                                <label for="kadastr_raqami">Кадастр рақами</label>
+                                <input type="text" class="form-control form-control-sm" name="kadastr_raqami" id="kadastr_raqami" value="{{ request()->input('kadastr_raqami') }}">
+                            </div>
+
+                            <div class="col-2">
+                                <select class="form-control form-control-sm" name="kadastr_raqami_operator">
+                                    <option value="like" {{ request()->input('kadastr_raqami_operator') == 'like' ? 'selected' : '' }}>O‘xshash</option>
+                                    <option value="=" {{ request()->input('kadastr_raqami_operator') == '=' ? 'selected' : '' }}>=</option>
+                                    <option value=">" {{ request()->input('kadastr_raqami_operator') == '>' ? 'selected' : '' }}>&gt;</option>
+                                    <option value="<" {{ request()->input('kadastr_raqami_operator') == '<' ? 'selected' : '' }}>&lt;</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="submit" name="filter" class="btn btn-primary">@lang('global.filter')</button>
+                            <button type="button" class="btn btn-secondary"
+                                data-bs-dismiss="modal">@lang('global.close')</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+
+
+
 
     @if ($aktivs->count())
         <div class="table-responsive rounded shadow-sm">
@@ -24,7 +70,7 @@
                 <thead class="table-primary">
                     <tr>
                         <th scope="col"><i class="fas fa-user"></i> №</th>
-                        <th scope="col" ><i class="fas fa-user"></i> Фойдаланувчи</th>
+                        <th scope="col"><i class="fas fa-user"></i> Фойдаланувчи</th>
                         <th scope="col" width="50"><i class="fas fa-building"></i> Объект номи</th>
                         <th scope="col"><i class="fas fa-balance-scale"></i> Балансда сақловчи</th>
                         <th scope="col" width="100" style="width: 100px"><i class="fas fa-map-marker-alt"></i> Мфй
@@ -40,7 +86,9 @@
                             <td class="fw-bold">
                                 {{ $aktiv->id ?? 'No Name' }}<br>
                             </td>
-                            <td style="max-width: 200px" title="{{ $aktiv->user->name ?? 'No Name' }} {{ $aktiv->user->email ?? 'No Email' }}" class="text-truncate" class="fw-bold">
+                            <td style="max-width: 200px"
+                                title="{{ $aktiv->user->name ?? 'No Name' }} {{ $aktiv->user->email ?? 'No Email' }}"
+                                class="text-truncate" class="fw-bold">
                                 {{ $aktiv->user->name ?? 'No Name' }}<br>
                                 <small class="text-muted">{{ $aktiv->user->email ?? 'No Email' }}</small>
                             </td>
@@ -71,10 +119,10 @@
                                     </a>
 
                                     {{-- @if (auth()->user()->roles[0]->name == 'Super Admin') --}}
-                                        <a href="{{ route('aktivs.edit', $aktiv) }}" class="btn btn-warning btn-sm"
-                                            data-bs-toggle="tooltip" data-bs-placement="top" title="Таҳрирлаш">
-                                            <i class="fas fa-edit"></i>
-                                        </a>
+                                    <a href="{{ route('aktivs.edit', $aktiv) }}" class="btn btn-warning btn-sm"
+                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Таҳрирлаш">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
                                     {{-- @endif --}}
                                     @if (auth()->user()->roles[0]->name == 'Manager')
                                         <form action="{{ route('aktivs.destroy', $aktiv) }}" method="POST"
