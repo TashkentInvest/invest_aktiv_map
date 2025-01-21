@@ -258,6 +258,17 @@
                 <i class="fas fa-edit"></i> Объектни таҳрирлаш (Редактировать объект)
             </a>
         @endif
+
+        @if (auth()->user()->roles[0]->name == 'Manager')
+            <form action="{{ route('aktivs.destroy', $aktiv) }}" method="POST" style="display:inline-block;">
+                @csrf
+                @method('DELETE')
+                <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip" data-bs-placement="top"
+                    title="Ўчириш" onclick="return confirm('Сиз ростдан ҳам бу объектни ўчиришни истайсизми?');">
+                    <i class="fas fa-trash-alt"></i>
+                </button>
+            </form>
+        @endif
     </div>
 @endsection
 
