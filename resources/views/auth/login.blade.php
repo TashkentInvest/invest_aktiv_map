@@ -1,84 +1,95 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="col-md-8 col-lg-6 col-xl-5">
-    <div class="card overflow-hidden">
-        <div class="bg-primary bg-soft">
-            <div class="row">
-                <div class="col-7">
-                    <div class="text-primary p-4">
-                        <h5 class="text-primary">@lang('global.login')</h5>
-                        <p>@lang('global.login_desc_wel')</p>
+    <div class="container-fluid h-100 d-flex justify-content-center align-items-center">
+        <div class="col-md-8 col-lg-6 col-xl-4">
+            <div class="card shadow-lg border-0 rounded-5 mt-3 overflow-hidden">
+                <div class="card-header bg-gradient text-white text-center py-3 position-relative"
+                    style="background: linear-gradient(135deg, #0057b8, #1d75e2);">
+                    <div class="row justify-content-center mb-4">
+                        <div class="col-12 text-center">
+                            <img src="https://toshkentinvest.uz/assets/frontend/tild6238-3031-4265-a564-343037346231/tic_logo_blue.png"
+                                alt="ToshkentInvest Logo" class="img-fluid" style="max-width: 220px; height: auto; object-fit: contain;">
+                        </div>
+                    </div>
+                    <h3 class="fw-bold text-white mb-3" style="font-size: 1.8rem; text-shadow: 1px 1px 5px rgba(0, 0, 0, 0.3);color:#0057b8 !important">Хуш келибсиз, илтимос, шахсий кабинетингизга киринг.</h3>
+                    <div class="position-absolute top-0 end-0 mt-3 me-3">
+                        {{-- <a href="{{ route('home') }}">
+                            <img src="https://api-portal.gov.uz/uploads/b7824a9f-ebbc-80ea-06df-4dada0642929_media_.png"
+                                alt="Uzbekistan Emblem" class="img-fluid" style="max-height: 60px;">
+                        </a> --}}
                     </div>
                 </div>
-                <div class="col-5 align-self-end">
-                    <img src="{{ asset('assets/images/profile-img.png') }}" alt="" class="img-fluid">
+                <div class="card-body bg-white rounded-bottom-5 p-5">
+
+                    <form method="POST" action="{{ route('login') }}" class="px-1">
+                        @csrf
+                        <div class="form-floating mb-4">
+                            <input id="email" type="email" class="form-control @error('email') is-invalid @enderror"
+                                name="email" value="{{ old('email') }}" required autocomplete="email" autofocus
+                                placeholder="Электрон почта" style="height: 50px; font-size: 1rem;">
+                            <label for="email">Электрон почта</label>
+                            @error('email')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-floating mb-4 position-relative">
+                            <input id="password" type="password"
+                                class="form-control @error('password') is-invalid @enderror" name="password" required
+                                autocomplete="current-password" placeholder="Пароль" style="height: 50px; font-size: 1rem;">
+                            <label for="password">Пароль</label>
+                            <button class="btn btn-outline-secondary position-absolute end-0 top-50 translate-middle-y me-3"
+                                type="button" id="togglePassword" style="border-radius: 30px; background-color: #ffffff;">
+                                <i class="mdi mdi-eye-outline"></i>
+                            </button>
+                            @error('password')
+                                <div class="invalid-feedback">
+                                    {{ $message }}
+                                </div>
+                            @enderror
+                        </div>
+                        <div class="form-check mb-4">
+                            <input class="form-check-input" type="checkbox" id="remember-check" name="remember"
+                                {{ old('remember') ? 'checked' : '' }}>
+                            <label class="form-check-label" for="remember-check">
+                                Эслаб қолиш
+                            </label>
+                        </div>
+                        <div class="d-grid gap-3">
+                            <button class="btn btn-primary btn-lg" type="submit">Кириш</button>
+                        </div>
+                        {{-- @if (Route::has('password.request'))
+                            <div class="text-center mt-3">
+                                <a href="{{ route('password.request') }}" class="text-muted">@lang('global.forgot_password')</a>
+                            </div>
+                        @endif --}}
+                        @guest
+                            @if (Route::has('register'))
+                                <div class="text-center mt-3">
+                                    <p>@lang('global.login_registr') <a href="{{ route('register') }}"
+                                            class="fw-medium text-primary">@lang('global.register')</a></p>
+                                </div>
+                            @endif
+                        @endguest
+                    </form>
                 </div>
             </div>
-        </div>
-        <div class="card-body pt-0">
-            <div class="auth-logo">
-                <a href="{{ route('home') }}" class="auth-logo-dark">
-                    <div class="avatar-md profile-user-wid mb-4">
-                        <span class="avatar-title rounded-circle bg-light">
-                            <img src="{{ asset('assets/images/logo.svg') }}" alt="" class="rounded-circle" height="34">
-                        </span>
-                    </div>
-                </a>
-            </div>
-            <div class="p-2">
-                <form class="form-horizontal" method="POST" action="{{ route('login') }}">
-                    @csrf
-                    <div class="mb-3">
-                        <label for="email" class="form-label">@lang('global.login_email')</label>
-                        <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus placeholder="@lang('global.login_email')">
-                        @error('email')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="mb-3">
-                        <label for="password" class="form-label">@lang('global.login_password')</label>
-                        <div class="input-group auth-pass-inputgroup">
-                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password" placeholder="@lang('global.login_password')" aria-label="Password" aria-describedby="password-addon">
-                            <button class="btn btn-light " type="button" id="password-addon"><i class="mdi mdi-eye-outline"></i></button>
-                        </div>
-                        @error('password')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror
-                    </div>
-
-                    <div class="form-check">
-                        <input class="form-check-input" type="checkbox" id="remember-check" name="remember" {{ old('remember') ? 'checked' : '' }}>
-                        <label class="form-check-label" for="remember-check">
-                            @lang('global.remember_me')
-                        </label>
-                    </div>
-
-                    <div class="mt-3 d-grid">
-                        <button class="btn btn-primary waves-effect waves-light" type="submit">@lang('global.login')</button>
-                    </div>
-
-                    @if (Route::has('password.request'))
-                        <div class="mt-4 text-center">
-                            <a href="{{ route('password.request') }}" class="text-muted"><i class="mdi mdi-lock me-1"></i> @lang('global.forgot_password')</a>
-                        </div>
-                    @endif
-                    @guest
-                        @if (Route::has('register'))
-                        <div class="mt-2 text-center">
-                            <p>@lang('global.login_registr') <a href="{{ route('register') }}" class="fw-medium text-primary"> @lang('global.register') </a> </p>
-                        </div>
-                        @endif
-                    @endguest
-                </form>
-            </div>
-
         </div>
     </div>
-</div>
+
+    <script>
+        document.getElementById('togglePassword').addEventListener('click', function() {
+            const password = document.getElementById('password');
+            const type = password.getAttribute('type') === 'password' ? 'text' : 'password';
+            password.setAttribute('type', type);
+        });
+    </script>
+
+    <style>
+        body{
+            overflow: hidden !important;
+        }
+    </style>
 @endsection
