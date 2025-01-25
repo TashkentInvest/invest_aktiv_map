@@ -132,52 +132,41 @@ class AktivController extends Controller
         $userRole = $user->roles[0]->name ?? '';
         $userDistrictId = $user->district_id;
 
-        // If the user is a Manager and no district filter is present, redirect with their district_id
-        if ($userRole == 'Manager' && !$request->has('district_id')) {
-            return redirect()->route('aktivs.index', ['district_id' => $userDistrictId]);
-        }
+        // Build the query for Aktiv
+        $query = Aktiv::query();
 
-        // Build the query using deep filters
-        $query = Aktiv::deepFilters();
-
-        // Apply additional filters based on role
         if ($userRole == 'Super Admin') {
-            // Super Admin can filter by user_id if provided
+            // Super Admin can filter by user_id and district_id
             if ($user_id) {
                 $query->where('user_id', $user_id);
             }
-
-            // Apply district filter if provided
             if ($district_id) {
                 $query->whereHas('user', function ($q) use ($district_id) {
                     $q->where('district_id', $district_id);
                 });
             }
         } elseif ($userRole == 'Manager') {
-            // For a Manager:
-            // - If the requested district_id matches manager's own district, filter by that district.
-            // - Otherwise, show only the manager's own aktivs.
-            if ($district_id == $userDistrictId) {
-                $query->whereHas('user', function ($q) use ($district_id) {
-                    $q->where('district_id', $district_id);
-                });
+            // Managers can view aktivs of users within their district
+            if ($user_id) {
+                $query->where('user_id', $user_id)
+                    ->whereHas('user', function ($q) use ($userDistrictId) {
+                        $q->where('district_id', $userDistrictId);
+                    });
             } else {
-                // If the requested district_id doesn't match manager's district,
-                // show only their own aktivs.
                 $query->where('user_id', $user->id);
             }
         } else {
-            // For other roles, show only their own aktivs
+            // Other roles can only view their own aktivs
             $query->where('user_id', $user->id);
         }
 
-        // Build count queries based on the filtered query
+        // Count different building types
         $baseQuery = clone $query;
         $yerCount = (clone $baseQuery)->where('building_type', 'yer')->count();
         $noturarBinoCount = (clone $baseQuery)->where('building_type', 'NoturarBino')->count();
         $turarBinoCount = (clone $baseQuery)->where('building_type', 'TurarBino')->count();
 
-        // Finally, paginate the results
+        // Paginate and fetch the aktivs
         $aktivs = $query->orderBy('created_at', 'desc')
             ->with('files')
             ->paginate(10)
@@ -185,6 +174,7 @@ class AktivController extends Controller
 
         return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
     }
+
 
     public function userTumanlarCounts(Request $request)
     {
