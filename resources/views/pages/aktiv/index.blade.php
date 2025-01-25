@@ -15,67 +15,23 @@
         </a>
     </div>
 
-    <div class="btn-group float-right" role="group" aria-label="Filter">
-        <button type="button" class="btn btn-sm btn-success waves-effect waves-light" data-bs-toggle="modal"
-            data-bs-target="#exampleModal_filter">
-            <i class="fas fa-filter"></i> @lang('global.filter')
-        </button>
-        <form action="{{ route('aktivs.index') }}" method="get">
-            <div class="modal fade" id="exampleModal_filter" tabindex="-1" aria-labelledby="exampleModalLabel"
-                aria-hidden="true">
-                <div class="modal-dialog modal-lg">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="exampleModalLabel">@lang('global.filter')</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <!-- Общая информация -->
-                            <h6 class="text-primary mb-3">Общая информация</h6>
+    
 
-
-                            <!-- Техническая информация -->
-                            <h6 class="text-primary my-3">Техническая информация</h6>
-                            <div class="col-3">
-                                <label for="kadastr_raqami">Кадастр рақами</label>
-                                <input type="text" class="form-control form-control-sm" name="kadastr_raqami"
-                                    id="kadastr_raqami" value="{{ request()->input('kadastr_raqami') }}">
-                            </div>
-
-                            <div class="col-2">
-                                <select class="form-control form-control-sm" name="kadastr_raqami_operator">
-                                    <option value="like"
-                                        {{ request()->input('kadastr_raqami_operator') == 'like' ? 'selected' : '' }}>
-                                        O‘xshash</option>
-                                    <option value="="
-                                        {{ request()->input('kadastr_raqami_operator') == '=' ? 'selected' : '' }}>=
-                                    </option>
-                                    <option value=">"
-                                        {{ request()->input('kadastr_raqami_operator') == '>' ? 'selected' : '' }}>&gt;
-                                    </option>
-                                    <option value="<"
-                                        {{ request()->input('kadastr_raqami_operator') == '<' ? 'selected' : '' }}>&lt;
-                                    </option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="submit" name="filter" class="btn btn-primary">@lang('global.filter')</button>
-                            <button type="button" class="btn btn-secondary"
-                                data-bs-dismiss="modal">@lang('global.close')</button>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </form>
-    </div>
+    <form action="{{ route('aktivs.index') }}" method="get">
 
 
 
+        <div class="col-3 d-flex justify-content-start">
+            <label for="kadastr_raqami"></label>
+            <input type="text" class="form-control form-control-sm" name="kadastr_raqami" placeholder="Кадастр рақами" id="kadastr_raqami"
+                value="{{ request()->input('kadastr_raqami') }}">
+            <button type="submit" name="filter" class="btn btn-primary">@lang('global.filter')</button>
+        </div>
+    </form>
 
     @if ($aktivs->count())
         <div class="table-responsive rounded shadow-sm">
-            <table class="table table-hover table-bordered align-middle">
+            <table class="table table-hover table-bordered align-middle ">
                 <thead class="table-primary">
                     <tr>
                         <th scope="col"><i class="fas fa-user"></i> №</th>
@@ -227,8 +183,36 @@
     </style>
 @endsection
 
-@section('scripts')
+{{-- @section('scripts')
     <!-- Include Font Awesome for Icons and Tooltip Initialization -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <script>
+        // Initialize tooltips
+        document.addEventListener("DOMContentLoaded", function() {
+            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
+                return new bootstrap.Tooltip(tooltipTriggerEl)
+            })
+        });
+    </script>
+@endsection --}}
+@section('scripts')
+    <!-- Include jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
+    <!-- Include DataTables CSS and JS -->
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <!-- Initialize DataTables -->
+    <script>
+        $(document).ready(function() {
+            $('#users-table').DataTable({
+                language: {
+                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/Uzbek.json' // Adjust the URL if needed
+                }
+            });
+        });
+    </script>
+
     <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
     <script>
         // Initialize tooltips

@@ -16,112 +16,7 @@ use Illuminate\Support\Facades\Log;
 
 class AktivController extends Controller
 {
-    // public function index(Request $request)
-    // {
-    //     $user_id = $request->input('user_id');
-    //     $district_id = $request->input('district_id');
-    //     $userRole = auth()->user()->roles[0]->name ?? '';
-    //     $userDistrictId = auth()->user()->district_id; // Manager's assigned district
 
-    //     // If the user is a Manager and no district filter is present, redirect with their district_id
-    //     if ($userRole == 'Manager' && !$request->has('district_id')) {
-    //         return redirect()->route('aktivs.index', [
-    //             'district_id' => $userDistrictId,
-    //         ]);
-    //     }
-
-    //     // Build the query
-    //     $query = Aktiv::query();
-
-    //     // Apply filters based on role
-    //     if ($userRole == 'Super Admin') {
-    //         // Super Admin can filter by user_id if provided
-    //         if ($user_id) {
-    //             $query->where('user_id', $user_id);
-    //         }
-
-    //         // Apply district filter if provided
-    //         if ($district_id) {
-    //             $query->whereHas('user', function ($q) use ($district_id) {
-    //                 $q->where('district_id', $district_id);
-    //             });
-    //         }
-
-    //         // Counts for Super Admin (no restrictions)
-    //         $yerCount = Aktiv::where('building_type', 'yer')->count();
-    //         $noturarBinoCount = Aktiv::where('building_type', 'NoturarBino')->count();
-    //         $turarBinoCount = Aktiv::where('building_type', 'TurarBino')->count();
-    //     } elseif ($userRole == 'Manager') {
-    //         // For a Manager:
-    //         // - If the requested district_id matches manager's own district, filter by that district.
-    //         // - Otherwise, show only the manager's own aktivs.
-    //         if ($district_id == $userDistrictId) {
-    //             $query->whereHas('user', function ($q) use ($district_id) {
-    //                 $q->where('district_id', $district_id);
-    //             });
-
-    //             // Counts filtered by manager's district
-    //             $yerCount = Aktiv::where('building_type', 'yer')
-    //                 ->whereHas('user', function ($q) use ($userDistrictId) {
-    //                     $q->where('district_id', $userDistrictId);
-    //                 })
-    //                 ->count();
-
-    //             $noturarBinoCount = Aktiv::where('building_type', 'NoturarBino')
-    //                 ->whereHas('user', function ($q) use ($userDistrictId) {
-    //                     $q->where('district_id', $userDistrictId);
-    //                 })
-    //                 ->count();
-
-    //             $turarBinoCount = Aktiv::where('building_type', 'TurarBino')
-    //                 ->whereHas('user', function ($q) use ($userDistrictId) {
-    //                     $q->where('district_id', $userDistrictId);
-    //                 })
-    //                 ->count();
-    //         } else {
-    //             // If the requested district_id doesn't match manager's district,
-    //             // show only their own aktivs.
-    //             $query->where('user_id', auth()->id());
-
-    //             // Counts only the manager's own aktivs
-    //             $yerCount = Aktiv::where('building_type', 'yer')
-    //                 ->where('user_id', auth()->id())
-    //                 ->count();
-
-    //             $noturarBinoCount = Aktiv::where('building_type', 'NoturarBino')
-    //                 ->where('user_id', auth()->id())
-    //                 ->count();
-
-    //             $turarBinoCount = Aktiv::where('building_type', 'TurarBino')
-    //                 ->where('user_id', auth()->id())
-    //                 ->count();
-    //         }
-    //     } else {
-    //         // For other roles, show only their own aktivs
-    //         $query->where('user_id', auth()->id());
-
-    //         // Counts only for the authenticated user's own aktivs (non-admin roles)
-    //         $yerCount = Aktiv::where('building_type', 'yer')
-    //             ->where('user_id', auth()->id())
-    //             ->count();
-
-    //         $noturarBinoCount = Aktiv::where('building_type', 'NoturarBino')
-    //             ->where('user_id', auth()->id())
-    //             ->count();
-
-    //         $turarBinoCount = Aktiv::where('building_type', 'TurarBino')
-    //             ->where('user_id', auth()->id())
-    //             ->count();
-    //     }
-
-    //     // Finally, paginate the results
-    //     $aktivs = $query->orderBy('created_at', 'desc')
-    //         ->with('files')
-    //         ->paginate(10)
-    //         ->appends($request->query());
-
-    //     return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
-    // }
 
 
     public function index(Request $request)
@@ -131,17 +26,17 @@ class AktivController extends Controller
         $district_id = $request->input('district_id');
         $userRole = $user->roles[0]->name ?? '';
         $userDistrictId = $user->district_id;
-    
+
         // Build the query using deep filters
         $query = Aktiv::deepFilters();
-    
+
         // Apply filters based on role
         if ($userRole == 'Super Admin') {
             // Super Admin can filter by user_id if provided
             if ($user_id) {
                 $query->where('user_id', $user_id);
             }
-    
+
             // Apply district filter if provided
             if ($district_id) {
                 $query->whereHas('user', function ($q) use ($district_id) {
@@ -157,22 +52,72 @@ class AktivController extends Controller
             // For other roles, show only their own aktivs
             $query->where('user_id', $user->id);
         }
-    
+
         // Build count queries based on the filtered query
         $baseQuery = clone $query;
         $yerCount = (clone $baseQuery)->where('building_type', 'yer')->count();
         $noturarBinoCount = (clone $baseQuery)->where('building_type', 'NoturarBino')->count();
         $turarBinoCount = (clone $baseQuery)->where('building_type', 'TurarBino')->count();
-    
+
         // Finally, paginate the results
         $aktivs = $query->orderBy('created_at', 'desc')
             ->with('files')
             ->paginate(10)
             ->appends($request->query());
-    
+
         return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
     }
-    
+
+    // public function index(Request $request)
+    // {
+    //     $user = auth()->user();
+    //     $user_id = $request->input('user_id');
+    //     $district_id = $request->input('district_id');
+    //     $userRole = $user->roles[0]->name ?? '';
+    //     $userDistrictId = $user->district_id;
+
+    //     // Cache key based on request parameters and user role
+    //     $cacheKey = "aktivs_{$userRole}_{$user_id}_{$district_id}_{$userDistrictId}";
+
+    //     // Attempt to retrieve results from the cache
+    //     $aktivs = cache()->remember($cacheKey, 600, function () use ($userRole, $user_id, $district_id, $userDistrictId) {
+    //         // Build the query using deep filters
+    //         $query = Aktiv::deepFilters();
+
+    //         // Apply filters based on role
+    //         if ($userRole == 'Super Admin') {
+    //             if ($user_id) {
+    //                 $query->where('user_id', $user_id);
+    //             }
+    //             if ($district_id) {
+    //                 $query->whereHas('user', function ($q) use ($district_id) {
+    //                     $q->where('district_id', $district_id);
+    //                 });
+    //             }
+    //         } elseif ($userRole == 'Manager') {
+    //             $query->whereHas('user', function ($q) use ($userDistrictId) {
+    //                 $q->where('district_id', $userDistrictId);
+    //             });
+    //         } else {
+    //             $query->where('user_id', $user->id);
+    //         }
+
+    //         // Get all results (no pagination)
+    //         return $query->orderBy('created_at', 'desc')
+    //             ->with('files')
+    //             ->get();
+    //     });
+
+    //     // Build count queries based on the filtered query
+    //     $yerCount = $aktivs->where('building_type', 'yer')->count();
+    //     $noturarBinoCount = $aktivs->where('building_type', 'NoturarBino')->count();
+    //     $turarBinoCount = $aktivs->where('building_type', 'TurarBino')->count();
+
+    //     // Return the view with data for DataTables
+    //     return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
+    // }
+
+
 
     public function userTumanlarCounts(Request $request)
     {
