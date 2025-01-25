@@ -131,50 +131,48 @@ class AktivController extends Controller
         $district_id = $request->input('district_id');
         $userRole = $user->roles[0]->name ?? '';
         $userDistrictId = $user->district_id;
-
-        // Build the query for Aktiv
-        $query = Aktiv::query();
-
+    
+        // Build the query using deep filters
+        $query = Aktiv::deepFilters();
+    
+        // Apply filters based on role
         if ($userRole == 'Super Admin') {
-            // Super Admin can filter by user_id and district_id
+            // Super Admin can filter by user_id if provided
             if ($user_id) {
                 $query->where('user_id', $user_id);
             }
+    
+            // Apply district filter if provided
             if ($district_id) {
                 $query->whereHas('user', function ($q) use ($district_id) {
                     $q->where('district_id', $district_id);
                 });
             }
         } elseif ($userRole == 'Manager') {
-            // Managers can view aktivs of users within their district
-            if ($user_id) {
-                $query->where('user_id', $user_id)
-                    ->whereHas('user', function ($q) use ($userDistrictId) {
-                        $q->where('district_id', $userDistrictId);
-                    });
-            } else {
-                $query->where('user_id', $user->id);
-            }
+            // Managers can see all aktivs in their district
+            $query->whereHas('user', function ($q) use ($userDistrictId) {
+                $q->where('district_id', $userDistrictId);
+            });
         } else {
-            // Other roles can only view their own aktivs
+            // For other roles, show only their own aktivs
             $query->where('user_id', $user->id);
         }
-
-        // Count different building types
+    
+        // Build count queries based on the filtered query
         $baseQuery = clone $query;
         $yerCount = (clone $baseQuery)->where('building_type', 'yer')->count();
         $noturarBinoCount = (clone $baseQuery)->where('building_type', 'NoturarBino')->count();
         $turarBinoCount = (clone $baseQuery)->where('building_type', 'TurarBino')->count();
-
-        // Paginate and fetch the aktivs
+    
+        // Finally, paginate the results
         $aktivs = $query->orderBy('created_at', 'desc')
             ->with('files')
             ->paginate(10)
             ->appends($request->query());
-
+    
         return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
     }
-
+    
 
     public function userTumanlarCounts(Request $request)
     {

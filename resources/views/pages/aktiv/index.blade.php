@@ -38,15 +38,24 @@
                             <h6 class="text-primary my-3">Техническая информация</h6>
                             <div class="col-3">
                                 <label for="kadastr_raqami">Кадастр рақами</label>
-                                <input type="text" class="form-control form-control-sm" name="kadastr_raqami" id="kadastr_raqami" value="{{ request()->input('kadastr_raqami') }}">
+                                <input type="text" class="form-control form-control-sm" name="kadastr_raqami"
+                                    id="kadastr_raqami" value="{{ request()->input('kadastr_raqami') }}">
                             </div>
 
                             <div class="col-2">
                                 <select class="form-control form-control-sm" name="kadastr_raqami_operator">
-                                    <option value="like" {{ request()->input('kadastr_raqami_operator') == 'like' ? 'selected' : '' }}>O‘xshash</option>
-                                    <option value="=" {{ request()->input('kadastr_raqami_operator') == '=' ? 'selected' : '' }}>=</option>
-                                    <option value=">" {{ request()->input('kadastr_raqami_operator') == '>' ? 'selected' : '' }}>&gt;</option>
-                                    <option value="<" {{ request()->input('kadastr_raqami_operator') == '<' ? 'selected' : '' }}>&lt;</option>
+                                    <option value="like"
+                                        {{ request()->input('kadastr_raqami_operator') == 'like' ? 'selected' : '' }}>
+                                        O‘xshash</option>
+                                    <option value="="
+                                        {{ request()->input('kadastr_raqami_operator') == '=' ? 'selected' : '' }}>=
+                                    </option>
+                                    <option value=">"
+                                        {{ request()->input('kadastr_raqami_operator') == '>' ? 'selected' : '' }}>&gt;
+                                    </option>
+                                    <option value="<"
+                                        {{ request()->input('kadastr_raqami_operator') == '<' ? 'selected' : '' }}>&lt;
+                                    </option>
                                 </select>
                             </div>
                         </div>
@@ -76,7 +85,8 @@
                         <th scope="col" width="100" style="width: 100px"><i class="fas fa-map-marker-alt"></i> Мфй
                             /
                             Коча</th>
-                        <th scope="col"><i class="fas fa-calendar-alt"></i> Сана</th>
+                        <th scope="col"> Кадастр</th>
+                        {{-- <th scope="col"><i class="fas fa-calendar-alt"></i> Сана</th> --}}
                         <th scope="col" class="text-center"><i class="fas fa-cogs"></i> Ҳаракатлар</th>
                     </tr>
                 </thead>
@@ -110,7 +120,8 @@
                                 title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">
                                 {{ $aktiv->street->name ?? 'Маълумот йўқ' }},
                                 {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}</td>
-                            <td>{{ $aktiv->created_at->format('d-m-Y H:i') }}</td>
+                            <td>{{ $aktiv->kadastr_raqami ?? 'Маълумот йўқ' }}</td>
+                            {{-- <td>{{ $aktiv->created_at->format('d-m-Y H:i') }}</td> --}}
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-1">
                                     <a href="{{ route('aktivs.show', $aktiv) }}" class="btn btn-info btn-sm"
