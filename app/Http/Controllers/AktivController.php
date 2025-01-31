@@ -419,6 +419,17 @@ class AktivController extends Controller
             }
         }
 
+        if ($request->has('delete_files_pdf')) {
+            foreach ($request->delete_files_pdf as $fileKey) {
+                if ($aktiv->$fileKey) {
+                    \Storage::disk('public')->delete($aktiv->$fileKey);
+                    $aktiv->$fileKey = null;
+                }
+            }
+        }
+
+
+
 
 
         $data = $request->except('files', 'kadastr_pdf', 'hokim_qarori_pdf', 'transfer_basis_pdf');

@@ -104,11 +104,11 @@
                         {{ old('building_type', $aktiv->building_type) == 'NoturarBino' ? 'selected' : '' }}>NoturarBino
                     </option>
                 </select>
-                
+
                 @error('building_type')
                     <div class="text-danger">{{ $message }}</div>
                 @enderror
-                
+
                 <div class="mb-3">
                     <label for="additional_info">Қўшимча маълумот</label>
                     <input class="form-control" type="text" name="additional_info" id="additional_info"
@@ -117,48 +117,72 @@
                         <div class="text-danger">{{ $message }}</div>
                     @enderror
                 </div>
-                
+
                 <!-- Region Information -->
                 <div class="mb-3">
                     <strong>Вилоят номи (Region Name):</strong>
                     {{ $aktiv->subStreet->district->region->name_uz ?? 'Маълумот йўқ' }}
                 </div>
-                
+
                 <!-- District Information -->
                 <div class="mb-3">
                     <strong>Туман номи (District Name):</strong>
                     {{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}
                 </div>
-                
+
                 <!-- SubStreet Information -->
                 <div class="mb-3">
                     <strong>Кўча номи (Sub Street Name):</strong>
                     {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}
                 </div>
-                
+
                 <div class="mb-3">
                     <label for="kadastr_raqami">Кадастр рақами</label>
                     <input class="form-control" type="text" name="kadastr_raqami" id="kadastr_raqami"
-                        value="{{ old('kadastr_raqami', $aktiv->kadastr_raqami) }}" 
-                        title="Format: 11:04:42:01:03:0136" placeholder="11:04:42:01:03:0136">
+                        value="{{ old('kadastr_raqami', $aktiv->kadastr_raqami) }}" title="Format: 11:04:42:01:03:0136"
+                        placeholder="11:04:42:01:03:0136">
                     <small id="kadastrHelp" class="form-text text-muted">
                         Please enter the cadastral number in the format: 11:04:42:01:03:0136
                     </small>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="kadastr_pdf">Кадастр файл</label>
                     <input type="file" id="kadastr_pdf" name="kadastr_pdf" class="form-control">
+                    @if ($aktiv->kadastr_pdf)
+                        <div class="existing-file">
+                            <a href="{{ asset($aktiv->kadastr_pdf) }}" target="_blank">Файлни кўриш</a>
+                            <label>
+                                <input type="checkbox" name="delete_files_pdf[]" value="kadastr_pdf"> Ўчириш
+                            </label>
+                        </div>
+                    @endif
                 </div>
-            
+
                 <div class="form-group">
                     <label for="hokim_qarori_pdf">Балансга қабул қилиш учун асос болган хужжат</label>
-                    <input type="file" id="hokim_qarori_pdf" name="hokim_qarori_pdf" class="form-control">
+                    <input type="file" id="hokim_qarори_pdf" name="hokim_qarori_pdf" class="form-control">
+                    @if ($aktiv->hokim_qarori_pdf)
+                        <div class="existing-file">
+                            <a href="{{ asset($aktiv->hokim_qarori_pdf) }}" target="_blank">Файлни кўриш</a>
+                            <label>
+                                <input type="checkbox" name="delete_files_pdf[]" value="hokim_qarори_pdf"> Ўчириш
+                            </label>
+                        </div>
+                    @endif
                 </div>
-            
+
                 <div class="form-group mb-4">
                     <label for="transfer_basis_pdf">3-шахсга йоки бошқа шахсга бериш учун асос болган хужжат</label>
                     <input type="file" id="transfer_basis_pdf" name="transfer_basis_pdf" class="form-control">
+                    @if ($aktiv->transfer_basis_pdf)
+                        <div class="existing-file">
+                            <a href="{{ asset($aktiv->transfer_basis_pdf) }}" target="_blank">Файлни кўриш</a>
+                            <label>
+                                <input type="checkbox" name="delete_files_pdf[]" value="transfer_basis_pdf"> Ўчириш
+                            </label>
+                        </div>
+                    @endif
                 </div>
                 
                 <script>
@@ -166,36 +190,36 @@
                     function toggleKadastrRequired() {
                         var buildingType = document.getElementById('building_type').value;
                         var kadastrInput = document.getElementById('kadastr_raqami');
-                
+
                         if (buildingType !== 'yer') {
                             kadastrInput.setAttribute('required', 'required');
                         } else {
                             kadastrInput.removeAttribute('required');
                         }
                     }
-                
+
                     // Listen for changes in the building_type dropdown
                     document.getElementById('building_type').addEventListener('change', toggleKadastrRequired);
-                
+
                     // Call the function once to set the initial state based on the current selection
                     toggleKadastrRequired();
-                
+
                     // Kadastr formatting script
                     // document.getElementById('kadastr_raqami').addEventListener('input', function(e) {
                     //     let value = e.target.value.replace(/[^0-9]/g, '');
                     //     let formattedValue = '';
-                
+
                     //     if (value.length > 0) formattedValue += value.substring(0, 2);
                     //     if (value.length > 2) formattedValue += ':' + value.substring(2, 4);
                     //     if (value.length > 4) formattedValue += ':' + value.substring(4, 6);
                     //     if (value.length > 6) formattedValue += ':' + value.substring(6, 8);
                     //     if (value.length > 8) formattedValue += ':' + value.substring(8, 10);
                     //     if (value.length > 10) formattedValue += ':' + value.substring(10, 14);
-                
+
                     //     e.target.value = formattedValue;
                     // });
                 </script>
-                
+
                 <!-- Include Address Partial -->
                 {{-- @include('inc.__address') --}}
 
