@@ -9,7 +9,7 @@ use App\Models\Shartnoma;
 use App\Models\TolovGrafigi;
 use App\Models\Branch;
 use App\Models\Company;
-use App\Models\Districts;
+use App\Models\District;
 use App\Models\LoyihaHajmiMalumotnoma;
 use App\Models\Ruxsatnoma;
 use Shuchkin\SimpleXLSX;
@@ -47,15 +47,15 @@ class ExcelToDatabaseSeeder extends Seeder
                 }
                 $completionDateCell = $sheet->getCellByColumnAndRow(7, $rowIndex + 1); // Column G (7th column)
                 $completionDateValue = $completionDateCell->getCalculatedValue();
-                
+
                 if (Date::isDateTime($completionDateCell)) {
                     $completionDateFormatted = Date::excelToDateTimeObject($completionDateValue)->format('Y-m-d');
                     Log::info('Completion Date:', ['row' => $rowIndex, 'value' => $completionDateFormatted]);
                 } else {
-                    $completionDateFormatted = $completionDateValue; 
+                    $completionDateFormatted = $completionDateValue;
                     Log::info('Completion Date (non-date):', ['row' => $rowIndex, 'value' => $completionDateFormatted]);
                 }
-                
+
                 $item = [
                     'inn' => $this->parseCell($rowData['ИНН']),
                     'company_name' => $this->parseCell($rowData['Корхона номи']),
@@ -126,7 +126,7 @@ class ExcelToDatabaseSeeder extends Seeder
     private function getOrCreateDistrict($code, $name)
     {
         if ($code && is_numeric($code)) {
-            return Districts::firstOrCreate(
+            return District::firstOrCreate(
                 ['code' => $code],
                 ['name_uz' => $name, 'region_id' => 1]
             );

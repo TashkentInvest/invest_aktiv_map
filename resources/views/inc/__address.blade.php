@@ -33,7 +33,7 @@
                         <select class="form-control street_id select2" name="street_id" id="street_id" required>
                             <option value="">Мфй ни танланг</option>
                         </select>
-                        <button type="button" class="btn btn-primary ms-2" id="add_street_btn" 
+                        <button type="button" class="btn btn-primary ms-2" id="add_street_btn"
                             title="Мфй қошиш">+</button>
                     </div>
                     <span class="text-danger error-message" id="street_id_error"></span>
@@ -72,7 +72,7 @@
             </div>
 
 
-          
+
 
         </div>
     </div>

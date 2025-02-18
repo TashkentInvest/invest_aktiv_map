@@ -9,6 +9,7 @@ use App\Models\Regions;
 use App\Models\Street;
 use App\Models\SubStreet;
 use App\Models\User;
+use Illuminate\Support\Facades\Cache;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Maatwebsite\Excel\Facades\Excel;
@@ -181,6 +182,7 @@ class AktivController extends Controller
         return view('pages.aktiv.tuman_counts', compact('districts'));
     }
 
+
     public function create()
     {
         $regions = Regions::get();  // Assuming this needs no filtering
@@ -337,6 +339,7 @@ class AktivController extends Controller
 
         if (auth()->id() === 1) {
             // Super Admin can see all aktivs, limit for better performance
+            // $aktivs = Aktiv::with('files:id,aktiv_id,path')->get();
             $aktivs = Aktiv::with('files:id,aktiv_id,path')->limit(10)->get();
         } else {
             // Regular users see only aktivs from their district and not created by Super Admin, limit for better performance
@@ -412,6 +415,7 @@ class AktivController extends Controller
 
     public function getObDistrict(Request $request)
     {
+        Log::info('getObDistrict');
         $regionId = $request->region_id;
         $districts = District::where('region_id', $regionId)->pluck('name_uz', 'id')->toArray();
 

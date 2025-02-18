@@ -106,6 +106,12 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
 
     // Route::get('maps/aktivs', [AktivController::class, 'getLots']);
 
+    Route::get('/get-districtss', [AktivController::class, 'getObDistricts'])->name('get.Obdistricts');
+    Route::get('/get-streetss', [AktivController::class, 'getObStreets'])->name('get.Obstreets');
+    Route::get('/get-substreetss', [AktivController::class, 'getObSubstreets'])->name('get.Obsubstreets');
+
+
+
 
     Route::get('/optimize-cache', [HomeController::class, 'optimize'])->name('optimize.command');
 
@@ -287,9 +293,9 @@ Route::post('/obyekt/create/yuridik', [ObyektController::class, 'create_yuridik_
 Route::get('/search-client', [ObyektController::class, 'searchClient'])->name('search-client');
 Route::get('/get-client-details/{client_id}', [ObyektController::class, 'getClientDetails'])->name('get-client-details');
 Route::post('/obyekt/obyekt_create', [ObyektController::class, 'obyekt_create'])->name('obyekt_create');
-Route::get('/get-districts', [ObyektController::class, 'getDistrict'])->name('get.Obdistricts');
-Route::get('/get-streets', [ObyektController::class, 'getStreets'])->name('get.Obstreets');
-Route::get('/get-substreets', [ObyektController::class, 'getSubstreets'])->name('get.Obsubstreets');
+Route::get('/get-districts', [ObyektController::class, 'getDistrict'])->name('get.Obdistrictss');
+Route::get('/get-streets', [ObyektController::class, 'getStreets'])->name('get.Obstreetss');
+Route::get('/get-substreets', [ObyektController::class, 'getSubstreets'])->name('get.Obsubstreetss');
 
 
 // product

@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bank;
-use App\Models\Districts;
+use App\Models\District;
 use App\Models\Regions;
 use App\Models\Street;
 use App\Models\SubStreet;
@@ -11,14 +11,14 @@ use Illuminate\Http\Request;
 
 class BankController extends Controller
 {
-    
+
     public function index()
     {
         $banks = Bank::with('substreet.district.region')->get();
 
         return view('pages.banks.index', compact('banks'));
     }
-    
+
 
     public function create_new(Request $request)
     {
@@ -28,16 +28,16 @@ class BankController extends Controller
         $bank->home_number = $request->home_number;
         $bank->apartment_number = $request->apartment_number;
         $bank->save();
-    
+
         return response()->json([
             'id' => $bank->id,
             'name' => $bank->name
         ]);
     }
 
-    
-    public function add()   
-    { 
+
+    public function add()
+    {
         $regions = Regions::all();
         return view('pages.banks.add',compact('regions'));
     }
@@ -52,9 +52,9 @@ class BankController extends Controller
         $bank->name = $request->get('name');
         $bank->comment = $request->get('comment');
         $bank->code = $request->get('code');
-        $bank->sub_street_id = $request->get('sub_street_id');  
+        $bank->sub_street_id = $request->get('sub_street_id');
         $bank->save();
-        
+
         return redirect()->route('bankIndex');
     }
 
@@ -62,10 +62,10 @@ class BankController extends Controller
     {
         $bank = Bank::with('substreet.district.region')->find($id);
         $regions = Regions::all();
-  
+
         return view('pages.banks.edit', compact('bank', 'regions'));
     }
-    
+
     public function update(Request $request, $id)
     {
 
@@ -77,7 +77,7 @@ class BankController extends Controller
         $bank->name = $request->get('name');
         $bank->comment = $request->get('comment');
         $bank->code = $request->get('code');
-        $bank->sub_street_id = $request->get('sub_street_id');  
+        $bank->sub_street_id = $request->get('sub_street_id');
         $bank->home_number = $request->home_number;
         $bank->apartment_number = $request->apartment_number;
         $bank->save();

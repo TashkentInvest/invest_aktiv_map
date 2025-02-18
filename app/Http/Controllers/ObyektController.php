@@ -9,7 +9,7 @@ use App\Models\Kz;
 use App\Models\Kj;
 use App\Models\Ko;
 use App\Models\Regions;
-use App\Models\Districts;
+use App\Models\District;
 use App\Models\RuxsatnomaBerilganIshTuri;
 use App\Models\Street;
 use App\Models\BranchHistory;
@@ -82,7 +82,7 @@ class ObyektController extends Controller
     public function getDistricts(Request $request)
     {
         $regionId = $request->region_id;
-        $districts = Districts::where('region_id', $regionId)->pluck('name_uz', 'id')->toArray();
+        $districts = District::where('region_id', $regionId)->pluck('name_uz', 'id')->toArray();
 
         return response()->json($districts);
     }

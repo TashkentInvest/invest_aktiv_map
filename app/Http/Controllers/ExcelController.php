@@ -10,7 +10,7 @@ use App\Models\Shartnoma;
 use App\Models\TolovGrafigi;
 use App\Models\Branch;
 use App\Models\Company;
-use App\Models\Districts;
+use App\Models\District;
 use App\Models\LoyihaHajmiMalumotnoma;
 use App\Models\Ruxsatnoma;
 use Carbon\Carbon;
@@ -25,21 +25,21 @@ class ExcelController extends Controller
     {
         $branches = Branch::with(['client', 'shartnoma.tolovGrafigi', 'substreet', 'ruxsatnoma.shartnoma'])
             ->paginate(25);
-    
+
         $branches->getCollection()->transform(function ($branch) {
             $shartnomaSanasi = $branch->shartnoma->shartnoma_sanasi ?? null;
             $shartnomaQiymati = $branch->shartnoma->tolovGrafigi->generate_price ?? 0;
             $installmentQuarterly = $branch->shartnoma->tolovGrafigi->installment_quarterly ?? 0;
             $paymentDeadline = $branch->shartnoma->tolovGrafigi->payment_deadline ?? null;
             $advanceAndBalanceSum = $branch->shartnoma->tolovGrafigi->advance_and_balance_sum ?? 0; // Assuming you have this value
-    
+
             if (!$shartnomaSanasi || !$paymentDeadline || $installmentQuarterly <= 0) {
                 $branch->payment_dates = [];
                 $branch->payment_amount = 0;
                 $branch->payment_status = [];
                 return $branch;
             }
-    
+
             // Calculate the payment schedule
             $paymentDates = [];
             $currentDate = $shartnomaSanasi;
@@ -47,17 +47,17 @@ class ExcelController extends Controller
                 $paymentDates[] = $currentDate->format('d/m/y');
                 $currentDate->addMonths(3); // Add 3 months for quarterly payments
             }
-    
+
             $branch->payment_dates = $paymentDates;
             $branch->payment_amount = $shartnomaQiymati / count($paymentDates); // Assuming equal distribution
-    
+
             // Determine payment status
             $paymentStatus = [];
             $today = \Carbon\Carbon::today();
             foreach ($paymentDates as $index => $date) {
                 $status = 'not-paid'; // Default status
                 $dateObj = \Carbon\Carbon::createFromFormat('d/m/y', $date);
-    
+
                 if ($today->gt($dateObj)) {
                     $status = 'paid';
                 } elseif ($today->eq($dateObj)) {
@@ -65,16 +65,16 @@ class ExcelController extends Controller
                 } elseif ($today->lt($dateObj)) {
                     $status = 'not-paid';
                 }
-    
+
                 $paymentStatus[] = $status;
             }
-    
+
             // Additional payment calculation logic
             $paymentLeft = 0;
             $todayPayment = \Carbon\Carbon::today()->format('d/m/y');
-    
+
             if ($paymentDeadline < $todayPayment) {
-                $paymentLeft = 0;   
+                $paymentLeft = 0;
             } elseif ($paymentDeadline->copy()->addDays(5)->eq($todayPayment) && $advanceAndBalanceSum == 0) {
                 $paymentLeft = $shartnomaQiymati;
             } elseif ($paymentDeadline->copy()->addDays(5)->lt($todayPayment) && $advanceAndBalanceSum < $shartnomaQiymati) {
@@ -84,16 +84,16 @@ class ExcelController extends Controller
             } elseif ($shartnomaSanasi <= $paymentDeadline && $shartnomaSanasi->eq($todayPayment->copy()->addDays(90 * (1 + $installmentQuarterly))) && $advanceAndBalanceSum > $shartnomaQiymati) {
                 $paymentLeft = $shartnomaQiymati - $advanceAndBalanceSum;
             }
-    
+
             $branch->payment_left = $paymentLeft;
             $branch->payment_status = $paymentStatus;
-    
+
             return $branch;
         });
-    
+
         return view('pages.subyekt.exel_index', compact('branches'));
     }
-    
+
     // -----------------------------------------------------------------------------
     public function index_imp_exp()
     {
@@ -218,7 +218,7 @@ class ExcelController extends Controller
     private function getOrCreateDistrict($code, $name)
     {
         if ($code && is_numeric($code)) {
-            return Districts::firstOrCreate(
+            return District::firstOrCreate(
                 ['code' => $code],
                 ['name_uz' => $name, 'region_id' => 1]
             );

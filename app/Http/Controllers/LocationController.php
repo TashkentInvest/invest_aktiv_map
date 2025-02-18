@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Districts;
+use App\Models\District;
 use App\Models\Street;
 use App\Models\SubStreet;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +15,7 @@ class LocationController extends Controller
     {
         $regionId = $request->get('region_id');
         Log::info("Region ID received: $regionId");
-        $districts = Districts::where('region_id', $regionId)->pluck('name_uz', 'id');
+        $districts = District::where('region_id', $regionId)->pluck('name_uz', 'id');
         return response()->json($districts);
     }
 

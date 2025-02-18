@@ -10,7 +10,7 @@ use App\Models\Shartnoma;
 use App\Models\TolovGrafigi;
 use App\Models\Branch;
 use App\Models\Company;
-use App\Models\Districts;
+use App\Models\District;
 use App\Models\LoyihaHajmiMalumotnoma;
 use App\Models\Ruxsatnoma;
 use Shuchkin\SimpleXLSX;
@@ -63,7 +63,7 @@ class ExcelToDatabaseSeeder extends Seeder
                 } else {
                     $paymentDeadlineDate = $paymentDeadlineValue; // Handle non-date values
                 }
-            
+
                 // Log the value
                 Log::info('PAYMENT_DEADLINE:', ['row' => $rowIndex, 'value' => $paymentDeadlineDate]);
 
@@ -155,7 +155,7 @@ class ExcelToDatabaseSeeder extends Seeder
     private function getOrCreateDistrict($code, $name)
     {
         if ($code && is_numeric($code)) {
-            return Districts::firstOrCreate(
+            return District::firstOrCreate(
                 ['code' => $code],
                 ['name_uz' => $name, 'region_id' => 1]
             );

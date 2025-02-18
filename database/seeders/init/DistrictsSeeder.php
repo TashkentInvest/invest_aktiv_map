@@ -1,12 +1,12 @@
 <?php
 namespace Database\Seeders\init;
 
-use Illuminate\Database\Seeder; 
+use Illuminate\Database\Seeder;
 use Maatwebsite\Excel\Facades\Excel;
 use Maatwebsite\Excel\Concerns\ToCollection;
 use Maatwebsite\Excel\Concerns\WithHeadingRow;
 use Illuminate\Support\Collection;
-use App\Models\Districts;
+use App\Models\District;
 
 class DistrictsSeeder extends Seeder
 {
@@ -21,11 +21,11 @@ class DistrictsSeeder extends Seeder
         {
             public function collection(Collection $rows)
             {
-                foreach ($rows as $row) 
+                foreach ($rows as $row)
                 {
-                    Districts::create([
+                    District::create([
                         'code' => $row['code'],
-                        'region_id' => 1, 
+                        'region_id' => 1,
                         'name_ru' => $row['name_ru'],
                         'name_uz' => $row['name_uz'],
                     ]);

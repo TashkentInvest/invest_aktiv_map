@@ -7,7 +7,7 @@ use App\Models\Company;
 use App\Models\Shartnoma;
 use App\Models\TolovGrafigi;
 use App\Models\Branch;
-use App\Models\Districts;
+use App\Models\District;
 use Illuminate\Support\Collection;
 use Maatwebsite\Excel\Concerns\ToCollection;
 
@@ -17,7 +17,7 @@ class ClientImport implements ToCollection
     {
         foreach ($rows as $row) {
             // Find or create the district
-            $district = Districts::firstOrCreate(
+            $district = District::firstOrCreate(
                 ['code' => $row['TUMAN_CODE']],
                 ['name_uz' => $row['TUMAN'], 'name_ru' => $row['TUMAN']]
             );

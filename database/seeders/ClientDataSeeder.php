@@ -7,7 +7,7 @@ use App\Models\Shartnoma;
 use App\Models\TolovGrafigi;
 use App\Models\Branch;
 use App\Models\Company;
-use App\Models\Districts;
+use App\Models\District;
 use App\Models\Ruxsatnoma;
 use Illuminate\Database\Seeder;
 use Maatwebsite\Excel\Concerns\ToCollection;
@@ -49,7 +49,7 @@ class ClientDataSeeder extends Seeder
 
                     // Handle district lookup and creation
                     if ($tuman_code) {
-                        $district = Districts::firstOrCreate(
+                        $district = District::firstOrCreate(
                             ['code' => $tuman_code],
                             ['name_uz' => $row['tuman'] ?? 'Unknown District', 'region_id' => 1]
                         );

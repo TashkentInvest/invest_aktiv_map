@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Districts;
+use App\Models\District;
 use App\Models\Products;
 use App\Models\Regions;
 use App\Models\Street;
@@ -20,13 +20,13 @@ class StreetController extends Controller
     {
         $request->validate([
             'district_id' => 'required|exists:districts,id',
-            'street_name' => 'required|string|max:255', 
+            'street_name' => 'required|string|max:255',
         ]);
 
         $street = new Street();
         $street->district_id = $request->district_id;
         $street->name = $request->street_name;
-        
+
         $street->save();
 
         return response()->json([
@@ -47,15 +47,15 @@ class StreetController extends Controller
     }
 
 
-   
+
     public function getProductByStreet($street_id)
     {
         $product = Products::where('street_id', $street_id)->first();
         $street = Street::find($street_id);
-        
+
         if ($product && $street) {
             // Fetch district data based on the district_id of the street
-            $district = Districts::find($street->district_id);
+            $district = District::find($street->district_id);
 
             if ($district) {
                 $response = [
@@ -79,16 +79,16 @@ class StreetController extends Controller
 
         return response()->json($response);
     }
-    
+
     public function getStreets($district_id)
     {
         $streets = Street::where('district_id', $district_id)->get();
         return response()->json($streets);
     }
-    
-    public function add()   
-    { 
-        $districts = Districts::get()->all();
+
+    public function add()
+    {
+        $districts = District::get()->all();
         return view('pages.streets.add', compact('districts'));
     }
 
@@ -108,11 +108,11 @@ class StreetController extends Controller
     public function edit($id)
     {
         $street = Street::findOrFail($id); // Adjust this query based on your needs
-        $districts = Districts::all(); // Or use a more specific query if needed
+        $districts = District::all(); // Or use a more specific query if needed
         return view('pages.streets.edit', compact('districts', 'street'));
     }
-    
-    
+
+
 
     public function update(Request $request, $id)
     {
