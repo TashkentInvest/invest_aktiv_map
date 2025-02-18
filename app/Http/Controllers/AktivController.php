@@ -62,7 +62,7 @@ class AktivController extends Controller
         // Finally, paginate the results
         $aktivs = $query->orderBy('created_at', 'desc')
             ->with('files')
-            ->paginate(10)
+            ->paginate(20)
             ->appends($request->query());
 
         return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
@@ -281,14 +281,51 @@ class AktivController extends Controller
 
         return redirect()->route('aktivs.index')->with('success', 'Aktiv created successfully.');
     }
+    // public function show(Aktiv $aktiv)
+    // {
+    //     // Check if the user can view this Aktiv (for authorization)
+    //     $this->authorizeView($aktiv);
+
+    //     // Load necessary relationships including the street to district relationship
+    //     // It's crucial that subStreet is correctly mapped to district in your Aktiv model
+    //     $aktiv->load('subStreet.district.region', 'files');
+
+    //     $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
+
+    //     // Add main_image attribute to the current Aktiv
+    //     $aktiv->main_image = $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : $defaultImage;
+
+    //     // Retrieve user district ID from the authenticated user's associated street
+    //     $userDistrictId = auth()->user()->district_id;  // Get the district ID of the authenticated user
+
+    //     if (auth()->id() === 1) {
+    //         // Super Admin can see all aktivs
+    //         $aktivs = Aktiv::with('files')->get();
+    //     } else {
+    //         // Regular users see only aktivs from their district and not created by Super Admin
+    //         $aktivs = Aktiv::with('files')
+    //             ->join('streets', 'aktivs.street_id', '=', 'streets.id')  // Ensure street is joined correctly
+    //             ->where('streets.district_id', $userDistrictId)  // Filter by user's district from street relationship
+    //             ->where('user_id', '!=', 1)  // Exclude aktivs created by Super Admin
+    //             ->get();
+    //     }
+
+    //     // Add main_image attribute to each Aktiv
+    //     $aktivs->map(function ($a) use ($defaultImage) {
+    //         $a->main_image = $a->files->first() ? asset('storage/' . $a->files->first()->path) : $defaultImage;
+    //         return $a;
+    //     });
+
+    //     return view('pages.aktiv.show', compact('aktiv', 'aktivs'));
+    // }
+
     public function show(Aktiv $aktiv)
     {
         // Check if the user can view this Aktiv (for authorization)
-        $this->authorizeView($aktiv);
+        // $this->authorizeView($aktiv);
 
-        // Load necessary relationships including the street to district relationship
-        // It's crucial that subStreet is correctly mapped to district in your Aktiv model
-        $aktiv->load('subStreet.district.region', 'files');
+        // Load necessary relationships using eager loading
+        $aktiv->load(['subStreet.district.region', 'files:id,aktiv_id,path']);
 
         $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
 
@@ -296,17 +333,18 @@ class AktivController extends Controller
         $aktiv->main_image = $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : $defaultImage;
 
         // Retrieve user district ID from the authenticated user's associated street
-        $userDistrictId = auth()->user()->district_id;  // Get the district ID of the authenticated user
+        $userDistrictId = auth()->user()->district_id;
 
         if (auth()->id() === 1) {
-            // Super Admin can see all aktivs
-            $aktivs = Aktiv::with('files')->get();
+            // Super Admin can see all aktivs, limit for better performance
+            $aktivs = Aktiv::with('files:id,aktiv_id,path')->limit(10)->get();
         } else {
-            // Regular users see only aktivs from their district and not created by Super Admin
-            $aktivs = Aktiv::with('files')
-                ->join('streets', 'aktivs.street_id', '=', 'streets.id')  // Ensure street is joined correctly
-                ->where('streets.district_id', $userDistrictId)  // Filter by user's district from street relationship
-                ->where('user_id', '!=', 1)  // Exclude aktivs created by Super Admin
+            // Regular users see only aktivs from their district and not created by Super Admin, limit for better performance
+            $aktivs = Aktiv::with('files:id,aktiv_id,path')
+                ->join('streets', 'aktivs.street_id', '=', 'streets.id')
+                ->where('streets.district_id', $userDistrictId)
+                ->where('aktivs.user_id', '!=', 1) // Specify the table name for user_id
+                ->limit(10)
                 ->get();
         }
 
@@ -320,20 +358,16 @@ class AktivController extends Controller
     }
     public function edit(Aktiv $aktiv)
     {
-        $this->authorizeView($aktiv); // Check if the user can edit this Aktiv
+        // $this->authorizeView($aktiv); // Check if the user can edit this Aktiv
 
         try {
             // Eager load relationships
             $aktiv->load('subStreet.district.region');
 
-            // Log the Aktiv and related data for debugging
-            \Log::info('Aktiv: ' . $aktiv->toJson());
-            \Log::info('SubStreet: ' . optional($aktiv->subStreet)->toJson());
-            \Log::info('District: ' . optional($aktiv->subStreet->district)->toJson());
-            \Log::info('Region: ' . optional($aktiv->subStreet->district->region)->toJson());
+            // Get regions
+            $regions = Regions::all();
 
-            // Get regions, districts, streets, and substreets
-            $regions = Regions::get();
+            // Safely access subStreet, district, and region
             $districts = optional($aktiv->subStreet->district->region)->districts ?? collect();
             $streets = optional($aktiv->subStreet->district)->streets ?? collect();
             $substreets = optional($aktiv->subStreet->district)->subStreets ?? collect();

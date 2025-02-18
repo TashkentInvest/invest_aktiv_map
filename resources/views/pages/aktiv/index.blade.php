@@ -1,105 +1,82 @@
 @extends('layouts.admin')
 
 @section('content')
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2>Активлар сони: {{ $aktivs->total() ?? '' }}
-
-            @if (auth()->user()->roles[0]->name == 'Super Admin' || auth()->user()->roles[0]->name == 'Manager')
-                (Ер: {{ $yerCount ?? '' }} | Нотурар Бино: {{ $noturarBinoCount ?? '' }} | Турар Бино:
-                {{ $turarBinoCount ?? '' }})
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h6 class="mb-0">
+            Активлар: <strong>{{ $aktivs->total() ?? '0' }}</strong>
+            @if (in_array(auth()->user()->roles[0]->name, ['Super Admin', 'Manager']))
+                <small class="text-muted ms-2">
+                    (Ер: {{ $yerCount ?? '0' }} | Нотурар: {{ $noturarBinoCount ?? '0' }} | Турар:
+                    {{ $turarBinoCount ?? '0' }})
+                </small>
             @endif
-        </h2>
+        </h6>
 
-        <a href="{{ route('aktivs.create') }}" class="btn btn-primary">
-            <i class="fas fa-plus"></i> Янги актив яратиш
+        <a href="{{ route('aktivs.create') }}" class="btn btn-sm btn-primary">
+            <i class="fas fa-plus"></i>
         </a>
     </div>
 
-    
-
-    <form action="{{ route('aktivs.index') }}" method="get">
-
-
-
-        <div class="col-3 d-flex justify-content-start">
-            <label for="kadastr_raqami"></label>
-            <input type="text" class="form-control form-control-sm" name="kadastr_raqami" placeholder="Кадастр рақами" id="kadastr_raqami"
-                value="{{ request()->input('kadastr_raqami') }}">
-            <button type="submit" name="filter" class="btn btn-primary">@lang('global.filter')</button>
-        </div>
+<div class="col-3 p-0 m-0">
+    <form action="{{ route('aktivs.index') }}" method="get" class="d-flex gap-1 mb-2">
+        <input type="text" class="form-control form-control-sm" name="kadastr_raqami" placeholder="Кадастр рақами"
+            id="kadastr_raqami" value="{{ request()->input('kadastr_raqami') }}">
+        <button type="submit" class="btn btn-sm btn-primary">@lang('global.filter')</button>
     </form>
 
+</div>
+
     @if ($aktivs->count())
-        <div class="table-responsive rounded shadow-sm">
-            <table class="table table-hover table-bordered align-middle ">
-                <thead class="table-primary">
-                    <tr>
-                        <th scope="col"><i class="fas fa-user"></i> №</th>
-                        <th scope="col"><i class="fas fa-user"></i> Фойдаланувчи</th>
-                        <th scope="col" width="50"><i class="fas fa-building"></i> Объект номи</th>
-                        <th scope="col"><i class="fas fa-balance-scale"></i> Балансда сақловчи</th>
-                        <th scope="col" width="100" style="width: 100px"><i class="fas fa-map-marker-alt"></i> Мфй
-                            /
-                            Коча</th>
-                        <th scope="col"> Кадастр</th>
-                        {{-- <th scope="col"><i class="fas fa-calendar-alt"></i> Сана</th> --}}
-                        <th scope="col" class="text-center"><i class="fas fa-cogs"></i> Ҳаракатлар</th>
+        <div class="table-responsive">
+            <table class="table table-bordered table-sm mb-0">
+                <thead class="table-light">
+                    <tr class="small text-center">
+                        <th>№</th>
+                        <th><i class="fas fa-user"> Фойдаланувчи</i></th>
+                        <th><i class="fas fa-building"></i> Объект номи</th>
+                        <th><i class="fas fa-balance-scale"></i> Балансда сақловчи</th>
+                        <th><i class="fas fa-map-marker-alt"></i> Мфй / Коча</th>
+                        <th><i class="fa-solid fa-earth-americas"></i> Кадастр</th>
+                        <th><i class="fas fa-cogs"></i></th>
                     </tr>
                 </thead>
                 <tbody>
                     @foreach ($aktivs as $aktiv)
-                        <tr>
-                            <td class="fw-bold">
-                                {{ $aktiv->id ?? 'No Name' }}<br>
+                        <tr class="small">
+                            <td class="fw-bold">{{ $aktiv->id ?? '-' }}</td>
+                            <td title="{{ $aktiv->user->name ?? '-' }}">
+                                {{-- <small>{{ $aktiv->user->name ?? '-' }}</small> --}}
+                                {{ $aktiv->user->email ?? '-' }}
                             </td>
-                            <td style="max-width: 200px"
-                                title="{{ $aktiv->user->name ?? 'No Name' }} {{ $aktiv->user->email ?? 'No Email' }}"
-                                class="text-truncate" class="fw-bold">
-                                {{ $aktiv->user->name ?? 'No Name' }}<br>
-                                <small class="text-muted">{{ $aktiv->user->email ?? 'No Email' }}</small>
-                            </td>
-                            <td style="max-width: 200px" class="text-truncate" title="{{ $aktiv->object_name }}">
-
+                            <td style="max-width: 250px" class="text-truncate" title="{{ $aktiv->object_name }}">
                                 {{ $aktiv->object_name }}
-
-                                <style>
-                                    .text-truncate {
-                                        word-wrap: break-word;
-                                        word-break: break-word;
-                                        white-space: normal;
-                                    }
-                                </style>
                             </td>
-                            <td style="max-width: 200px" class="text-truncate" title="{{ $aktiv->balance_keeper }}">
-                                {{ $aktiv->balance_keeper }}</td>
-                            <td style="width: 100px" class="text-truncate"
+                            <td class="text-truncate" title="{{ $aktiv->balance_keeper }}">
+                                {{ $aktiv->balance_keeper }}
+                            </td>
+                            <td class="text-truncate"
                                 title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">
-                                {{ $aktiv->street->name ?? 'Маълумот йўқ' }},
-                                {{ $aktiv->subStreet->name ?? 'Маълумот йўқ' }}</td>
-                            <td>{{ $aktiv->kadastr_raqami ?? 'Маълумот йўқ' }}</td>
-                            {{-- <td>{{ $aktiv->created_at->format('d-m-Y H:i') }}</td> --}}
+                                {{ $aktiv->street->name ?? '-' }},
+                                {{ $aktiv->subStreet->name ?? '-' }}
+                            </td>
+                            <td>{{ $aktiv->kadastr_raqami ?? '-' }}</td>
                             <td class="text-center">
                                 <div class="d-flex justify-content-center gap-1">
-                                    <a href="{{ route('aktivs.show', $aktiv) }}" class="btn btn-info btn-sm"
-                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Кўриш">
-                                        <i class="fas fa-eye"></i>
+                                    <a href="{{ route('aktivs.show', $aktiv) }}" class="btn btn-sm btn-info"
+                                        title="Кўриш">
+                                        <i class="fas fa-eye text-light"></i>
                                     </a>
-
-                                    {{-- @if (auth()->user()->roles[0]->name == 'Super Admin') --}}
-                                    <a href="{{ route('aktivs.edit', $aktiv) }}" class="btn btn-warning btn-sm"
-                                        data-bs-toggle="tooltip" data-bs-placement="top" title="Таҳрирлаш">
-                                        <i class="fas fa-edit"></i>
+                                    <a href="{{ route('aktivs.edit', $aktiv) }}" class="btn btn-sm btn-warning"
+                                        title="Таҳрирлаш">
+                                        <i class="fas fa-edit text-light"></i>
                                     </a>
-                                    {{-- @endif --}}
                                     @if (auth()->user()->roles[0]->name == 'Manager')
                                         <form action="{{ route('aktivs.destroy', $aktiv) }}" method="POST"
-                                            style="display:inline-block;">
+                                            onsubmit="return confirm('Сиз ростдан ҳам бу объектни ўчиришни истайсизми?');">
                                             @csrf
                                             @method('DELETE')
-                                            <button type="submit" class="btn btn-danger btn-sm" data-bs-toggle="tooltip"
-                                                data-bs-placement="top" title="Ўчириш"
-                                                onclick="return confirm('Сиз ростдан ҳам бу объектни ўчиришни истайсизми?');">
-                                                <i class="fas fa-trash-alt"></i>
+                                            <button type="submit" class="btn btn-sm btn-danger" title="Ўчириш">
+                                                <i class="fas fa-trash-alt text-light"></i>
                                             </button>
                                         </form>
                                     @endif
@@ -111,116 +88,44 @@
             </table>
         </div>
 
-        <!-- Pagination Controls -->
-        <div class="d-flex justify-content-center mt-4">
+        <div class="d-flex justify-content-center mt-3">
             {{ $aktivs->links('pagination::bootstrap-4') }}
         </div>
     @else
-        <div class="alert alert-warning text-center mt-4">
+        <div class="alert alert-warning text-center mt-3 small">
             <i class="fas fa-exclamation-circle"></i> Активлар топилмади.
         </div>
     @endif
-@endsection
 
-@section('styles')
     <style>
-        .table {
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        table.table {
+            font-size: 12px;
         }
 
-        .table-hover tbody tr:hover {
-            background-color: #f8f9fa;
-        }
-
-        .table-primary th {
-            background-color: #007bff;
-            color: white;
-        }
-
-        .table-primary th i {
-            margin-right: 5px;
-            font-size: 1.1rem;
+        .table th,
+        .table td {
+            padding: 4px !important;
             vertical-align: middle;
         }
 
-        .fw-bold {
-            font-weight: 600;
-        }
-
-        .table-bordered td,
-        .table-bordered th {
-            border-color: #dee2e6 !important;
+        .table-hover tbody tr:hover {
+            background-color: #f9f9f9;
         }
 
         .btn-sm {
-            padding: 6px 8px;
-            font-size: 0.875rem;
+            padding: 2px 6px;
+            font-size: 12px;
         }
 
-        .btn {
-            transition: all 0.2s ease-in-out;
+        .alert {
+            font-size: 12px;
+            padding: 8px;
         }
 
-        .btn:hover {
-            transform: scale(1.05);
-            box-shadow: 0px 4px 12px rgba(0, 123, 255, 0.2);
-        }
-
-        .alert-warning {
-            background-color: #fff3cd;
-            border-color: #ffecb5;
-            color: #856404;
-        }
-
-        /* Truncate long text */
         .text-truncate {
-            overflow: hidden;
             white-space: nowrap;
+            overflow: hidden;
             text-overflow: ellipsis;
         }
     </style>
-@endsection
-
-{{-- @section('scripts')
-    <!-- Include Font Awesome for Icons and Tooltip Initialization -->
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script>
-        // Initialize tooltips
-        document.addEventListener("DOMContentLoaded", function() {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            })
-        });
-    </script>
-@endsection --}}
-@section('scripts')
-    <!-- Include jQuery -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script>
-    <!-- Include DataTables CSS and JS -->
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
-    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
-    <!-- Initialize DataTables -->
-    <script>
-        $(document).ready(function() {
-            $('#users-table').DataTable({
-                language: {
-                    url: '//cdn.datatables.net/plug-ins/1.13.6/i18n/Uzbek.json' // Adjust the URL if needed
-                }
-            });
-        });
-    </script>
-
-    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
-    <script>
-        // Initialize tooltips
-        document.addEventListener("DOMContentLoaded", function() {
-            var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-            var tooltipList = tooltipTriggerList.map(function(tooltipTriggerEl) {
-                return new bootstrap.Tooltip(tooltipTriggerEl)
-            })
-        });
-    </script>
 @endsection
