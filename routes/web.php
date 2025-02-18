@@ -107,7 +107,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
 
     Route::get('/optimize-cache', [HomeController::class, 'optimize'])->name('optimize.command');
 
-    // Regions  
+    // Regions
     // Route::prefix('regions')->group(function () {
     //     Route::get('/', [RegionController::class, 'index'])->name('regionIndex');
     //     Route::get('/add', [RegionController::class, 'add'])->name('regionAdd');
@@ -117,7 +117,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     //     Route::delete('/delete/{id}', [RegionController::class, 'destroy'])->name('regionDestroy');
     // });
 
-    // Districts 
+    // Districts
     // Route::prefix('districts')->group(function () {
     //     Route::get('/', [DistrictController::class, 'index'])->name('districtIndex');
     //     Route::get('/add', [DistrictController::class, 'add'])->name('districtAdd');
@@ -213,8 +213,6 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::get('/request-confirm', [HistoryController::class, 'confirm'])->name('request.confirm');
     Route::get('/history/{id}', [HistoryController::class, 'showHistory'])->name('history.show');
 
-
-
     Route::get('/import/backup', [BackupController::class, 'import'])->name('backup.import');
 });
 
@@ -291,7 +289,7 @@ Route::get('/get-streets', [ObyektController::class, 'getStreets'])->name('get.O
 Route::get('/get-substreets', [ObyektController::class, 'getSubstreets'])->name('get.Obsubstreets');
 
 
-// product 
+// product
 
 
 
@@ -302,7 +300,7 @@ Route::post('/region/create', [RegionController::class, 'create'])->name('region
 Route::get('/region/edit/{id}', [RegionController::class, 'edit'])->name('regionEdit');
 Route::post('/region/update/{id}', [RegionController::class, 'update'])->name('regionUpdate');
 Route::delete('/region/delete/{id}', [RegionController::class, 'destroy'])->name('regionDestroy');
-// Districts 
+// Districts
 Route::get('/districts', [DistrictController::class, 'index'])->name('districtIndex');
 Route::get('/district/add', [DistrictController::class, 'add'])->name('districtAdd');
 Route::post('/district/create', [DistrictController::class, 'create'])->name('districtCreate');
@@ -311,7 +309,7 @@ Route::post('/district/update/{id}', [DistrictController::class, 'update'])->nam
 Route::delete('/district/delete/{id}', [DistrictController::class, 'destroy'])->name('districtDestroy');
 Route::get('/get-districts/{region_id}', [DistrictController::class, 'getDistricts'])->name('get.districts');
 Route::get('/get-streets/{district_id}', [DistrictController::class, 'getStreets']);
-// streets 
+// streets
 Route::get('/streets', [StreetController::class, 'index'])->name('streetIndex');
 Route::get('/street/add', [StreetController::class, 'add'])->name('streetAdd');
 Route::post('/street/create', [StreetController::class, 'create'])->name('streetCreate');
@@ -321,7 +319,7 @@ Route::delete('/street/delete/{id}', [StreetController::class, 'destroy'])->name
 Route::get('/get-product-by-street/{street_id}', [StreetController::class, 'getProductByStreet'])->name('getProductByStreet');
 Route::post('/create/street', [StreetController::class, 'create_new'])->name('create.street');
 
-// Substreet 
+// Substreet
 Route::get('/substreets', [SubStreetController::class, 'index'])->name('substreetIndex');
 Route::get('/substreet/add', [SubStreetController::class, 'add'])->name('substreetAdd');
 Route::post('/substreet/create', [SubStreetController::class, 'create'])->name('substreetCreate');
@@ -330,7 +328,7 @@ Route::post('/substreet/update/{id}', [SubStreetController::class, 'update'])->n
 Route::delete('/substreet/delete/{id}', [SubStreetController::class, 'destroy'])->name('substreetDestroy');
 Route::post('/create/substreet', [SubStreetController::class, 'create_new'])->name('create.substreet');
 
-// Banks 
+// Banks
 Route::get('/banks', [BankController::class, 'index'])->name('bankIndex');
 Route::get('/bank/add', [BankController::class, 'add'])->name('bankAdd');
 Route::post('/bank/create', [BankController::class, 'create'])->name('bankCreate');
@@ -373,7 +371,7 @@ Route::get('/kz/edit/{id}', [kzController::class, 'edit'])->name('kzEdit');
 Route::post('/kz/update/{id}', [kzController::class, 'update'])->name('kzUpdate');
 Route::delete('/kz/delete/{id}', [kzController::class, 'destroy'])->name('kzDestroy');
 
-// Subyekt shakli 
+// Subyekt shakli
 Route::get('/subyektshakli', [SubyektShakliController::class, 'index'])->name('subyektShakliIndex');
 Route::get('/subyektshakli/add', [SubyektShakliController::class, 'add'])->name('subyektShakliAdd');
 Route::post('/subyektshakli/create', [SubyektShakliController::class, 'create'])->name('subyektShakliCreate');
@@ -431,7 +429,7 @@ Route::post('/ariza/{id}/reject', [OrderController::class, 'reject'])->name('ord
 Route::get('/ariza/arxiv/{id}', [OrderController::class, 'arxiv'])->name('orderArxiv');
 
 
-// Order Atkaz 
+// Order Atkaz
 Route::get('/orderAtkaz', [OrderAtkazController::class, 'index'])->name('orderAtkazIndex');
 Route::get('/orderAtkaz/add', [OrderAtkazController::class, 'add'])->name('orderAtkazAdd');
 Route::post('/orderAtkaz/create', [OrderAtkazController::class, 'create'])->name('orderAtkazCreate');
@@ -440,7 +438,7 @@ Route::post('/orderAtkaz/update/{id}', [OrderAtkazController::class, 'update'])-
 Route::delete('/orderAtkaz/delete/{id}', [OrderAtkazController::class, 'destroy'])->name('orderAtkazDestroy');
 
 
-// Order Atkaz 
+// Order Atkaz
 Route::get('shartnoma', [ShartnomaController::class, 'index'])->name('shartnoma.index');
 Route::get('shartnoma/grafik/{id}', [ShartnomaController::class, 'grafik'])->name('grafik.show');
 Route::get('shartnoma/{id}', [ShartnomaController::class, 'show'])->name('shartnoma.show');
