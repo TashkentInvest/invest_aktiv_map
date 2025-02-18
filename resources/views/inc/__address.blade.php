@@ -11,7 +11,7 @@
                         <option value="">Худудни танланг</option>
                         @foreach ($regions as $region)
                             {{-- <option value="{{ $region->id == 1 }}" selected>{{ $region->name_uz }}</option> --}}
-                            <option value="{{ $region->id}}">{{ $region->name_uz }}</option>
+                            <option value="{{ $region->id }}">{{ $region->name_uz }}</option>
                         @endforeach
                     </select>
                     <span class="text-danger error-message" id="region_id_error"></span>
@@ -43,7 +43,8 @@
                 <div class="mb-3">
                     <label for="sub_street_id" class="me-2">Кўча</label>
                     <div class="d-flex align-items-end">
-                        <select class="form-control sub_street_id select2" name="sub_street_id" id="sub_street_id" required>
+                        <select class="form-control sub_street_id select2" name="sub_street_id" id="sub_street_id"
+                            required>
                             <option value="">Кўчани танланг</option>
                         </select>
                         <button type="button" class="btn btn-primary ms-2" id="add_substreet_btn"
@@ -87,6 +88,8 @@
 
         // When a region is selected
         $('#region_id').change(function() {
+            alert(data);
+
             var regionId = $(this).val();
             if (regionId) {
                 $.ajax({
@@ -233,7 +236,7 @@
                         console.error('Error adding sub-street:', error);
                         alert(
                             'Ошибка при добавлении подулицы. Пожалуйста, попробуйте снова.'
-                            );
+                        );
                     }
                 });
             }
