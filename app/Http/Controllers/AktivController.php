@@ -4,7 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Exports\AktivsExport;
 use App\Models\Aktiv;
-use App\Models\Districts;
+use App\Models\District;
 use App\Models\Regions;
 use App\Models\Street;
 use App\Models\SubStreet;
@@ -152,7 +152,7 @@ class AktivController extends Controller
         }
 
         // Get distinct districts by joining with users and selecting the distinct district_id
-        $districts = Districts::select('districts.id', 'districts.name_uz') // select relevant columns
+        $districts = District::select('districts.id', 'districts.name_uz') // select relevant columns
             ->distinct()
             ->join('users', 'districts.id', '=', 'users.district_id') // join with users table
             ->join('aktivs', 'users.id', '=', 'aktivs.user_id') // join with aktivs table
@@ -371,6 +371,7 @@ class AktivController extends Controller
             $districts = optional($aktiv->subStreet->district->region)->districts ?? collect();
             $streets = optional($aktiv->subStreet->district)->streets ?? collect();
             $substreets = optional($aktiv->subStreet->district)->subStreets ?? collect();
+            // dd($districts);
 
             return view('pages.aktiv.edit', compact('aktiv', 'regions', 'districts', 'streets', 'substreets'));
         } catch (\Exception $e) {
@@ -380,11 +381,12 @@ class AktivController extends Controller
         }
     }
 
-    public function getDistricts(Request $request)
+    public function getDistrict(Request $request)
     {
         $regionId = $request->region_id;
-        $districts = Districts::where('region_id', $regionId)->pluck('name_uz', 'id')->toArray();
+        $districts = District::where('region_id', $regionId)->pluck('name_uz', 'id')->toArray();
 
+        \Log::info('' . count($districts) . '');
         return response()->json($districts);
     }
 
@@ -392,7 +394,7 @@ class AktivController extends Controller
     {
         $districtId = $request->district_id;
         $streets = Street::where('district_id', $districtId)->pluck('name', 'id')->toArray();
-
+        \Log::info('' . count($streets) . '');
         return response()->json($streets);
     }
 
@@ -401,9 +403,71 @@ class AktivController extends Controller
         $districtId = $request->input('district_id');
         if ($districtId) {
             $substreets = SubStreet::where('district_id', $districtId)->pluck('name', 'id')->toArray();
+            \Log::info('substreets' . count($substreets) . '');
             return response()->json($substreets);
         }
         return response()->json([]);
+    }
+
+
+    public function getObDistrict(Request $request)
+    {
+        $regionId = $request->region_id;
+        $districts = District::where('region_id', $regionId)->pluck('name_uz', 'id')->toArray();
+
+        return response()->json($districts);
+    }
+
+    public function getObStreets(Request $request)
+    {
+        $districtId = $request->district_id;
+        $streets = Street::where('district_id', $districtId)->pluck('name', 'id')->toArray();
+
+        return response()->json($streets);
+    }
+
+    public function getObSubStreets(Request $request)
+    {
+        $districtId = $request->input('district_id');
+        if ($districtId) {
+            $substreets = SubStreet::where('district_id', $districtId)->pluck('name', 'id');
+            return response()->json($substreets);
+        }
+        return response()->json([]);
+    }
+
+    public function createStreet(Request $request)
+    {
+        $request->validate([
+            'district_id' => 'required|exists:districts,id',
+            'street_name' => 'required',
+        ]);
+
+        $street = Street::create([
+            'district_id' => $request->district_id,
+            'name' => $request->street_name,
+            'user_id' => auth()->id() ?? null,
+            'created_from_outside' => true,
+        ]);
+
+        return response()->json(['id' => $street->id, 'name' => $street->name]);
+    }
+
+    public function createSubStreet(Request $request)
+    {
+        $request->validate([
+            'district_id' => 'required|exists:districts,id',
+            'sub_street_name' => 'required',
+        ]);
+
+        $subStreet = SubStreet::create([
+            'district_id' => $request->district_id,
+            'name' => $request->sub_street_name,
+            'user_id' => auth()->id() ?? null,
+            'created_from_outside' => true,
+        ]);
+
+        return response()->json(['id' => $subStreet->id, 'name' => $subStreet->name]);
     }
     public function update(Request $request, Aktiv $aktiv)
     {
@@ -572,7 +636,7 @@ class AktivController extends Controller
         }
 
         // Get distinct districts by joining with users and selecting the distinct district_id
-        $districts = Districts::select('districts.id', 'districts.name_uz') // select relevant columns
+        $districts = District::select('districts.id', 'districts.name_uz') // select relevant columns
             ->distinct()
             ->join('users', 'districts.id', '=', 'users.district_id') // join with users table
             ->join('aktivs', 'users.id', '=', 'aktivs.user_id') // join with aktivs table
@@ -623,7 +687,7 @@ class AktivController extends Controller
     public function kadastrByDistrict($district_id)
     {
         // Fetch the district along with its associated Aktiv records (through Street)
-        $district = Districts::with(['aktives' => function ($query) {
+        $district = District::with(['aktives' => function ($query) {
             $query->where('kadastr_raqami', '!=', '')
                 ->where('kadastr_raqami', '!=', '00:00:00:00:00:0000')
                 ->where('kadastr_raqami', 'not like', '00%')

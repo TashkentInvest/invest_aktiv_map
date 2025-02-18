@@ -45,14 +45,13 @@
                         <tr class="small">
                             <td class="fw-bold">{{ $aktiv->id ?? '-' }}</td>
                             <td title="{{ $aktiv->user->name ?? '-' }}">
-                                {{-- <small>{{ $aktiv->user->name ?? '-' }}</small> --}}
                                 {{ $aktiv->user->email ?? '-' }}
                             </td>
-                            <td style="max-width: 250px" class="text-truncate" title="{{ $aktiv->object_name }}">
-                                {{ $aktiv->object_name }}
+                            <td style="max-width: 250px" class="text-truncate" title="{{ $aktiv->object_name ?? '' }}">
+                                {{ $aktiv->object_name ?? '' }}
                             </td>
-                            <td class="text-truncate" title="{{ $aktiv->balance_keeper }}">
-                                {{ $aktiv->balance_keeper }}
+                            <td class="text-truncate" title="{{ $aktiv->balance_keeper ?? '' }}">
+                                {{ $aktiv->balance_keeper ?? '' }}
                             </td>
                             <td class="text-truncate"
                                 title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">

@@ -6,7 +6,7 @@ use App\Services\HistoryService;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Districts extends Model
+class District extends Model
 {
     use HasFactory;
 
@@ -39,9 +39,14 @@ class Districts extends Model
         'region_id',     // Add this line
         // Add other fillable fields here as necessary
     ];
+    // public function region()
+    // {
+    //     return $this->hasOne(Regions::class, 'id', 'region_id');
+    // }
+
     public function region()
     {
-        return $this->hasOne(Regions::class, 'id', 'region_id');
+        return $this->belongsTo(Regions::class,'region_id','id');
     }
 
     public function street()
@@ -56,7 +61,11 @@ class Districts extends Model
 
     public function substreet()
     {
-        return $this->hasMany(SubStreet::class, 'district_id');
+        return $this->hasOne(SubStreet::class, 'district_id');
+    }
+    public function substreets()
+    {
+        return $this->hasMany(SubStreet::class, 'district_id','id');
     }
     // Define the relationship to Aktivs via Street
     public function aktives()

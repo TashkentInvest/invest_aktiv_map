@@ -327,13 +327,13 @@
                     <li class="pc-item">
                         <div class="legend-item" style="display: flex; align-items: center; gap: 8px;">
                             <!-- Marker Icon -->
-                            <span 
-                                class="legend-icon" 
+                            <span
+                                class="legend-icon"
                                 style="
-                                    display: inline-block; 
-                                    width: 12px; 
-                                    height: 12px; 
-                                    background-color: #FF0000; 
+                                    display: inline-block;
+                                    width: 12px;
+                                    height: 12px;
+                                    background-color: #FF0000;
                                     border-radius: 50%;
                                     box-shadow: 0 0 3px rgba(0,0,0,0.3);
                                 "
@@ -345,13 +345,13 @@
                     </li>
                     <li class="pc-item">
                         <div class="legend-item" style="display: flex; align-items: center; gap: 8px;">
-                            <span 
-                                class="legend-icon" 
+                            <span
+                                class="legend-icon"
                                 style="
-                                    display: inline-block; 
-                                    width: 12px; 
-                                    height: 12px; 
-                                    background-color: #FFFF00; 
+                                    display: inline-block;
+                                    width: 12px;
+                                    height: 12px;
+                                    background-color: #FFFF00;
                                     border-radius: 50%;
                                     box-shadow: 0 0 3px rgba(0,0,0,0.3);
                                 "
@@ -362,13 +362,13 @@
                     </li>
                     <li class="pc-item">
                         <div class="legend-item" style="display: flex; align-items: center; gap: 8px;">
-                            <span 
-                                class="legend-icon" 
+                            <span
+                                class="legend-icon"
                                 style="
-                                    display: inline-block; 
-                                    width: 12px; 
-                                    height: 12px; 
-                                    background-color: #1a81bd; 
+                                    display: inline-block;
+                                    width: 12px;
+                                    height: 12px;
+                                    background-color: #1a81bd;
                                     border-radius: 50%;
                                     box-shadow: 0 0 3px rgba(0,0,0,0.3);
                                 "
@@ -378,7 +378,7 @@
                         </div>
                     </li>
                 </ul>
-                
+
             </div>
         </div>
     </nav>
@@ -416,7 +416,7 @@
                     </li>
                 </ul>
 
-                
+
             </div>
         </div>
     </header>
@@ -509,7 +509,7 @@
                 });
 
             // Handle district selection and KML processing
-            handleDistricts(map);
+            handleDistrict(map);
         }
 
         async function fetchUsdRate() {
@@ -560,7 +560,7 @@
                                 iconUrl = 'http://maps.google.com/mapfiles/ms/icons/yellow-dot.png';
                             } else if (markerData.building_type == 'NoturarBino') {
                                 iconUrl = 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png';
-                                
+
                             } else {
                                 iconUrl = 'http://maps.google.com/mapfiles/ms/icons/green-dot.png';
 
@@ -693,7 +693,7 @@
                     <td>${markerData.user_email || 'N/A'}</td>
                 </tr>
             </table>
-        
+
             <a target="_blank" href="${markerData.lot_link || '#'}" class="btn-link">Aktivni ko'rish</a>
         </div>
     `;
@@ -728,7 +728,7 @@
 
 
         // Handle District Selection and KML Files
-        function handleDistricts(map) {
+        function handleDistrict(map) {
             let polygons = {};
             let currentHighlight = null;
 

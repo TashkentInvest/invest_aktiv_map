@@ -112,6 +112,7 @@ class Aktiv extends Model
         return $this->belongsTo(Street::class, 'street_id', 'id');
     }
 
+
     public function comments()
     {
         return $this->hasMany(Comment::class);

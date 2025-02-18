@@ -98,7 +98,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::get('/my-map', [AktivController::class, 'myMap'])->name('aktivs.myMap');
 
 
-    Route::get('/getDistricts', [AktivController::class, 'getDistricts'])->name('getDistricts');
+    Route::get('/getDistrict', [AktivController::class, 'getDistrict'])->name('getDistrict');
     Route::get('/getStreets', [AktivController::class, 'getStreets'])->name('getStreets');
     Route::get('/getSubStreets', [AktivController::class, 'getSubStreets'])->name('getSubStreets');
     Route::post('/create/streets', [AktivController::class, 'createStreet'])->name('create.streets');
@@ -119,7 +119,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     //     Route::delete('/delete/{id}', [RegionController::class, 'destroy'])->name('regionDestroy');
     // });
 
-    // Districts
+    // District
     // Route::prefix('districts')->group(function () {
     //     Route::get('/', [DistrictController::class, 'index'])->name('districtIndex');
     //     Route::get('/add', [DistrictController::class, 'add'])->name('districtAdd');
@@ -287,7 +287,7 @@ Route::post('/obyekt/create/yuridik', [ObyektController::class, 'create_yuridik_
 Route::get('/search-client', [ObyektController::class, 'searchClient'])->name('search-client');
 Route::get('/get-client-details/{client_id}', [ObyektController::class, 'getClientDetails'])->name('get-client-details');
 Route::post('/obyekt/obyekt_create', [ObyektController::class, 'obyekt_create'])->name('obyekt_create');
-Route::get('/get-districts', [ObyektController::class, 'getDistricts'])->name('get.Obdistricts');
+Route::get('/get-districts', [ObyektController::class, 'getDistrict'])->name('get.Obdistricts');
 Route::get('/get-streets', [ObyektController::class, 'getStreets'])->name('get.Obstreets');
 Route::get('/get-substreets', [ObyektController::class, 'getSubstreets'])->name('get.Obsubstreets');
 
@@ -303,14 +303,14 @@ Route::post('/region/create', [RegionController::class, 'create'])->name('region
 Route::get('/region/edit/{id}', [RegionController::class, 'edit'])->name('regionEdit');
 Route::post('/region/update/{id}', [RegionController::class, 'update'])->name('regionUpdate');
 Route::delete('/region/delete/{id}', [RegionController::class, 'destroy'])->name('regionDestroy');
-// Districts
+// District
 Route::get('/districts', [DistrictController::class, 'index'])->name('districtIndex');
 Route::get('/district/add', [DistrictController::class, 'add'])->name('districtAdd');
 Route::post('/district/create', [DistrictController::class, 'create'])->name('districtCreate');
 Route::get('/district/edit/{id}', [DistrictController::class, 'edit'])->name('districtEdit');
 Route::post('/district/update/{id}', [DistrictController::class, 'update'])->name('districtUpdate');
 Route::delete('/district/delete/{id}', [DistrictController::class, 'destroy'])->name('districtDestroy');
-Route::get('/get-districts/{region_id}', [DistrictController::class, 'getDistricts'])->name('get.districts');
+Route::get('/get-districts/{region_id}', [DistrictController::class, 'getDistrict'])->name('get.districts');
 Route::get('/get-streets/{district_id}', [DistrictController::class, 'getStreets']);
 // streets
 Route::get('/streets', [StreetController::class, 'index'])->name('streetIndex');
