@@ -32,7 +32,7 @@
                 <li class="nav-item">
                     <a href="{{ route('aktivs.kadastrTumanlarCounts') }}" class="nav-link">
                         <i class="link-icon" data-feather="home"></i>
-                        <span class="link-title">Кадастр (Свотник)</span>
+                        <span class="link-title">Кадастр (Туман)</span>
                     </a>
                 </li>
 
