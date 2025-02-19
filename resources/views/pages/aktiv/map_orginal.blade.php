@@ -282,7 +282,7 @@
                         alt="logo" />
                 </a>
             </div>
-            <div class="navbar-content">
+            <div class="navbar-content px-3">
                 <ul class="pc-navbar">
                     <li class="pc-item pc-caption"><label>Xarita</label>
                         <a class="pc-link" href="{{ route('aktivs.index') }}">Xarita</a>
