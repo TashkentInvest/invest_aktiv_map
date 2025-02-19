@@ -83,12 +83,13 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.1.0-beta.1/js/select2.min.js"></script>
 <script>
     $(document).ready(function() {
+// alert('ok');
         // Initialize select2
         $('.select2').select2();
 
         // When a region is selected
         $('#region_id').change(function() {
-            alert(data);
+            // alert(data);
 
             var regionId = $(this).val();
             if (regionId) {

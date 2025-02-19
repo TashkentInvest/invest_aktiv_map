@@ -413,7 +413,7 @@ class AktivController extends Controller
     }
 
 
-    public function getObDistrict(Request $request)
+    public function getObDistricts(Request $request)
     {
         Log::info('getObDistrict');
         $regionId = $request->region_id;

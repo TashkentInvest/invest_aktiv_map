@@ -4,7 +4,6 @@ use App\Http\Controllers\AddNewUsersController;
 use App\Http\Controllers\AktivController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\BankController;
 use App\Http\Controllers\ChatController;
 use App\Http\Controllers\FileController;
 use App\Http\Controllers\BackupController;
@@ -13,10 +12,8 @@ use App\Http\Controllers\HistoryController;
 use App\Http\Controllers\SubStreetController;
 use App\Http\Controllers\Blade\HomeController;
 use App\Http\Controllers\Blade\UserController;
-use App\Http\Controllers\Blade\ClientController;
 use App\Http\Controllers\Blade\RegionController;
 use App\Http\Controllers\ConstructionController;
-use App\Http\Controllers\NumberToTextController;
 use App\Http\Controllers\Blade\DistrictController;
 use App\Http\Controllers\CommentController;
 
@@ -28,10 +25,6 @@ Auth::routes(['register' => false]);
 Route::get('/', function () {
     return view('welcome');
 });
-
-Route::get('/client/create', [ClientController::class, 'client_create'])->name('clientFormCreate');
-Route::post('/qr/create', [ClientController::class, 'Qrcreate'])->name('Qrcreate');
-Route::get('/number-to+-text', [NumberToTextController::class, 'convert']);
 
 
 
@@ -73,9 +66,9 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::post('/create/streets', [AktivController::class, 'createStreet'])->name('create.streets');
     Route::post('/create/substreets', [AktivController::class, 'createSubStreet'])->name('create.substreets');
 
-    Route::get('/get-districtss', [AktivController::class, 'getObDistricts'])->name('get.Obdistricts');
-    Route::get('/get-streetss', [AktivController::class, 'getObStreets'])->name('get.Obstreets');
-    Route::get('/get-substreetss', [AktivController::class, 'getObSubstreets'])->name('get.Obsubstreets');
+    Route::get('/custom/get-districts', [AktivController::class, 'getObDistricts'])->name('get.Obdistricts');
+    Route::get('/custom/get-streets', [AktivController::class, 'getObStreets'])->name('get.Obstreets');
+    Route::get('/custom/get-substreets', [AktivController::class, 'getObSubstreets'])->name('get.Obsubstreets');
 
     Route::get('/optimize-cache', [HomeController::class, 'optimize'])->name('optimize.command');
 
@@ -171,14 +164,6 @@ Route::post('/substreet/update/{id}', [SubStreetController::class, 'update'])->n
 Route::delete('/substreet/delete/{id}', [SubStreetController::class, 'destroy'])->name('substreetDestroy');
 Route::post('/create/substreet', [SubStreetController::class, 'create_new'])->name('create.substreet');
 
-// Banks
-Route::get('/banks', [BankController::class, 'index'])->name('bankIndex');
-Route::get('/bank/add', [BankController::class, 'add'])->name('bankAdd');
-Route::post('/bank/create', [BankController::class, 'create'])->name('bankCreate');
-Route::get('/bank/edit/{id}', [BankController::class, 'edit'])->name('bankEdit');
-Route::post('/bank/update/{id}', [BankController::class, 'update'])->name('bankUpdate');
-Route::delete('/bank/delete/{id}', [BankController::class, 'destroy'])->name('bankDestroy');
-Route::post('/create/bank', [BankController::class, 'create_new'])->name('create.bank');
 
 
 
