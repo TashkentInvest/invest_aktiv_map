@@ -36,6 +36,7 @@ class CreateAktivsTable extends Migration
             $table->decimal('latitude', 10, 7);
             $table->decimal('longitude', 10, 7);
             $table->string('kadastr_raqami')->nullable();
+            $table->string('status_invest_moderator')->nullable();
             $table->timestamps();
         });
     }

@@ -18,6 +18,16 @@ use Illuminate\Support\Facades\Log;
 class AktivController extends Controller
 {
 
+    public function status_invest_moderator(Request $request)
+    {
+        // Find and update the record
+        $aktiv = Aktiv::findOrFail($request->id);
+        $aktiv->status_invest_moderator = $request->status_invest_moderator;
+        $aktiv->save();
+
+        // Redirect with success message
+        return redirect()->route('aktivs.show', $aktiv->id)->with('success', 'Status updated successfully.');
+    }
 
 
     public function index(Request $request)
@@ -68,57 +78,6 @@ class AktivController extends Controller
 
         return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
     }
-
-    // public function index(Request $request)
-    // {
-    //     $user = auth()->user();
-    //     $user_id = $request->input('user_id');
-    //     $district_id = $request->input('district_id');
-    //     $userRole = $user->roles[0]->name ?? '';
-    //     $userDistrictId = $user->district_id;
-
-    //     // Cache key based on request parameters and user role
-    //     $cacheKey = "aktivs_{$userRole}_{$user_id}_{$district_id}_{$userDistrictId}";
-
-    //     // Attempt to retrieve results from the cache
-    //     $aktivs = cache()->remember($cacheKey, 600, function () use ($userRole, $user_id, $district_id, $userDistrictId) {
-    //         // Build the query using deep filters
-    //         $query = Aktiv::deepFilters();
-
-    //         // Apply filters based on role
-    //         if ($userRole == 'Super Admin') {
-    //             if ($user_id) {
-    //                 $query->where('user_id', $user_id);
-    //             }
-    //             if ($district_id) {
-    //                 $query->whereHas('user', function ($q) use ($district_id) {
-    //                     $q->where('district_id', $district_id);
-    //                 });
-    //             }
-    //         } elseif ($userRole == 'Manager') {
-    //             $query->whereHas('user', function ($q) use ($userDistrictId) {
-    //                 $q->where('district_id', $userDistrictId);
-    //             });
-    //         } else {
-    //             $query->where('user_id', $user->id);
-    //         }
-
-    //         // Get all results (no pagination)
-    //         return $query->orderBy('created_at', 'desc')
-    //             ->with('files')
-    //             ->get();
-    //     });
-
-    //     // Build count queries based on the filtered query
-    //     $yerCount = $aktivs->where('building_type', 'yer')->count();
-    //     $noturarBinoCount = $aktivs->where('building_type', 'NoturarBino')->count();
-    //     $turarBinoCount = $aktivs->where('building_type', 'TurarBino')->count();
-
-    //     // Return the view with data for DataTables
-    //     return view('pages.aktiv.index', compact('aktivs', 'yerCount', 'noturarBinoCount', 'turarBinoCount'));
-    // }
-
-
 
     public function userTumanlarCounts(Request $request)
     {
@@ -283,44 +242,6 @@ class AktivController extends Controller
 
         return redirect()->route('aktivs.index')->with('success', 'Aktiv created successfully.');
     }
-    // public function show(Aktiv $aktiv)
-    // {
-    //     // Check if the user can view this Aktiv (for authorization)
-    //     $this->authorizeView($aktiv);
-
-    //     // Load necessary relationships including the street to district relationship
-    //     // It's crucial that subStreet is correctly mapped to district in your Aktiv model
-    //     $aktiv->load('subStreet.district.region', 'files');
-
-    //     $defaultImage = 'https://cdn.dribbble.com/users/1651691/screenshots/5336717/404_v2.png';
-
-    //     // Add main_image attribute to the current Aktiv
-    //     $aktiv->main_image = $aktiv->files->first() ? asset('storage/' . $aktiv->files->first()->path) : $defaultImage;
-
-    //     // Retrieve user district ID from the authenticated user's associated street
-    //     $userDistrictId = auth()->user()->district_id;  // Get the district ID of the authenticated user
-
-    //     if (auth()->id() === 1) {
-    //         // Super Admin can see all aktivs
-    //         $aktivs = Aktiv::with('files')->get();
-    //     } else {
-    //         // Regular users see only aktivs from their district and not created by Super Admin
-    //         $aktivs = Aktiv::with('files')
-    //             ->join('streets', 'aktivs.street_id', '=', 'streets.id')  // Ensure street is joined correctly
-    //             ->where('streets.district_id', $userDistrictId)  // Filter by user's district from street relationship
-    //             ->where('user_id', '!=', 1)  // Exclude aktivs created by Super Admin
-    //             ->get();
-    //     }
-
-    //     // Add main_image attribute to each Aktiv
-    //     $aktivs->map(function ($a) use ($defaultImage) {
-    //         $a->main_image = $a->files->first() ? asset('storage/' . $a->files->first()->path) : $defaultImage;
-    //         return $a;
-    //     });
-
-    //     return view('pages.aktiv.show', compact('aktiv', 'aktivs'));
-    // }
-
     public function show(Aktiv $aktiv)
     {
         // Check if the user can view this Aktiv (for authorization)
@@ -357,7 +278,14 @@ class AktivController extends Controller
             return $a;
         });
 
-        return view('pages.aktiv.show', compact('aktiv', 'aktivs'));
+        $aktiv_moderator_statuses = [
+            'yer' => 'Yer',
+            'saqlab_qolish' => 'Saqlab qolish',
+            'sotish' => 'Sotish',
+            'qoshimcha_organish' => 'Qo\'shimcha organish',
+        ];
+
+        return view('pages.aktiv.show', compact('aktiv', 'aktivs', 'aktiv_moderator_statuses'));
     }
     public function edit(Aktiv $aktiv)
     {

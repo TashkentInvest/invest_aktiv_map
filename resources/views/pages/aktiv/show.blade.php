@@ -160,6 +160,42 @@
     </div>
 
 
+    @if (auth()->user()->roles()->first()->name == 'Super Admin')
+        <div class="card shadow-sm border-0">
+            <div class="card-body">
+                <form action="{{ route('aktivs.status_invest_moderator') }}" method="POST" class="needs-validation"
+                    novalidate>
+                    @csrf
+
+                    <input type="hidden" name="id" value="{{ $aktiv->id }}">
+
+                    <div class="mb-3">
+                        <label for="status_invest_moderator" class="form-label fw-bold">
+                            Invest Moderator Status
+                        </label>
+                        <select name="status_invest_moderator" id="status_invest_moderator" class="form-select" required>
+                            <option value="" disabled selected>Choose Status...</option>
+                            @foreach ($aktiv_moderator_statuses as $aktiv_moderator_status)
+                                <option value="{{ $aktiv_moderator_status }}"
+                                    {{ $aktiv->status_invest_moderator == $aktiv_moderator_status ? 'selected' : '' }}>
+                                    {{ ucfirst($aktiv_moderator_status) }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <div class="invalid-feedback">
+                            Please select a status.
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary w-100">
+                        Saqlash
+                    </button>
+
+                </form>
+            </div>
+        </div>
+    @endif
+
     {{-- Comments Section --}}
     <div class="comments mt-4">
         <h3 class="text-primary">Comments</h3>

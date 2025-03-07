@@ -52,6 +52,7 @@ Route::group(['middleware' => ['auth', 'checkUserRole']], function () {
     Route::get('/aktiv/get_kadastr_by_district', [AktivController::class, 'getKadastrByDistrict']);
 
     Route::post('/aktivs/export', [AktivController::class, 'export'])->name('aktivs.export');
+    Route::post('/aktivs/status_invest_moderator', [AktivController::class, 'status_invest_moderator'])->name('aktivs.status_invest_moderator');
 
 
     Route::get('/kadastr', [AktivController::class, 'kadastr_index'])->name('aktivs.kadastr_index');
