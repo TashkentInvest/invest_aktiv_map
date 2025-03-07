@@ -64,6 +64,9 @@ class Aktiv extends Model
 
             $query->where('kadastr_raqami', $operator, $value);
         }
+        if ($request->filled('building_type')) {
+            $query->where('building_type', $request->input('building_type'));
+        }
 
         return $query;
     }

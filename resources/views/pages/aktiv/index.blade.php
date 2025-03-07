@@ -17,14 +17,24 @@
         </a>
     </div>
 
-<div class="col-3 p-0 m-0">
-    <form action="{{ route('aktivs.index') }}" method="get" class="d-flex gap-1 mb-2">
-        <input type="text" class="form-control form-control-sm" name="kadastr_raqami" placeholder="Кадастр рақами"
-            id="kadastr_raqami" value="{{ request()->input('kadastr_raqami') }}">
-        <button type="submit" class="btn btn-sm btn-primary">@lang('global.filter')</button>
-    </form>
+    <div class="col-3 p-0 m-0">
+        <form action="{{ route('aktivs.index') }}" method="get" class="d-flex gap-1 mb-2">
+            <input type="text" class="form-control form-control-sm" name="kadastr_raqami" placeholder="Кадастр рақами"
+                id="kadastr_raqami" value="{{ request()->input('kadastr_raqami') }}">
 
-</div>
+
+            <select name="building_type" id="building_type" class="form-control form-control-sm">
+                <option value="">-- Mulk Turini Tanlang --</option>
+                <option value="yer" {{ request()->input('building_type') == 'yer' ? 'selected' : '' }}>yer</option>
+                <option value="TurarBino" {{ request()->input('building_type') == 'TurarBino' ? 'selected' : '' }}>TurarBino
+                </option>
+                <option value="NoturarBino" {{ request()->input('building_type') == 'NoturarBino' ? 'selected' : '' }}>
+                    NoturarBino</option>
+            </select>
+            <button type="submit" class="btn btn-sm btn-primary">@lang('global.filter')</button>
+        </form>
+
+    </div>
 
     @if ($aktivs->count())
         <div class="table-responsive">
@@ -53,8 +63,7 @@
                             <td class="text-truncate" title="{{ $aktiv->balance_keeper ?? '' }}">
                                 {{ $aktiv->balance_keeper ?? '' }}
                             </td>
-                            <td class="text-truncate"
-                                title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">
+                            <td class="text-truncate" title="{{ $aktiv->subStreet->district->name_uz ?? 'Маълумот йўқ' }}">
                                 {{ $aktiv->street->name ?? '-' }},
                                 {{ $aktiv->subStreet->name ?? '-' }}
                             </td>
